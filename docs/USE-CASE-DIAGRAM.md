@@ -1,614 +1,396 @@
 # Diagram B-Club Badminton
 
-Kode diagram di bawah bisa di-render menggunakan tool online:
-- **PlantUML:** https://www.plantuml.com/plantuml/uml
-- **Mermaid:** https://mermaid.live
+## Cara Terbaik Membuat Diagram
+
+### Opsi 1: Draw.io (Rekomendasi)
+1. Buka https://app.diagrams.net
+2. Pilih "Create New Diagram"
+3. Pilih template "UML Use Case"
+4. Gunakan daftar use case di bawah sebagai referensi untuk menggambar
+
+### Opsi 2: ChatGPT
+Copy seluruh isi bagian "Daftar Use Case" di bawah, lalu paste ke ChatGPT dan minta:
+> "Buatkan use case diagram dalam bentuk gambar berdasarkan data ini"
+
+### Opsi 3: Canva
+Buka https://www.canva.com dan cari template "Use Case Diagram", lalu isi manual.
 
 ---
 
-## 1. Use Case Diagram (PlantUML)
+## Daftar Aktor (Role)
 
-Copy-paste kode di bawah ke https://www.plantuml.com/plantuml/uml lalu klik **Submit**.
+| No | Aktor | Deskripsi |
+|----|-------|-----------|
+| 1 | **Admin** | Mengelola seluruh sistem termasuk pengguna |
+| 2 | **Pelatih** | Mengelola data operasional latihan dan atlet |
+| 3 | **Ketua Klub** | Mengawasi klub, melihat laporan, kelola pengaturan |
+| 4 | **Atlet** | Melihat dashboard dan performa pribadi |
+| 5 | **Pengunjung** | Belum login, hanya bisa login/register |
 
-```plantuml
-@startuml
-!theme cerulean
-skinparam actorStyle awesome
-skinparam packageStyle rectangle
-skinparam usecase {
-  BackgroundColor<<admin>> #E8F5E9
-  BackgroundColor<<pelatih>> #E3F2FD
-  BackgroundColor<<ketua>> #FFF3E0
-  BackgroundColor<<atlet>> #FCE4EC
-  BackgroundColor<<publik>> #F3E5F5
-  BackgroundColor<<semua>> #ECEFF1
-}
+---
 
-title Use Case Diagram - B-Club Badminton\nSistem Pembinaan Atlet Bulutangkis
+## Daftar Use Case Lengkap
 
-actor "Admin" as admin #green
-actor "Pelatih" as pelatih #blue
-actor "Ketua Klub" as ketua #orange
-actor "Atlet" as atlet #pink
-actor "Pengunjung" as publik #purple
+### UC-01: Autentikasi
 
-rectangle "Sistem B-Club Badminton" {
+| Kode | Use Case | Pengunjung | Admin | Pelatih | Ketua Klub | Atlet |
+|------|----------|:---:|:---:|:---:|:---:|:---:|
+| UC-01.1 | Login | v | - | - | - | - |
+| UC-01.2 | Register (sebagai Atlet) | v | - | - | - | - |
+| UC-01.3 | Logout | - | v | v | v | v |
+| UC-01.4 | Edit Profil Sendiri | - | v | v | v | v |
 
-  ' === AUTENTIKASI ===
-  package "Autentikasi" {
-    usecase "Login" as UC_LOGIN <<publik>>
-    usecase "Register\n(sebagai Atlet)" as UC_REGISTER <<publik>>
-    usecase "Logout" as UC_LOGOUT <<semua>>
-    usecase "Edit Profil Sendiri" as UC_EDIT_PROFILE <<semua>>
-  }
+### UC-02: Dashboard
 
-  ' === DASHBOARD ===
-  package "Dashboard" {
-    usecase "Lihat Dashboard\n(Statistik Klub)" as UC_DASHBOARD <<semua>>
-    usecase "Lihat Dashboard\nPersonal (Performa Sendiri)" as UC_DASHBOARD_ATLET <<atlet>>
-    usecase "Lihat Quick Actions" as UC_QUICK_ACTIONS <<admin>>
-  }
+| Kode | Use Case | Admin | Pelatih | Ketua Klub | Atlet |
+|------|----------|:---:|:---:|:---:|:---:|
+| UC-02.1 | Lihat Dashboard Statistik Klub | v | v | v | - |
+| UC-02.2 | Lihat Dashboard Personal (Performa Sendiri) | - | - | - | v |
+| UC-02.3 | Lihat Grafik Tren Performa Bulanan | v | v | v | - |
+| UC-02.4 | Lihat Grafik Kehadiran Mingguan | v | v | v | - |
+| UC-02.5 | Akses Quick Actions | v | v | - | - |
 
-  ' === DATA ATLET ===
-  package "Manajemen Data Atlet" {
-    usecase "Lihat Daftar Atlet" as UC_LIST_ATHLETE <<semua>>
-    usecase "Lihat Detail Atlet" as UC_VIEW_ATHLETE <<semua>>
-    usecase "Tambah Atlet Baru" as UC_ADD_ATHLETE <<pelatih>>
-    usecase "Edit Data Atlet" as UC_EDIT_ATHLETE <<pelatih>>
-    usecase "Hapus Atlet" as UC_DELETE_ATHLETE <<pelatih>>
-    usecase "Upload Foto Atlet" as UC_UPLOAD_PHOTO <<pelatih>>
-    usecase "Kelola Cedera Atlet" as UC_MANAGE_INJURY <<pelatih>>
-  }
+### UC-03: Manajemen Data Atlet
 
-  ' === PROGRAM LATIHAN ===
-  package "Program Latihan" {
-    usecase "Lihat Program Latihan" as UC_LIST_PROGRAM <<semua>>
-    usecase "Lihat Detail Program" as UC_VIEW_PROGRAM <<semua>>
-    usecase "Buat Program Latihan" as UC_ADD_PROGRAM <<pelatih>>
-    usecase "Edit Program Latihan" as UC_EDIT_PROGRAM <<pelatih>>
-    usecase "Hapus Program Latihan" as UC_DELETE_PROGRAM <<pelatih>>
-  }
+| Kode | Use Case | Admin | Pelatih | Ketua Klub | Atlet |
+|------|----------|:---:|:---:|:---:|:---:|
+| UC-03.1 | Lihat Daftar Atlet (Filter & Search) | v | v | v | - |
+| UC-03.2 | Lihat Detail Atlet | v | v | v | - |
+| UC-03.3 | Tambah Atlet Baru | v | v | - | - |
+| UC-03.4 | Edit Data Atlet | v | v | - | - |
+| UC-03.5 | Hapus Atlet | v | v | - | - |
+| UC-03.6 | Upload Foto Atlet | v | v | - | - |
+| UC-03.7 | Kelola Cedera Atlet (CRUD) | v | v | - | - |
 
-  ' === JADWAL LATIHAN ===
-  package "Jadwal Latihan" {
-    usecase "Lihat Jadwal\n(Kalender/List)" as UC_LIST_SCHEDULE <<semua>>
-    usecase "Buat Jadwal Latihan" as UC_ADD_SCHEDULE <<pelatih>>
-    usecase "Edit Jadwal Latihan" as UC_EDIT_SCHEDULE <<pelatih>>
-    usecase "Hapus Jadwal Latihan" as UC_DELETE_SCHEDULE <<pelatih>>
-  }
+**Kategori Atlet:** Pra Usia Dini, Usia Dini, Anak-anak, Pemula, Remaja, Taruna, Dewasa
 
-  ' === ABSENSI ===
-  package "Absensi" {
-    usecase "Lihat Riwayat Absensi" as UC_LIST_ATTENDANCE <<semua>>
-    usecase "Input Absensi\n(Hadir/Izin/Tidak Hadir)" as UC_MARK_ATTENDANCE <<pelatih>>
-  }
+### UC-04: Program Latihan
 
-  ' === MONITORING PERFORMA ===
-  package "Monitoring Performa" {
-    usecase "Lihat Performa\nSemua Atlet" as UC_LIST_PERF <<semua>>
-    usecase "Lihat Detail Performa\nAtlet" as UC_VIEW_PERF <<semua>>
-    usecase "Input Nilai Performa" as UC_ADD_PERF <<pelatih>>
-    usecase "Buat Catatan Pelatih" as UC_ADD_NOTE <<pelatih>>
-    usecase "Edit Catatan Pelatih" as UC_EDIT_NOTE <<pelatih>>
-    usecase "Hapus Catatan Pelatih" as UC_DELETE_NOTE <<pelatih>>
-  }
+| Kode | Use Case | Admin | Pelatih | Ketua Klub | Atlet |
+|------|----------|:---:|:---:|:---:|:---:|
+| UC-04.1 | Lihat Daftar Program Latihan | v | v | - | - |
+| UC-04.2 | Lihat Detail Program | v | v | - | - |
+| UC-04.3 | Buat Program Latihan Baru | v | v | - | - |
+| UC-04.4 | Edit Program Latihan | v | v | - | - |
+| UC-04.5 | Hapus Program Latihan | v | v | - | - |
 
-  ' === LAPORAN ===
-  package "Laporan" {
-    usecase "Lihat Rekap\nLatihan Bulanan" as UC_REPORT_MONTHLY <<ketua>>
-    usecase "Lihat Rekap\nPerforma Atlet" as UC_REPORT_PERF <<ketua>>
-    usecase "Lihat Rekap\nKehadiran" as UC_REPORT_ATTENDANCE <<ketua>>
-    usecase "Ekspor Laporan PDF" as UC_EXPORT_PDF <<ketua>>
-  }
+**Jenis Program:** Teknik, Fisik, Taktik
 
-  ' === PENGATURAN ===
-  package "Pengaturan" {
-    usecase "Kelola Pengaturan Klub\n(Nama, Alamat, Logo)" as UC_CLUB_SETTINGS <<ketua>>
-    usecase "Kelola Pengguna\n(CRUD User)" as UC_USER_MGMT <<admin>>
-    usecase "Tambah User Baru" as UC_ADD_USER <<admin>>
-    usecase "Ubah Role/Status User" as UC_EDIT_USER <<admin>>
-    usecase "Hapus User" as UC_DELETE_USER <<admin>>
-  }
-}
+### UC-05: Jadwal Latihan
 
-' === RELASI PENGUNJUNG ===
-publik --> UC_LOGIN
-publik --> UC_REGISTER
+| Kode | Use Case | Admin | Pelatih | Ketua Klub | Atlet |
+|------|----------|:---:|:---:|:---:|:---:|
+| UC-05.1 | Lihat Jadwal (Kalender & List) | v | v | - | - |
+| UC-05.2 | Buat Jadwal Latihan Baru | v | v | - | - |
+| UC-05.3 | Edit Jadwal Latihan | v | v | - | - |
+| UC-05.4 | Hapus Jadwal Latihan | v | v | - | - |
 
-' === RELASI ADMIN (semua fitur) ===
-admin --> UC_LOGOUT
-admin --> UC_EDIT_PROFILE
-admin --> UC_DASHBOARD
-admin --> UC_QUICK_ACTIONS
-admin --> UC_LIST_ATHLETE
-admin --> UC_VIEW_ATHLETE
-admin --> UC_ADD_ATHLETE
-admin --> UC_EDIT_ATHLETE
-admin --> UC_DELETE_ATHLETE
-admin --> UC_UPLOAD_PHOTO
-admin --> UC_MANAGE_INJURY
-admin --> UC_LIST_PROGRAM
-admin --> UC_VIEW_PROGRAM
-admin --> UC_ADD_PROGRAM
-admin --> UC_EDIT_PROGRAM
-admin --> UC_DELETE_PROGRAM
-admin --> UC_LIST_SCHEDULE
-admin --> UC_ADD_SCHEDULE
-admin --> UC_EDIT_SCHEDULE
-admin --> UC_DELETE_SCHEDULE
-admin --> UC_LIST_ATTENDANCE
-admin --> UC_MARK_ATTENDANCE
-admin --> UC_LIST_PERF
-admin --> UC_VIEW_PERF
-admin --> UC_ADD_PERF
-admin --> UC_ADD_NOTE
-admin --> UC_EDIT_NOTE
-admin --> UC_DELETE_NOTE
-admin --> UC_REPORT_MONTHLY
-admin --> UC_REPORT_PERF
-admin --> UC_REPORT_ATTENDANCE
-admin --> UC_EXPORT_PDF
-admin --> UC_CLUB_SETTINGS
-admin --> UC_USER_MGMT
-admin --> UC_ADD_USER
-admin --> UC_EDIT_USER
-admin --> UC_DELETE_USER
+**Status Jadwal:** Terjadwal, Berlangsung, Selesai, Dibatalkan (otomatis berubah berdasarkan waktu)
 
-' === RELASI PELATIH ===
-pelatih --> UC_LOGOUT
-pelatih --> UC_EDIT_PROFILE
-pelatih --> UC_DASHBOARD
-pelatih --> UC_LIST_ATHLETE
-pelatih --> UC_VIEW_ATHLETE
-pelatih --> UC_ADD_ATHLETE
-pelatih --> UC_EDIT_ATHLETE
-pelatih --> UC_DELETE_ATHLETE
-pelatih --> UC_UPLOAD_PHOTO
-pelatih --> UC_MANAGE_INJURY
-pelatih --> UC_LIST_PROGRAM
-pelatih --> UC_VIEW_PROGRAM
-pelatih --> UC_ADD_PROGRAM
-pelatih --> UC_EDIT_PROGRAM
-pelatih --> UC_DELETE_PROGRAM
-pelatih --> UC_LIST_SCHEDULE
-pelatih --> UC_ADD_SCHEDULE
-pelatih --> UC_EDIT_SCHEDULE
-pelatih --> UC_DELETE_SCHEDULE
-pelatih --> UC_LIST_ATTENDANCE
-pelatih --> UC_MARK_ATTENDANCE
-pelatih --> UC_LIST_PERF
-pelatih --> UC_VIEW_PERF
-pelatih --> UC_ADD_PERF
-pelatih --> UC_ADD_NOTE
-pelatih --> UC_EDIT_NOTE
-pelatih --> UC_DELETE_NOTE
-pelatih --> UC_REPORT_MONTHLY
-pelatih --> UC_REPORT_PERF
-pelatih --> UC_REPORT_ATTENDANCE
-pelatih --> UC_EXPORT_PDF
+### UC-06: Absensi
 
-' === RELASI KETUA KLUB ===
-ketua --> UC_LOGOUT
-ketua --> UC_EDIT_PROFILE
-ketua --> UC_DASHBOARD
-ketua --> UC_LIST_ATHLETE
-ketua --> UC_VIEW_ATHLETE
-ketua --> UC_LIST_PERF
-ketua --> UC_VIEW_PERF
-ketua --> UC_REPORT_MONTHLY
-ketua --> UC_REPORT_PERF
-ketua --> UC_REPORT_ATTENDANCE
-ketua --> UC_EXPORT_PDF
-ketua --> UC_CLUB_SETTINGS
+| Kode | Use Case | Admin | Pelatih | Ketua Klub | Atlet |
+|------|----------|:---:|:---:|:---:|:---:|
+| UC-06.1 | Lihat Riwayat Absensi | v | v | - | - |
+| UC-06.2 | Input Absensi per Sesi Latihan | v | v | - | - |
 
-' === RELASI ATLET ===
-atlet --> UC_LOGOUT
-atlet --> UC_EDIT_PROFILE
-atlet --> UC_DASHBOARD_ATLET
-atlet --> UC_LIST_PERF
-atlet --> UC_VIEW_PERF
+**Status Absensi:** Hadir, Izin, Tidak Hadir
 
-@enduml
+### UC-07: Monitoring Performa
+
+| Kode | Use Case | Admin | Pelatih | Ketua Klub | Atlet |
+|------|----------|:---:|:---:|:---:|:---:|
+| UC-07.1 | Lihat Performa Semua Atlet | v | v | v | - |
+| UC-07.2 | Lihat Detail Performa Atlet | v | v | v | v* |
+| UC-07.3 | Input Nilai Performa | v | v | - | - |
+| UC-07.4 | Buat Catatan Pelatih | v | v | - | - |
+| UC-07.5 | Edit Catatan Pelatih | v | v | - | - |
+| UC-07.6 | Hapus Catatan Pelatih | v | v | - | - |
+
+*Atlet hanya bisa melihat performa diri sendiri
+
+**Penilaian Otomatis:**
+- Progres Baik = skor naik >10% DAN kehadiran ≥60%
+- Perlu Evaluasi = kehadiran <60% ATAU skor rata-rata <60
+- Stabil = kondisi lainnya
+
+### UC-08: Laporan
+
+| Kode | Use Case | Admin | Pelatih | Ketua Klub | Atlet |
+|------|----------|:---:|:---:|:---:|:---:|
+| UC-08.1 | Lihat Rekap Latihan Bulanan | v | v | v | - |
+| UC-08.2 | Lihat Rekap Performa Atlet | v | v | v | - |
+| UC-08.3 | Lihat Rekap Kehadiran | v | v | v | - |
+| UC-08.4 | Ekspor Laporan ke PDF | v | v | v | - |
+
+**Filter Laporan:** Bulan, Tahun, Kategori Atlet, Jenis Latihan
+
+### UC-09: Pengaturan
+
+| Kode | Use Case | Admin | Pelatih | Ketua Klub | Atlet |
+|------|----------|:---:|:---:|:---:|:---:|
+| UC-09.1 | Lihat & Edit Pengaturan Klub | v | - | v | - |
+| UC-09.2 | Upload Logo Klub | v | - | v | - |
+| UC-09.3 | Upload Favicon | v | - | v | - |
+| UC-09.4 | Lihat Daftar Pengguna | v | - | - | - |
+| UC-09.5 | Tambah Pengguna Baru | v | - | - | - |
+| UC-09.6 | Edit Role/Status Pengguna | v | - | - | - |
+| UC-09.7 | Hapus Pengguna | v | - | - | - |
+
+**Role Pengguna:** Admin, Pelatih, Atlet, Ketua Klub
+**Status Pengguna:** Aktif, Non-Aktif
+
+---
+
+## Ringkasan CRUD per Modul
+
+| Modul | Create | Read | Update | Delete |
+|-------|--------|------|--------|--------|
+| **Data Atlet** | Admin, Pelatih | Admin, Pelatih, Ketua Klub | Admin, Pelatih | Admin, Pelatih |
+| **Program Latihan** | Admin, Pelatih | Admin, Pelatih | Admin, Pelatih | Admin, Pelatih |
+| **Jadwal Latihan** | Admin, Pelatih | Admin, Pelatih | Admin, Pelatih | Admin, Pelatih |
+| **Absensi** | Admin, Pelatih | Admin, Pelatih | Admin, Pelatih | - |
+| **Performa** | Admin, Pelatih | Semua Role | - | - |
+| **Catatan Pelatih** | Admin, Pelatih | Semua Role | Admin, Pelatih | Admin, Pelatih |
+| **Laporan** | - | Admin, Pelatih, Ketua Klub | - | - |
+| **Pengguna** | Admin | Admin | Admin | Admin |
+| **Pengaturan Klub** | - | Admin, Ketua Klub | Admin, Ketua Klub | - |
+| **Profil Sendiri** | - | Semua Role | Semua Role | - |
+
+---
+
+## Entity Relationship Diagram (ERD)
+
+### Entitas & Atribut
+
+#### User
+- _id (PK)
+- name: String
+- email: String (unique)
+- password: String (bcrypt hash)
+- phone: String
+- role: [Admin | Pelatih | Atlet | Ketua Klub]
+- status: [Aktif | Non-Aktif]
+- createdAt, updatedAt
+
+#### Athlete
+- _id (PK)
+- customId: String (unique, format: BC-YYYY-XXX)
+- name: String
+- dateOfBirth: Date
+- gender: [Laki-laki | Perempuan]
+- category: [Pra Usia Dini | Usia Dini | Anak-anak | Pemula | Remaja | Taruna | Dewasa]
+- position: [Tunggal | Ganda | Keduanya]
+- status: [Aktif | Pemulihan | Non-Aktif | Pro Roster]
+- height: Number (cm)
+- weight: Number (kg)
+- phone: String
+- address: String
+- joinDate: Date
+- photo: String (file path)
+- injuries[]: Embedded → {type, date, status, severity}
+- recentPerformance[]: Embedded → {date, score, type}
+
+#### TrainingProgram
+- _id (PK)
+- name: String
+- type: [Teknik | Fisik | Taktik]
+- description: String
+- objective: String
+- target: String
+- duration: Number (menit)
+- drills[]: [{name, description}]
+- assignedAthletes[]: FK → Athlete
+
+#### TrainingSchedule
+- _id (PK)
+- program: FK → TrainingProgram
+- date: Date
+- day: String
+- startTime: String (HH:mm)
+- endTime: String (HH:mm)
+- venue: String
+- coach: String
+- athletes[]: FK → Athlete
+- status: [Terjadwal | Berlangsung | Selesai | Dibatalkan]
+- notes: String
+
+#### Attendance
+- _id (PK)
+- date: Date
+- schedule: FK → TrainingSchedule
+- athlete: FK → Athlete
+- status: [Hadir | Izin | Tidak Hadir]
+- markedBy: String
+
+#### PerformanceRecord
+- _id (PK)
+- athlete: FK → Athlete
+- date: Date
+- score: Number (0-100)
+- type: [Training | Post-Match]
+- stats: {smashSpeed, footworkRating, winProbability, netAccuracy}
+- recovery: {overall, sleepScore, hrvStatus}
+- trend: [up | down | neutral]
+- change: String
+
+#### CoachNote
+- _id (PK)
+- athlete: FK → Athlete
+- date: Date
+- type: [POST-MATCH | TRAINING]
+- content: String
+- coach: String
+
+#### ClubSettings
+- _id (PK)
+- clubName: String
+- phone: String
+- address: String
+- email: String
+- website: String
+- logo: String (file path)
+- favicon: String (file path)
+
+### Relasi Antar Entitas
+
+```
+TrainingProgram  1 ──── * TrainingSchedule
+TrainingSchedule * ──── * Athlete (many-to-many)
+TrainingSchedule 1 ──── * Attendance
+Athlete          1 ──── * Attendance
+Athlete          1 ──── * PerformanceRecord
+Athlete          1 ──── * CoachNote
+Athlete          1 ──── * Injury (embedded)
 ```
 
 ---
 
-## 2. Activity Diagram - Proses Login (PlantUML)
+## Activity Diagram - Alur Proses
 
-```plantuml
-@startuml
-!theme cerulean
-title Activity Diagram - Proses Login
+### Alur Login
+```
+[Mulai]
+  → User buka halaman login
+  → Input email dan password
+  → Klik "Masuk"
+  → [Validasi: email & password terisi?]
+      ├─ Tidak → Tampilkan error → [Selesai]
+      └─ Ya → Kirim request ke server
+          → [Cek: user ditemukan?]
+              ├─ Tidak → Tampilkan "Email atau password salah" → [Selesai]
+              └─ Ya → [Cek: status Aktif?]
+                  ├─ Tidak → Tampilkan "Akun tidak aktif" → [Selesai]
+                  └─ Ya → Verifikasi password (bcrypt)
+                      → [Cek: password valid?]
+                          ├─ Tidak → Tampilkan "Email atau password salah" → [Selesai]
+                          └─ Ya → Buat JWT token (7 hari)
+                              → Set session cookie
+                              → Redirect ke dashboard
+                              → [Cek: role = Atlet?]
+                                  ├─ Ya → Dashboard Personal
+                                  └─ Tidak → Dashboard Statistik Klub
+[Selesai]
+```
 
-start
+### Alur Input Absensi
+```
+[Mulai]
+  → Pelatih/Admin buka halaman Absensi
+  → Sistem tampilkan jadwal hari ini
+  → [Ada jadwal hari ini?]
+      ├─ Tidak → Tampilkan "Tidak ada sesi latihan hari ini" → [Selesai]
+      └─ Ya → Pilih sesi latihan
+          → Sistem tampilkan daftar atlet dalam sesi
+          → Untuk setiap atlet: pilih status (Hadir/Izin/Tidak Hadir)
+          → Klik "Submit Absensi"
+          → Validasi data (Zod + ObjectId)
+          → [Data valid?]
+              ├─ Tidak → Tampilkan error → [Selesai]
+              └─ Ya → Simpan ke database (bulk upsert)
+                  → Tampilkan "Absensi berhasil disimpan"
+[Selesai]
+```
 
-:User membuka halaman login;
+### Alur Tambah Atlet
+```
+[Mulai]
+  → Admin/Pelatih buka Data Atlet
+  → Klik "Tambah Atlet Baru"
+  → Isi form: Nama, Tanggal Lahir, Kelamin, Kategori, Posisi,
+    Tinggi, Berat, Telepon, Alamat, Tanggal Bergabung
+  → (Opsional) Upload foto atlet
+  → Klik "Simpan"
+  → Validasi data (Zod schema)
+  → [Data valid?]
+      ├─ Tidak → Tampilkan error per field → [Selesai]
+      └─ Ya → Generate Custom ID (BC-YYYY-XXX)
+          → Simpan ke MongoDB
+          → Redirect ke halaman Detail Atlet
+          → Tampilkan "Atlet berhasil ditambahkan"
+[Selesai]
+```
 
-:Memasukkan email dan password;
-
-:Klik tombol "Masuk";
-
-if (Email dan password terisi?) then (tidak)
-  :Tampilkan error\n"Email dan password wajib diisi";
-  stop
-else (ya)
-endif
-
-:Kirim request ke /api/auth/login;
-
-:Server mencari user berdasarkan email;
-
-if (User ditemukan?) then (tidak)
-  :Tampilkan error\n"Email atau password salah";
-  stop
-else (ya)
-endif
-
-if (Status user Aktif?) then (tidak)
-  :Tampilkan error\n"Akun tidak aktif";
-  stop
-else (ya)
-endif
-
-:Verifikasi password dengan bcrypt;
-
-if (Password valid?) then (tidak)
-  :Tampilkan error\n"Email atau password salah";
-  stop
-else (ya)
-endif
-
-:Buat JWT token (berlaku 7 hari);
-
-:Set session cookie (httpOnly, secure);
-
-:Redirect ke /dashboard;
-
-if (Role = Atlet?) then (ya)
-  :Tampilkan Dashboard Personal\n(performa sendiri);
-else (tidak)
-  :Tampilkan Dashboard Umum\n(statistik klub);
-endif
-
-stop
-
-@enduml
+### Alur Generate Laporan PDF
+```
+[Mulai]
+  → Admin/Pelatih/Ketua Klub buka halaman Laporan
+  → Pilih jenis laporan:
+      ├─ Rekap Latihan Bulanan
+      ├─ Rekap Performa Atlet
+      └─ Rekap Kehadiran
+  → Pilih filter (Bulan, Tahun, Kategori, Jenis Latihan)
+  → Sistem query data dari database
+  → Tampilkan preview laporan (tabel + statistik)
+  → Klik "Ekspor PDF"
+  → Sistem generate PDF (jsPDF + autoTable)
+  → Download file PDF
+[Selesai]
 ```
 
 ---
 
-## 3. Activity Diagram - Input Absensi (PlantUML)
+## Arsitektur Sistem
 
-```plantuml
-@startuml
-!theme cerulean
-title Activity Diagram - Input Absensi
-
-start
-
-:Pelatih/Admin membuka\nhalaman Absensi;
-
-:Sistem menampilkan jadwal\nlatihan hari ini;
-
-if (Ada jadwal hari ini?) then (tidak)
-  :Tampilkan pesan\n"Tidak ada sesi latihan hari ini";
-  stop
-else (ya)
-endif
-
-:Pilih sesi latihan;
-
-:Sistem menampilkan daftar atlet\nyang terdaftar di sesi tersebut;
-
-repeat
-  :Pilih status untuk tiap atlet\n(Hadir / Izin / Tidak Hadir);
-repeat while (Masih ada atlet yang belum diisi?) is (ya)
--> tidak;
-
-:Klik "Submit Absensi";
-
-:Sistem validasi data\n(Zod + ObjectId check);
-
-if (Data valid?) then (tidak)
-  :Tampilkan error validasi;
-  stop
-else (ya)
-endif
-
-:Simpan absensi ke database\n(bulkWrite - upsert);
-
-:Tampilkan notifikasi\n"Absensi berhasil disimpan";
-
-stop
-
-@enduml
 ```
-
----
-
-## 4. Activity Diagram - Tambah Atlet (PlantUML)
-
-```plantuml
-@startuml
-!theme cerulean
-title Activity Diagram - Tambah Atlet Baru
-
-start
-
-:Admin/Pelatih membuka\nhalaman Data Atlet;
-
-:Klik tombol "Tambah Atlet Baru";
-
-:Sistem menampilkan form\npendaftaran atlet;
-
-:Isi data atlet:
-- Nama Lengkap
-- Tanggal Lahir
-- Jenis Kelamin
-- Kategori (Pra Usia Dini s/d Dewasa)
-- Posisi (Tunggal/Ganda/Keduanya)
-- Tinggi & Berat Badan
-- No. Telepon
-- Alamat
-- Tanggal Bergabung;
-
-if (Upload foto?) then (ya)
-  :Upload foto atlet\n(PNG/JPG, maks 5MB);
-  :Sistem simpan foto\nke folder public/uploads;
-else (tidak)
-endif
-
-:Klik tombol "Simpan";
-
-:Sistem validasi data\n(Zod schema);
-
-if (Data valid?) then (tidak)
-  :Tampilkan error pada\nfield yang salah;
-  stop
-else (ya)
-endif
-
-:Generate Custom ID\n(BC-YYYY-XXX);
-
-:Simpan data atlet ke MongoDB;
-
-:Redirect ke halaman\nDetail Atlet;
-
-:Tampilkan notifikasi\n"Atlet berhasil ditambahkan";
-
-stop
-
-@enduml
+┌─────────────────────────────────────────────────┐
+│                   CLIENT                         │
+│  Browser (Chrome/Firefox/Safari)                │
+│  ┌────────────────────────────────────────────┐ │
+│  │  Next.js Frontend (React 19)               │ │
+│  │  - Pages (App Router)                      │ │
+│  │  - Components (shadcn/ui)                  │ │
+│  │  - SWR (Data Fetching & Caching)           │ │
+│  │  - Tailwind CSS 4 (Styling)                │ │
+│  └────────────────────────────────────────────┘ │
+└─────────────────────┬───────────────────────────┘
+                      │ HTTPS (Port 443)
+                      ▼
+┌─────────────────────────────────────────────────┐
+│                   SERVER (VPS)                   │
+│                                                  │
+│  ┌────────────────────────────────────────────┐ │
+│  │  Nginx (Reverse Proxy + SSL)               │ │
+│  │  - SSL termination (Let's Encrypt)         │ │
+│  │  - Static file serving                     │ │
+│  │  - HTTP → HTTPS redirect                   │ │
+│  └────────────────────┬───────────────────────┘ │
+│                       │ Port 3000                │
+│  ┌────────────────────▼───────────────────────┐ │
+│  │  PM2 → Next.js Standalone Server           │ │
+│  │  - API Routes (REST)                       │ │
+│  │  - Server-Side Rendering                   │ │
+│  │  - JWT Authentication (jose)               │ │
+│  │  - Zod Validation                          │ │
+│  │  - bcrypt Password Hashing                 │ │
+│  └────────────────────┬───────────────────────┘ │
+│                       │ Port 27017               │
+│  ┌────────────────────▼───────────────────────┐ │
+│  │  MongoDB 8.0                               │ │
+│  │  - Database: bclub                         │ │
+│  │  - Collections: users, athletes, programs, │ │
+│  │    schedules, attendances, performances,   │ │
+│  │    coachnotes, clubsettings                │ │
+│  └────────────────────────────────────────────┘ │
+└─────────────────────────────────────────────────┘
 ```
-
----
-
-## 5. Class Diagram / ERD (PlantUML)
-
-```plantuml
-@startuml
-!theme cerulean
-skinparam classAttributeIconSize 0
-title Entity Relationship Diagram - B-Club Badminton
-
-entity "User" as user {
-  * _id : ObjectId <<PK>>
-  --
-  name : String
-  email : String <<unique>>
-  password : String (bcrypt)
-  phone : String
-  role : enum [Admin, Pelatih, Atlet, Ketua Klub]
-  status : enum [Aktif, Non-Aktif]
-  createdAt : Date
-  updatedAt : Date
-}
-
-entity "Athlete" as athlete {
-  * _id : ObjectId <<PK>>
-  --
-  customId : String <<unique>> (BC-YYYY-XXX)
-  name : String
-  dateOfBirth : Date
-  gender : enum [Laki-laki, Perempuan]
-  category : enum [Pra Usia Dini, Usia Dini,
-    Anak-anak, Pemula, Remaja, Taruna, Dewasa]
-  position : enum [Tunggal, Ganda, Keduanya]
-  status : enum [Aktif, Pemulihan, Non-Aktif, Pro Roster]
-  height : Number (cm)
-  weight : Number (kg)
-  phone : String
-  address : String
-  joinDate : Date
-  photo : String (file path)
-  injuries[] : Embedded
-  recentPerformance[] : Embedded
-}
-
-entity "Injury (Embedded)" as injury {
-  type : String
-  date : Date
-  status : enum [Sembuh, Dalam Pemulihan]
-  severity : enum [Ringan, Sedang, Berat]
-}
-
-entity "TrainingProgram" as program {
-  * _id : ObjectId <<PK>>
-  --
-  name : String
-  type : enum [Teknik, Fisik, Taktik]
-  description : String
-  objective : String
-  target : String
-  duration : Number (menit)
-  drills[] : [{name, description}]
-  assignedAthletes[] : ObjectId <<FK Athlete>>
-}
-
-entity "TrainingSchedule" as schedule {
-  * _id : ObjectId <<PK>>
-  --
-  program : ObjectId <<FK TrainingProgram>>
-  date : Date
-  day : String
-  startTime : String (HH:mm)
-  endTime : String (HH:mm)
-  venue : String
-  coach : String
-  athletes[] : ObjectId <<FK Athlete>>
-  status : enum [Terjadwal, Berlangsung, Selesai, Dibatalkan]
-  notes : String
-}
-
-entity "Attendance" as attendance {
-  * _id : ObjectId <<PK>>
-  --
-  date : Date
-  schedule : ObjectId <<FK TrainingSchedule>>
-  athlete : ObjectId <<FK Athlete>>
-  status : enum [Hadir, Izin, Tidak Hadir]
-  markedBy : String
-}
-
-entity "PerformanceRecord" as performance {
-  * _id : ObjectId <<PK>>
-  --
-  athlete : ObjectId <<FK Athlete>>
-  date : Date
-  score : Number (0-100)
-  type : enum [Training, Post-Match]
-  stats.smashSpeed : Number
-  stats.footworkRating : Number
-  stats.winProbability : Number
-  stats.netAccuracy : Number
-  recovery.overall : Number
-  recovery.sleepScore : Number
-  recovery.hrvStatus : String
-  trend : enum [up, down, neutral]
-  change : String
-}
-
-entity "CoachNote" as coachnote {
-  * _id : ObjectId <<PK>>
-  --
-  athlete : ObjectId <<FK Athlete>>
-  date : Date
-  type : enum [POST-MATCH, TRAINING]
-  content : String
-  coach : String
-}
-
-entity "ClubSettings" as settings {
-  * _id : ObjectId <<PK>>
-  --
-  clubName : String
-  phone : String
-  address : String
-  email : String
-  website : String
-  logo : String (file path)
-  favicon : String (file path)
-}
-
-' === RELASI ===
-athlete ||--o{ injury : has
-program ||--o{ schedule : has
-schedule }o--|| program : belongs to
-schedule }o--o{ athlete : includes
-attendance }o--|| schedule : for
-attendance }o--|| athlete : records
-performance }o--|| athlete : evaluates
-coachnote }o--|| athlete : about
-
-@enduml
-```
-
----
-
-## 6. Use Case Diagram Sederhana (Mermaid)
-
-Untuk render cepat, paste ke https://mermaid.live
-
-```mermaid
-graph TB
-    subgraph "Pengunjung"
-        A1[Login]
-        A2[Register]
-    end
-
-    subgraph "Admin"
-        B1[Dashboard + Statistik]
-        B2[CRUD Data Atlet]
-        B3[CRUD Program Latihan]
-        B4[CRUD Jadwal Latihan]
-        B5[Input Absensi]
-        B6[Input Performa]
-        B7[Catatan Pelatih]
-        B8[Lihat & Ekspor Laporan PDF]
-        B9[Kelola Pengaturan Klub]
-        B10[Kelola Pengguna - CRUD User]
-    end
-
-    subgraph "Pelatih"
-        C1[Dashboard + Statistik]
-        C2[CRUD Data Atlet]
-        C3[CRUD Program Latihan]
-        C4[CRUD Jadwal Latihan]
-        C5[Input Absensi]
-        C6[Input Performa]
-        C7[Catatan Pelatih]
-        C8[Lihat & Ekspor Laporan PDF]
-    end
-
-    subgraph "Ketua Klub"
-        D1[Dashboard + Statistik]
-        D2[Lihat Data Atlet]
-        D3[Lihat Performa]
-        D4[Lihat & Ekspor Laporan PDF]
-        D5[Kelola Pengaturan Klub]
-    end
-
-    subgraph "Atlet"
-        E1[Dashboard Personal]
-        E2[Lihat Performa Sendiri]
-    end
-```
-
----
-
-## 7. CRUD Matrix per Role
-
-| Modul | Admin | Pelatih | Ketua Klub | Atlet |
-|-------|-------|---------|------------|-------|
-| **Data Atlet** | CRUD | CRUD | Read | - |
-| **Program Latihan** | CRUD | CRUD | - | - |
-| **Jadwal Latihan** | CRUD | CRUD | - | - |
-| **Absensi** | Create, Read | Create, Read | - | - |
-| **Performa** | Create, Read | Create, Read | Read | Read (sendiri) |
-| **Catatan Pelatih** | CRUD | CRUD | - | - |
-| **Laporan** | Read, Export PDF | Read, Export PDF | Read, Export PDF | - |
-| **Pengguna** | CRUD | - | Read | - |
-| **Pengaturan Klub** | Read, Update | - | Read, Update | - |
-| **Profil Sendiri** | Read, Update | Read, Update | Read, Update | Read, Update |
-
----
-
-## Cara Render Diagram
-
-### PlantUML (Diagram 1-5)
-1. Buka https://www.plantuml.com/plantuml/uml
-2. Hapus kode default
-3. Paste kode PlantUML di atas
-4. Klik **Submit**
-5. Klik kanan gambar → **Save image as** untuk download
-
-### Mermaid (Diagram 6)
-1. Buka https://mermaid.live
-2. Hapus kode default di editor kiri
-3. Paste kode Mermaid di atas
-4. Diagram otomatis muncul di kanan
-5. Klik ikon download (PNG/SVG)
-
-### Alternatif: ChatGPT / AI Image
-Kamu juga bisa copy tabel CRUD Matrix atau deskripsi role di atas, lalu paste ke ChatGPT dan minta:
-> "Buatkan use case diagram berdasarkan data ini dalam bentuk gambar"
