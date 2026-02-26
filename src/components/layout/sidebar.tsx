@@ -12,7 +12,6 @@ import {
   APP_SUBTITLE,
 } from "@/lib/constants";
 import { ChevronDown } from "lucide-react";
-import { ShuttlecockIcon } from "@/components/icons/shuttlecock";
 import { useSession } from "@/hooks/use-session";
 import { useBranding } from "@/hooks/use-branding";
 
@@ -59,14 +58,14 @@ export function Sidebar({ mobile = false }: { mobile?: boolean }) {
       {/* Logo */}
       <div className="flex items-center gap-3 px-6 py-5 border-b border-border">
         <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/20 overflow-hidden shrink-0">
-          {branding.logo ? (
-            <img src={branding.logo} alt="Logo" className="h-8 w-8 object-contain" />
-          ) : (
-            <ShuttlecockIcon className="h-6 w-6 text-primary" />
-          )}
+          <img
+            src={branding.logo || "/logo.jpeg"}
+            alt="Logo"
+            className="h-8 w-8 object-contain"
+          />
         </div>
         <div>
-          <h1 className="font-bold text-foreground text-lg leading-tight">{APP_NAME}</h1>
+          <h1 className="font-bold text-foreground text-sm leading-tight">{APP_NAME}</h1>
           <p className="text-[10px] font-semibold tracking-[0.2em] text-primary uppercase">{APP_SUBTITLE}</p>
         </div>
       </div>

@@ -4,6 +4,33 @@ import { User } from "@/models/User";
 import { requireAuth } from "@/lib/api-auth";
 import { hashPassword } from "@/lib/auth";
 
+export async function GET(request: NextRequest) {
+  try {
+    const auth = await requireAuth(request);
+    if (auth instanceof NextResponse) return auth;
+
+    await connectDB();
+
+    const user = await User.findById(auth.user.id)
+      .select("-password")
+      .lean();
+
+    if (!user) {
+      return NextResponse.json(
+        { error: "User tidak ditemukan" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json(user);
+  } catch (error: any) {
+    return NextResponse.json(
+      { error: error.message || "Gagal mengambil profil" },
+      { status: 500 }
+    );
+  }
+}
+
 export async function PUT(request: NextRequest) {
   try {
     const auth = await requireAuth(request);

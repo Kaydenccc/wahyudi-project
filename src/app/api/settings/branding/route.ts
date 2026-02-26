@@ -12,14 +12,14 @@ export async function GET() {
       .lean();
 
     return NextResponse.json({
-      clubName: settings?.clubName || "B-Club Badminton",
+      clubName: settings?.clubName || "PB. TIGA BERLIAN",
       logo: settings?.logo || "",
       favicon: settings?.favicon || "",
     });
   } catch (error) {
     console.error("GET /api/settings/branding error:", error);
     return NextResponse.json({
-      clubName: "B-Club Badminton",
+      clubName: "PB. TIGA BERLIAN",
       logo: "",
       favicon: "",
     });

@@ -261,20 +261,25 @@ export function Topbar() {
           </PopoverContent>
         </Popover>
 
-        <div className="hidden sm:flex flex-col items-end mr-1">
-          <span className="text-sm font-medium text-foreground leading-tight">
-            {user?.name || "Memuat..."}
-          </span>
-          <span className="text-[11px] text-muted-foreground leading-tight">
-            {user?.role || ""}
-          </span>
-        </div>
+        <Link
+          href="/profil"
+          className="flex items-center gap-2 rounded-lg px-2 py-1.5 -mr-1 hover:bg-secondary/50 transition-colors"
+        >
+          <div className="hidden sm:flex flex-col items-end">
+            <span className="text-sm font-medium text-foreground leading-tight">
+              {user?.name || "Memuat..."}
+            </span>
+            <span className="text-[11px] text-muted-foreground leading-tight">
+              {user?.role || ""}
+            </span>
+          </div>
 
-        <Avatar className="h-9 w-9 border-2 border-primary">
-          <AvatarFallback className="bg-primary/20 text-primary text-sm font-semibold">
-            {initials}
-          </AvatarFallback>
-        </Avatar>
+          <Avatar className="h-9 w-9 border-2 border-primary">
+            <AvatarFallback className="bg-primary/20 text-primary text-sm font-semibold">
+              {initials}
+            </AvatarFallback>
+          </Avatar>
+        </Link>
 
         <Button
           variant="ghost"

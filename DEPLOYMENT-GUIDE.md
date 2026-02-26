@@ -1,6 +1,6 @@
-# Panduan Deployment B-Club Badminton
+# Panduan Deployment PB. TIGA BERLIAN
 
-Panduan lengkap dan detail untuk melakukan deployment aplikasi B-Club Badminton ke VPS (Virtual Private Server) dari nol hingga website online dengan domain dan SSL.
+Panduan lengkap dan detail untuk melakukan deployment aplikasi PB. TIGA BERLIAN ke VPS (Virtual Private Server) dari nol hingga website online dengan domain dan SSL.
 
 **Teknologi yang digunakan:**
 - **Frontend & Backend:** Next.js 16 (App Router, Standalone Output)
@@ -327,7 +327,7 @@ git init
 git add .
 
 # Commit
-git commit -m "Initial commit - B-Club Badminton"
+git commit -m "Initial commit - PB. TIGA BERLIAN"
 
 # Set branch utama
 git branch -M main
@@ -613,7 +613,7 @@ Buka browser: `http://IP_ADDRESS_VPS`
 
 Contoh: `http://148.230.103.107`
 
-Jika halaman login B-Club muncul, Nginx sudah bekerja dengan benar.
+Jika halaman login PB. TIGA BERLIAN muncul, Nginx sudah bekerja dengan benar.
 
 ---
 

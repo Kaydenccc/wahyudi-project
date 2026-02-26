@@ -802,11 +802,11 @@ async function seed() {
   // ═══════════════════════════════════════════════════════
   console.log("Seeding club settings...");
   await ClubSettings.create({
-    clubName: "B-Club Badminton",
+    clubName: "PB. TIGA BERLIAN",
     phone: "021-5551234",
     address: "Jl. Jendral Sudirman No. 100, Jakarta Selatan, DKI Jakarta 12190",
-    email: "info@bclub.id",
-    website: "https://bclub.id",
+    email: "info@tigaberlian.id",
+    website: "https://sitigaberlian.my.id",
     logo: "",
     favicon: "",
   });

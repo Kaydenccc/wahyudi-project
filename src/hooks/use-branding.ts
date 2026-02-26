@@ -11,7 +11,7 @@ export function useBranding() {
   );
 
   return {
-    branding: data || { clubName: "B-Club Badminton", logo: "", favicon: "" },
+    branding: data || { clubName: "PB. TIGA BERLIAN", logo: "", favicon: "" },
     isLoading,
     isError: !!error,
     mutate,

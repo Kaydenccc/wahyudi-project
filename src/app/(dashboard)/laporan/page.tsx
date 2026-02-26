@@ -134,7 +134,7 @@ export default function LaporanPage() {
 
       // Title
       doc.setFontSize(18);
-      doc.text("B-Club Badminton", 14, 20);
+      doc.text("PB. TIGA BERLIAN", 14, 20);
       doc.setFontSize(14);
       doc.text(`Rekap Latihan - ${periodLabel}`, 14, 30);
 

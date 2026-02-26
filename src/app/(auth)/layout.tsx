@@ -1,4 +1,4 @@
-import { Volleyball } from "lucide-react";
+import Image from "next/image";
 
 export default function AuthLayout({
   children,
@@ -9,11 +9,16 @@ export default function AuthLayout({
     <div className="min-h-screen flex items-center justify-center bg-background">
       <div className="w-full max-w-md space-y-8 px-4">
         <div className="flex flex-col items-center gap-3">
-          <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/20">
-            <Volleyball className="h-10 w-10 text-primary" />
-          </div>
+          <Image
+            src="/logo.jpeg"
+            alt="PB. TIGA BERLIAN"
+            width={80}
+            height={80}
+            className="rounded-2xl"
+            priority
+          />
           <div className="text-center">
-            <h1 className="text-2xl font-bold text-foreground">B-Club</h1>
+            <h1 className="text-2xl font-bold text-foreground">PB. TIGA BERLIAN</h1>
             <p className="text-sm text-muted-foreground">Sistem Pembinaan Atlet Bulutangkis</p>
           </div>
         </div>

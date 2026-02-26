@@ -1,4 +1,4 @@
-# Diagram B-Club Badminton
+# Diagram PB. TIGA BERLIAN
 
 ## Cara Terbaik Membuat Diagram
 

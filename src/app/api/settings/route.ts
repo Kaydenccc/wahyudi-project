@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
 
     let settings = await ClubSettings.findOne().lean();
     if (!settings) {
-      settings = await ClubSettings.create({ clubName: "B-Club Badminton" });
+      settings = await ClubSettings.create({ clubName: "PB. TIGA BERLIAN" });
       settings = settings.toObject();
     }
 

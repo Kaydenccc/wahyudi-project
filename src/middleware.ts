@@ -18,6 +18,7 @@ const ROLE_ACCESS: Record<string, string[]> = {
     "/monitoring-performa",
     "/laporan",
     "/pengaturan",
+    "/profil",
   ],
   Pelatih: [
     "/dashboard",
@@ -26,6 +27,7 @@ const ROLE_ACCESS: Record<string, string[]> = {
     "/absensi",
     "/monitoring-performa",
     "/laporan",
+    "/profil",
   ],
   "Ketua Klub": [
     "/dashboard",
@@ -33,8 +35,9 @@ const ROLE_ACCESS: Record<string, string[]> = {
     "/monitoring-performa",
     "/laporan",
     "/pengaturan",
+    "/profil",
   ],
-  Atlet: ["/dashboard", "/monitoring-performa"],
+  Atlet: ["/dashboard", "/monitoring-performa", "/profil"],
 };
 
 export async function middleware(req: NextRequest) {

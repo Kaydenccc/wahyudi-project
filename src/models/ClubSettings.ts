@@ -14,7 +14,7 @@ export interface IClubSettings extends Document {
 
 const ClubSettingsSchema = new Schema<IClubSettings>(
   {
-    clubName: { type: String, required: true, default: "B-Club Badminton" },
+    clubName: { type: String, required: true, default: "PB. TIGA BERLIAN" },
     phone: { type: String, default: "" },
     address: { type: String, default: "" },
     email: { type: String, default: "" },
