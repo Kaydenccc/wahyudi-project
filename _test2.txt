@@ -1,0 +1,4 @@
+backtick test: `hello`
+template: \`world\`
+dollar brace: ${test}
+apos: &apos;s
