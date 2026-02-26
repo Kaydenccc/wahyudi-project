@@ -16,7 +16,7 @@ import { ShuttlecockIcon } from "@/components/icons/shuttlecock";
 import { useSession } from "@/hooks/use-session";
 import { useBranding } from "@/hooks/use-branding";
 
-export function Sidebar() {
+export function Sidebar({ mobile = false }: { mobile?: boolean }) {
   const pathname = usePathname();
   const { user } = useSession();
   const { branding } = useBranding();
@@ -52,7 +52,10 @@ export function Sidebar() {
   };
 
   return (
-    <aside className="fixed left-0 top-0 z-40 h-screen w-64 border-r border-border bg-sidebar flex flex-col">
+    <aside className={cn(
+      "w-64 border-r border-border bg-sidebar flex flex-col",
+      mobile ? "h-full" : "fixed left-0 top-0 z-40 h-screen"
+    )}>
       {/* Logo */}
       <div className="flex items-center gap-3 px-6 py-5 border-b border-border">
         <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/20 overflow-hidden shrink-0">

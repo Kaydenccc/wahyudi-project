@@ -23,6 +23,13 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    if (user.status === "Menunggu") {
+      return NextResponse.json(
+        { error: "Akun Anda menunggu persetujuan admin." },
+        { status: 403 }
+      );
+    }
+
     if (user.status === "Non-Aktif") {
       return NextResponse.json(
         { error: "Akun Anda tidak aktif. Hubungi admin." },

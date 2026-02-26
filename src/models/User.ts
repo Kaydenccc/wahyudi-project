@@ -25,7 +25,7 @@ const UserSchema = new Schema<IUser>(
     status: {
       type: String,
       required: true,
-      enum: ["Aktif", "Non-Aktif"],
+      enum: ["Aktif", "Non-Aktif", "Menunggu"],
       default: "Aktif",
     },
     password: { type: String, required: true },

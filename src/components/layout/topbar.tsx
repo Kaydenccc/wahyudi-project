@@ -105,7 +105,7 @@ export function Topbar() {
         </SheetTrigger>
         <SheetContent side="left" className="w-64 p-0">
           <SheetTitle className="sr-only">Menu Navigasi</SheetTitle>
-          <Sidebar />
+          <Sidebar mobile />
         </SheetContent>
       </Sheet>
 

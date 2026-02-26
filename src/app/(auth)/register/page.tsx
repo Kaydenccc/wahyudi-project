@@ -40,7 +40,7 @@ export default function RegisterPage() {
         toast.error(data.error || "Registrasi gagal");
         return;
       }
-      toast.success("Registrasi berhasil! Silakan login.");
+      toast.success("Registrasi berhasil! Akun Anda menunggu persetujuan admin sebelum dapat login.");
       router.push("/login");
     } catch {
       toast.error("Terjadi kesalahan. Coba lagi.");

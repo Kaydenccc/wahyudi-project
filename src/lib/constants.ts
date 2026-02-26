@@ -10,8 +10,8 @@ import {
   ListChecks,
 } from "lucide-react";
 
-export const APP_NAME = "B-Club";
-export const APP_SUBTITLE = "PRO MANAGER";
+export const APP_NAME = "PB. TIGA BERLIAN";
+export const APP_SUBTITLE = "BADMINTON";
 
 export type MenuItem = {
   label: string;

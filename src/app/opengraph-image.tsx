@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
 
-export const alt = "B-Club - Sistem Pembinaan Atlet Bulutangkis";
+export const alt = "PB. TIGA BERLIAN - Sistem Pembinaan Atlet Bulutangkis";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -78,15 +78,15 @@ export default async function Image() {
         >
           <h1
             style={{
-              fontSize: "64px",
+              fontSize: "52px",
               fontWeight: 800,
               color: "#ffffff",
-              letterSpacing: "-2px",
+              letterSpacing: "-1px",
               margin: 0,
               lineHeight: 1,
             }}
           >
-            B-Club
+            PB. TIGA BERLIAN
           </h1>
           <p
             style={{
@@ -98,7 +98,7 @@ export default async function Image() {
               margin: 0,
             }}
           >
-            Badminton Club
+            Badminton
           </p>
         </div>
 

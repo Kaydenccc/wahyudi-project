@@ -294,17 +294,30 @@ export default function PengaturanPage() {
     }
   };
 
+  const getNextStatus = (currentStatus: string) => {
+    if (currentStatus === "Menunggu") return "Aktif";
+    if (currentStatus === "Aktif") return "Non-Aktif";
+    return "Aktif";
+  };
+
+  const getStatusActionLabel = (status: string) => {
+    if (status === "Menunggu") return "Setujui";
+    if (status === "Aktif") return "Nonaktifkan";
+    return "Aktifkan";
+  };
+
   const handleBanUser = async (user: any) => {
     setDialogSaving(true);
     try {
-      const newStatus = user.status === "Aktif" ? "Non-Aktif" : "Aktif";
+      const newStatus = getNextStatus(user.status);
       const res = await fetch(`/api/users/${user._id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: newStatus }),
       });
       if (!res.ok) throw new Error("Gagal mengubah status user");
-      toast.success(`User berhasil di-${newStatus === "Non-Aktif" ? "nonaktifkan" : "aktifkan"}!`);
+      const label = user.status === "Menunggu" ? "disetujui" : newStatus === "Non-Aktif" ? "dinonaktifkan" : "diaktifkan";
+      toast.success(`User berhasil ${label}!`);
       setShowBanConfirm(null);
       mutateUsers();
     } catch {
@@ -709,10 +722,10 @@ export default function PengaturanPage() {
                                     Edit
                                   </DropdownMenuItem>
                                   <DropdownMenuItem
-                                    className="text-destructive"
+                                    className={user.status === "Menunggu" ? "text-green-500" : "text-destructive"}
                                     onClick={() => setShowBanConfirm(user)}
                                   >
-                                    {user.status === "Aktif" ? "Nonaktifkan" : "Aktifkan"}
+                                    {getStatusActionLabel(user.status)}
                                   </DropdownMenuItem>
                                 </DropdownMenuContent>
                               </DropdownMenu>
@@ -799,17 +812,26 @@ export default function PengaturanPage() {
         </DialogContent>
       </Dialog>
 
-      {/* Ban/Activate User Confirm Dialog */}
+      {/* Ban/Activate/Approve User Confirm Dialog */}
       <Dialog open={!!showBanConfirm} onOpenChange={() => setShowBanConfirm(null)}>
         <DialogContent className="bg-card border-border">
           <DialogHeader>
             <DialogTitle>
-              {showBanConfirm?.status === "Aktif" ? "Nonaktifkan User" : "Aktifkan User"}
+              {showBanConfirm?.status === "Menunggu"
+                ? "Setujui User"
+                : showBanConfirm?.status === "Aktif"
+                  ? "Nonaktifkan User"
+                  : "Aktifkan User"}
             </DialogTitle>
           </DialogHeader>
           <p className="text-sm text-muted-foreground">
-            Apakah Anda yakin ingin {showBanConfirm?.status === "Aktif" ? "menonaktifkan" : "mengaktifkan"} user{" "}
-            <span className="font-semibold text-foreground">{showBanConfirm?.name}</span>?
+            Apakah Anda yakin ingin{" "}
+            {showBanConfirm?.status === "Menunggu"
+              ? "menyetujui"
+              : showBanConfirm?.status === "Aktif"
+                ? "menonaktifkan"
+                : "mengaktifkan"}{" "}
+            user <span className="font-semibold text-foreground">{showBanConfirm?.name}</span>?
           </p>
           <DialogFooter>
             <Button variant="outline" onClick={() => setShowBanConfirm(null)}>
@@ -820,7 +842,9 @@ export default function PengaturanPage() {
               onClick={() => handleBanUser(showBanConfirm)}
               disabled={dialogSaving}
             >
-              {dialogSaving ? "Memproses..." : showBanConfirm?.status === "Aktif" ? "Nonaktifkan" : "Aktifkan"}
+              {dialogSaving
+                ? "Memproses..."
+                : getStatusActionLabel(showBanConfirm?.status || "")}
             </Button>
           </DialogFooter>
         </DialogContent>

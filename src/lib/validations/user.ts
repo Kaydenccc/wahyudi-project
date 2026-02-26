@@ -13,7 +13,7 @@ export const updateUserSchema = z.object({
   email: z.string().email().optional(),
   phone: z.string().optional(),
   role: z.enum(["Admin", "Pelatih", "Atlet", "Ketua Klub"]).optional(),
-  status: z.enum(["Aktif", "Non-Aktif"]).optional(),
+  status: z.enum(["Aktif", "Non-Aktif", "Menunggu"]).optional(),
   password: z.string().min(8).optional(),
 });
 
