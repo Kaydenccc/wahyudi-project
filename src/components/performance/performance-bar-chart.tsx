@@ -42,26 +42,27 @@ export function PerformanceBarChart({ mode, data = [] }: PerformanceBarChartProp
       <BarChart data={data}>
         <CartesianGrid
           strokeDasharray="3 3"
-          stroke="rgba(255,255,255,0.05)"
+          stroke="var(--color-border)"
+          opacity={0.5}
         />
         <XAxis
           dataKey="week"
-          stroke="#4a7a5a"
-          tick={{ fill: "#6a9a7a", fontSize: 11 }}
-          axisLine={{ stroke: "rgba(255,255,255,0.1)" }}
+          stroke="var(--color-muted-foreground)"
+          tick={{ fill: "var(--color-muted-foreground)", fontSize: 11 }}
+          axisLine={{ stroke: "var(--color-border)" }}
         />
         <YAxis
-          stroke="#4a7a5a"
-          tick={{ fill: "#6a9a7a", fontSize: 11 }}
-          axisLine={{ stroke: "rgba(255,255,255,0.1)" }}
+          stroke="var(--color-muted-foreground)"
+          tick={{ fill: "var(--color-muted-foreground)", fontSize: 11 }}
+          axisLine={{ stroke: "var(--color-border)" }}
           domain={yDomain}
         />
         <Tooltip
           contentStyle={{
-            backgroundColor: "rgba(10, 26, 15, 0.95)",
-            border: `1px solid ${color}50`,
+            backgroundColor: "var(--color-card)",
+            border: "1px solid var(--color-border)",
             borderRadius: "12px",
-            color: "#e2e8f0",
+            color: "var(--color-foreground)",
           }}
           formatter={(value) => [
             isSmash ? `${value} km/h` : `${value}/100`,

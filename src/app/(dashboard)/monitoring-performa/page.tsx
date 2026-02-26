@@ -14,6 +14,7 @@ import { StatCard } from "@/components/shared/stat-card";
 import { cn } from "@/lib/utils";
 import { usePerformance } from "@/hooks/use-performance";
 import { useSession } from "@/hooks/use-session";
+import { useDebouncedValue } from "@/hooks/use-debounce";
 
 const tabs = ["Semua", "Progres Baik", "Stabil", "Perlu Evaluasi"];
 
@@ -22,14 +23,15 @@ export default function MonitoringPerformaPage() {
   const canInput = user?.role === "Admin" || user?.role === "Pelatih";
   const [activeTab, setActiveTab] = useState("Semua");
   const [searchQuery, setSearchQuery] = useState("");
+  const debouncedSearch = useDebouncedValue(searchQuery, 500);
 
   const { athletes: athletePerformance, isLoading } = usePerformance({
-    search: searchQuery,
+    search: debouncedSearch,
     status: activeTab === "Semua" ? "" : activeTab,
   });
 
   const filtered = athletePerformance.filter((a: any) => {
-    const matchesSearch = a.name.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSearch = a.name.toLowerCase().includes(debouncedSearch.toLowerCase());
     if (activeTab === "Semua") return matchesSearch;
     return matchesSearch && a.status === activeTab;
   });

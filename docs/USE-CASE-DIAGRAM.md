@@ -31,14 +31,14 @@ Buka https://www.canva.com dan cari template "Use Case Diagram", lalu isi manual
 
 ## Daftar Use Case Lengkap
 
-### UC-01: Autentikasi
+  ### UC-01: Autentikasi
 
-| Kode | Use Case | Pengunjung | Admin | Pelatih | Ketua Klub | Atlet |
-|------|----------|:---:|:---:|:---:|:---:|:---:|
-| UC-01.1 | Login | v | - | - | - | - |
-| UC-01.2 | Register (sebagai Atlet) | v | - | - | - | - |
-| UC-01.3 | Logout | - | v | v | v | v |
-| UC-01.4 | Edit Profil Sendiri | - | v | v | v | v |
+  | Kode | Use Case | Pengunjung | Admin | Pelatih | Ketua Klub | Atlet |
+  |------|----------|:---:|:---:|:---:|:---:|:---:|
+  | UC-01.1 | Login | v | - | - | - | - |
+  | UC-01.2 | Register (sebagai Atlet) | v | - | - | - | - |
+  | UC-01.3 | Logout | - | v | v | v | v |
+  | UC-01.4 | Edit Profil Sendiri | - | v | v | v | v |
 
 ### UC-02: Dashboard
 

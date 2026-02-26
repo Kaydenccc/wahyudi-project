@@ -27,6 +27,7 @@ import { StatusBadge } from "@/components/shared/status-badge";
 import { cn } from "@/lib/utils";
 import { useAthletes } from "@/hooks/use-athletes";
 import { useSession } from "@/hooks/use-session";
+import { useDebouncedValue } from "@/hooks/use-debounce";
 import { toast } from "sonner";
 
 const tabs = [
@@ -47,6 +48,7 @@ export default function DataAtletPage() {
   const canEdit = sessionUser?.role === "Admin" || sessionUser?.role === "Pelatih";
   const [activeTab, setActiveTab] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const debouncedSearch = useDebouncedValue(searchQuery, 500);
   const [currentPage, setCurrentPage] = useState(1);
   const [deleteTarget, setDeleteTarget] = useState<any>(null);
   const [deleting, setDeleting] = useState(false);
@@ -55,8 +57,8 @@ export default function DataAtletPage() {
     page: currentPage,
     limit: 10,
   };
-  if (searchQuery) hookParams.search = searchQuery;
-  if (activeTab === "Senior" || activeTab === "Junior") {
+  if (debouncedSearch) hookParams.search = debouncedSearch;
+  if (activeTab !== "all" && activeTab !== "injury") {
     hookParams.category = activeTab;
   } else if (activeTab === "injury") {
     hookParams.status = "Pemulihan";

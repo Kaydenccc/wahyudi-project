@@ -171,7 +171,7 @@ export default function LaporanPage() {
     <div className="space-y-6">
       <PageHeader
         title="Laporan"
-        description="Generate dan export laporan latihan dan performa atlet."
+        description="Buat dan ekspor laporan latihan dan performa atlet."
       >
         {showPreview && (
           <Button

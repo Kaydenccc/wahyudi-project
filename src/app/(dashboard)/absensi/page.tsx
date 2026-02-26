@@ -29,6 +29,7 @@ import { useAthletes } from "@/hooks/use-athletes";
 import { useAttendance } from "@/hooks/use-attendance";
 import { useDashboardStats } from "@/hooks/use-dashboard";
 import { useSession } from "@/hooks/use-session";
+import { useDebouncedValue } from "@/hooks/use-debounce";
 import { toast } from "sonner";
 
 const statusOptions = ["Hadir", "Izin", "Tidak Hadir"] as const;
@@ -40,11 +41,12 @@ export default function AbsensiPage() {
   const [attendanceData, setAttendanceData] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
   const [historySearch, setHistorySearch] = useState("");
+  const debouncedHistorySearch = useDebouncedValue(historySearch, 500);
   const [historyFilter, setHistoryFilter] = useState("");
 
   const { schedules: todaySchedules, isLoading: schedulesLoading } = useSchedules({ date: todayDate });
   const { athletes, isLoading: athletesLoading } = useAthletes({ limit: 50 });
-  const { records: attendanceHistory, isLoading: historyLoading, mutate: mutateAttendance } = useAttendance({ search: historySearch, status: historyFilter });
+  const { records: attendanceHistory, isLoading: historyLoading, mutate: mutateAttendance } = useAttendance({ search: debouncedHistorySearch, status: historyFilter });
   const { stats: dashStats } = useDashboardStats();
 
   // Set default selected schedule when schedules load

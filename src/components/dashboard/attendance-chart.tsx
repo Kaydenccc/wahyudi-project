@@ -34,26 +34,25 @@ export function AttendanceChart() {
   return (
     <ResponsiveContainer width="100%" height={280}>
       <BarChart data={data}>
-        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+        <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" opacity={0.5} />
         <XAxis
           dataKey="week"
-          stroke="#4a7a5a"
-          tick={{ fill: "#6a9a7a", fontSize: 12 }}
-          axisLine={{ stroke: "rgba(255,255,255,0.1)" }}
+          stroke="var(--color-muted-foreground)"
+          tick={{ fill: "var(--color-muted-foreground)", fontSize: 12 }}
+          axisLine={{ stroke: "var(--color-border)" }}
         />
         <YAxis
-          stroke="#4a7a5a"
-          tick={{ fill: "#6a9a7a", fontSize: 12 }}
-          axisLine={{ stroke: "rgba(255,255,255,0.1)" }}
+          stroke="var(--color-muted-foreground)"
+          tick={{ fill: "var(--color-muted-foreground)", fontSize: 12 }}
+          axisLine={{ stroke: "var(--color-border)" }}
           domain={[0, 100]}
         />
         <Tooltip
           contentStyle={{
-            backgroundColor: "rgba(10, 26, 15, 0.95)",
-            border: "1px solid rgba(34, 197, 94, 0.3)",
+            backgroundColor: "var(--color-card)",
+            border: "1px solid var(--color-border)",
             borderRadius: "12px",
-            color: "#e2e8f0",
-            boxShadow: "0 4px 20px rgba(0,0,0,0.3)",
+            color: "var(--color-foreground)",
           }}
           formatter={(value) => [`${value}%`, "Kehadiran"]}
         />

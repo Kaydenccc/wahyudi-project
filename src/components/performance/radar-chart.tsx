@@ -20,12 +20,12 @@ interface SkillRadarChartProps {
 }
 
 const defaultData: SkillData[] = [
-  { skill: "SMASH", value: 0, fullMark: 10 },
-  { skill: "AGILITY", value: 0, fullMark: 10 },
-  { skill: "STAMINA", value: 0, fullMark: 10 },
-  { skill: "FOOTWORK", value: 0, fullMark: 10 },
-  { skill: "DEFENSE", value: 0, fullMark: 10 },
-  { skill: "SERVE", value: 0, fullMark: 10 },
+  { skill: "Smash", value: 0, fullMark: 10 },
+  { skill: "Kelincahan", value: 0, fullMark: 10 },
+  { skill: "Stamina", value: 0, fullMark: 10 },
+  { skill: "Footwork", value: 0, fullMark: 10 },
+  { skill: "Pertahanan", value: 0, fullMark: 10 },
+  { skill: "Servis", value: 0, fullMark: 10 },
 ];
 
 export function SkillRadarChart({ data }: SkillRadarChartProps) {
@@ -34,11 +34,11 @@ export function SkillRadarChart({ data }: SkillRadarChartProps) {
   return (
     <ResponsiveContainer width="100%" height={320}>
       <RadarChart cx="50%" cy="50%" outerRadius="75%" data={chartData}>
-        <PolarGrid stroke="rgba(34, 197, 94, 0.15)" />
+        <PolarGrid stroke="var(--color-border)" />
         <PolarAngleAxis
           dataKey="skill"
           tick={{
-            fill: "#4ade80",
+            fill: "var(--color-primary)",
             fontSize: 11,
             fontWeight: 600,
           }}
@@ -46,14 +46,14 @@ export function SkillRadarChart({ data }: SkillRadarChartProps) {
         <PolarRadiusAxis
           angle={30}
           domain={[0, 10]}
-          tick={{ fill: "#6a9a7a", fontSize: 10 }}
+          tick={{ fill: "var(--color-muted-foreground)", fontSize: 10 }}
           axisLine={false}
         />
         <Radar
-          name="Skills"
+          name="Keterampilan"
           dataKey="value"
-          stroke="#22c55e"
-          fill="#22c55e"
+          stroke="var(--color-primary)"
+          fill="var(--color-primary)"
           fillOpacity={0.25}
           strokeWidth={2}
         />

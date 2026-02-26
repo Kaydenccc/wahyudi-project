@@ -18,6 +18,19 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "B-Club | Sistem Pembinaan Atlet Bulutangkis",
   description: "Sistem informasi pembinaan dan monitoring performa atlet bulutangkis",
+  metadataBase: new URL("https://sitigaberlian.my.id"),
+  openGraph: {
+    title: "B-Club | Sistem Pembinaan Atlet Bulutangkis",
+    description: "Sistem informasi pembinaan dan monitoring performa atlet bulutangkis",
+    siteName: "B-Club Badminton",
+    locale: "id_ID",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "B-Club | Sistem Pembinaan Atlet Bulutangkis",
+    description: "Sistem informasi pembinaan dan monitoring performa atlet bulutangkis",
+  },
 };
 
 export default function RootLayout({
