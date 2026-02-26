@@ -78,7 +78,7 @@ export function canSeeSettings(role: string): boolean {
   return !settingsItem.roles || settingsItem.roles.includes(role);
 }
 
-export const categories = ["Pemula", "Junior", "Senior"] as const;
+export const categories = ["Pra Usia Dini", "Usia Dini", "Anak-anak", "Pemula", "Remaja", "Taruna", "Dewasa"] as const;
 export const positions = ["Tunggal", "Ganda", "Keduanya"] as const;
 export const genders = ["Laki-laki", "Perempuan"] as const;
 export const athleteStatuses = ["Aktif", "Pemulihan", "Non-Aktif", "Pro Roster"] as const;

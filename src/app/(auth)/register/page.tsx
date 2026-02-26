@@ -7,22 +7,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { UserPlus, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
-
-const roleMap: Record<string, string> = {
-  atlet: "Atlet",
-  pelatih: "Pelatih",
-  admin: "Admin",
-  ketua_klub: "Ketua Klub",
-};
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -30,7 +16,6 @@ export default function RegisterPage() {
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [role, setRole] = useState("atlet");
   const [password, setPassword] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -48,7 +33,6 @@ export default function RegisterPage() {
           name,
           email,
           password,
-          role: roleMap[role] || "Atlet",
         }),
       });
       const data = await res.json();
@@ -97,20 +81,6 @@ export default function RegisterPage() {
               onChange={(e) => setEmail(e.target.value)}
               required
             />
-          </div>
-          <div className="space-y-2">
-            <Label>Role</Label>
-            <Select value={role} onValueChange={setRole}>
-              <SelectTrigger className="bg-secondary border-border">
-                <SelectValue placeholder="Pilih role" />
-              </SelectTrigger>
-              <SelectContent className="bg-card border-border">
-                <SelectItem value="atlet">Atlet</SelectItem>
-                <SelectItem value="pelatih">Pelatih</SelectItem>
-                <SelectItem value="admin">Admin</SelectItem>
-                <SelectItem value="ketua_klub">Ketua Klub</SelectItem>
-              </SelectContent>
-            </Select>
           </div>
           <div className="space-y-2">
             <Label htmlFor="password">Password</Label>

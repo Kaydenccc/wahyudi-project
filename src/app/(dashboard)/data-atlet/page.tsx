@@ -31,8 +31,13 @@ import { toast } from "sonner";
 
 const tabs = [
   { label: "Semua Atlet", value: "all" },
-  { label: "Senior", value: "Senior" },
-  { label: "Junior", value: "Junior" },
+  { label: "Pra Usia Dini", value: "Pra Usia Dini" },
+  { label: "Usia Dini", value: "Usia Dini" },
+  { label: "Anak-anak", value: "Anak-anak" },
+  { label: "Pemula", value: "Pemula" },
+  { label: "Remaja", value: "Remaja" },
+  { label: "Taruna", value: "Taruna" },
+  { label: "Dewasa", value: "Dewasa" },
   { label: "Daftar Cedera", value: "injury" },
 ];
 

@@ -54,7 +54,7 @@ const AthleteSchema = new Schema<IAthlete>(
     name: { type: String, required: true },
     dateOfBirth: { type: Date, required: true },
     gender: { type: String, required: true, enum: ["Laki-laki", "Perempuan"] },
-    category: { type: String, required: true, enum: ["Pemula", "Junior", "Senior"] },
+    category: { type: String, required: true, enum: ["Pra Usia Dini", "Usia Dini", "Anak-anak", "Pemula", "Remaja", "Taruna", "Dewasa"] },
     position: { type: String, required: true, enum: ["Tunggal", "Ganda", "Keduanya"] },
     status: {
       type: String,

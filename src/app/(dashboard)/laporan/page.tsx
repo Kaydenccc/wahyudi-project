@@ -246,8 +246,13 @@ export default function LaporanPage() {
                 </SelectTrigger>
                 <SelectContent className="bg-card border-border">
                   <SelectItem value="all">Semua Kategori</SelectItem>
-                  <SelectItem value="Senior">Senior</SelectItem>
-                  <SelectItem value="Junior">Junior</SelectItem>
+                  <SelectItem value="Pra Usia Dini">Pra Usia Dini</SelectItem>
+                  <SelectItem value="Usia Dini">Usia Dini</SelectItem>
+                  <SelectItem value="Anak-anak">Anak-anak</SelectItem>
+                  <SelectItem value="Pemula">Pemula</SelectItem>
+                  <SelectItem value="Remaja">Remaja</SelectItem>
+                  <SelectItem value="Taruna">Taruna</SelectItem>
+                  <SelectItem value="Dewasa">Dewasa</SelectItem>
                 </SelectContent>
               </Select>
             </div>
