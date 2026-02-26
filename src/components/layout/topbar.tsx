@@ -95,7 +95,7 @@ export function Topbar() {
   };
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-border bg-background/80 backdrop-blur-sm px-6">
+    <header className="sticky top-0 z-40 flex h-16 items-center justify-between border-b border-border bg-background/80 backdrop-blur-sm px-6">
       {/* Mobile menu */}
       <Sheet>
         <SheetTrigger asChild>
@@ -131,15 +131,18 @@ export function Topbar() {
 
           {/* Search Results Dropdown */}
           {showResults && (
-            <div className="absolute top-full left-0 right-0 mt-1 bg-card border border-border rounded-lg shadow-lg overflow-hidden z-50">
+            <div className="absolute top-full left-0 right-0 mt-1 bg-card border border-border rounded-lg shadow-lg overflow-hidden z-[100]">
               {searching ? (
                 <div className="px-4 py-3 text-sm text-muted-foreground">Mencari...</div>
               ) : searchResults.length > 0 ? (
                 searchResults.map((athlete: any) => (
                   <button
                     key={athlete._id}
-                    onClick={() => handleSelectAthlete(athlete._id)}
-                    className="flex items-center gap-3 w-full px-4 py-2.5 hover:bg-secondary/50 transition-colors text-left"
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      handleSelectAthlete(athlete._id);
+                    }}
+                    className="flex items-center gap-3 w-full px-4 py-2.5 hover:bg-secondary/50 transition-colors text-left cursor-pointer"
                   >
                     <Avatar className="h-8 w-8">
                       <AvatarFallback className="bg-primary/10 text-primary text-xs">
