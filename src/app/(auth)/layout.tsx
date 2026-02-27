@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function AuthLayout({
   children,
@@ -21,6 +22,13 @@ export default function AuthLayout({
             <h1 className="text-2xl font-bold text-foreground">PB. TIGA BERLIAN</h1>
             <p className="text-sm text-muted-foreground">Sistem Pembinaan Atlet Bulutangkis</p>
           </div>
+          <Link
+            href="/klub"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-sm font-medium text-primary hover:bg-primary/20 hover:border-primary/30 transition-all duration-300"
+          >
+            Profil Klub
+            <span aria-hidden="true">&rarr;</span>
+          </Link>
         </div>
         {children}
       </div>

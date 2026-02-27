@@ -33,7 +33,7 @@ export async function PUT(request: NextRequest) {
     const body = await request.json();
 
     // Whitelist allowed fields to prevent mass assignment
-    const allowedFields = ["clubName", "phone", "address", "email", "website", "logo", "favicon"];
+    const allowedFields = ["clubName", "phone", "address", "email", "website", "logo", "favicon", "history", "vision", "mission"];
     const sanitized: Record<string, unknown> = {};
     for (const key of allowedFields) {
       if (key in body) sanitized[key] = body[key];

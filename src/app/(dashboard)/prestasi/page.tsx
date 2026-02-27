@@ -198,11 +198,23 @@ export default function PrestasiPage() {
           }
         })
         .catch(() => {
-          toast.error("Gagal memuat profil atlet");
+          // silently fail — will fallback to name matching
         })
         .finally(() => setProfileLoading(false));
     }
   }, [isAtlet]);
+
+  // Fallback: if no athleteId from profile, match by user name in athletes list
+  useEffect(() => {
+    if (isAtlet && !profileLoading && !ownAthleteId && user?.name && allAthletes.length > 0) {
+      const match = allAthletes.find(
+        (a: any) => a.name?.toLowerCase() === user.name?.toLowerCase()
+      );
+      if (match) {
+        setOwnAthleteId(match._id);
+      }
+    }
+  }, [isAtlet, profileLoading, ownAthleteId, user?.name, allAthletes]);
 
   // ---------------------------------------------------------------------------
   // Client-side search filter (API doesn't support text search)
@@ -697,8 +709,11 @@ export default function PrestasiPage() {
                 <Input
                   id="athlete"
                   value={
-                    allAthletes.find((a: any) => a._id === ownAthleteId)?.name ||
-                    "Memuat..."
+                    profileLoading
+                      ? "Memuat..."
+                      : ownAthleteId
+                        ? user?.name || "Atlet"
+                        : "Profil atlet belum ditautkan. Hubungi admin."
                   }
                   disabled
                   className="bg-secondary border-border"

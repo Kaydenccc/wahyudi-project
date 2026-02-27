@@ -201,6 +201,79 @@ export default function KlubPage() {
         <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-background to-transparent" />
       </section>
 
+      {/* ===== SEJARAH SECTION ===== */}
+      {club?.history && (
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 sm:pt-16">
+          <div className="space-y-6">
+            <div className="flex items-center gap-3">
+              <div className="flex items-center justify-center size-10 rounded-xl bg-primary/10">
+                <BookOpen className="size-5 text-primary" />
+              </div>
+              <div>
+                <h2 className="text-2xl sm:text-3xl font-bold text-foreground">
+                  Sejarah Klub
+                </h2>
+                <p className="text-sm text-muted-foreground">
+                  Perjalanan {club?.clubName || "Klub"}
+                </p>
+              </div>
+            </div>
+            <Card className="border-border/50 bg-card/80 backdrop-blur-sm">
+              <CardContent className="py-6">
+                <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
+                  {club.history}
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+      )}
+
+      {/* ===== VISI & MISI SECTION ===== */}
+      {(club?.vision || club?.mission) && (
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 sm:pt-16">
+          <div className="space-y-6">
+            <div className="flex items-center gap-3">
+              <div className="flex items-center justify-center size-10 rounded-xl bg-blue-500/10">
+                <Star className="size-5 text-blue-500" />
+              </div>
+              <div>
+                <h2 className="text-2xl sm:text-3xl font-bold text-foreground">
+                  Visi & Misi
+                </h2>
+                <p className="text-sm text-muted-foreground">
+                  Arah dan tujuan pembinaan
+                </p>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+              {club?.vision && (
+                <Card className="relative overflow-hidden border-border/50 bg-card/80 backdrop-blur-sm">
+                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary/60 via-primary/30 to-transparent" />
+                  <CardContent className="py-6">
+                    <h3 className="text-lg font-semibold text-foreground mb-3">Visi</h3>
+                    <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
+                      {club.vision}
+                    </p>
+                  </CardContent>
+                </Card>
+              )}
+              {club?.mission && (
+                <Card className="relative overflow-hidden border-border/50 bg-card/80 backdrop-blur-sm">
+                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500/60 via-blue-500/30 to-transparent" />
+                  <CardContent className="py-6">
+                    <h3 className="text-lg font-semibold text-foreground mb-3">Misi</h3>
+                    <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
+                      {club.mission}
+                    </p>
+                  </CardContent>
+                </Card>
+              )}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* ===== STATISTICS SECTION ===== */}
       <section className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 z-10">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">

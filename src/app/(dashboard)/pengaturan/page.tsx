@@ -90,6 +90,9 @@ export default function PengaturanPage() {
   const [clubAddress, setClubAddress] = useState("");
   const [clubEmail, setClubEmail] = useState("");
   const [clubWebsite, setClubWebsite] = useState("");
+  const [clubHistory, setClubHistory] = useState("");
+  const [clubVision, setClubVision] = useState("");
+  const [clubMission, setClubMission] = useState("");
 
   // User management dialog state
   const [showAddDialog, setShowAddDialog] = useState(false);
@@ -123,6 +126,9 @@ export default function PengaturanPage() {
       setClubFavicon(settings.favicon || "");
       setLogoPreview(settings.logo || "");
       setFaviconPreview(settings.favicon || "");
+      setClubHistory(settings.history || "");
+      setClubVision(settings.vision || "");
+      setClubMission(settings.mission || "");
     }
   }, [settings]);
 
@@ -214,6 +220,9 @@ export default function PengaturanPage() {
           website: clubWebsite,
           logo: clubLogo,
           favicon: clubFavicon,
+          history: clubHistory,
+          vision: clubVision,
+          mission: clubMission,
         }),
       });
       if (!res.ok) throw new Error("Gagal menyimpan pengaturan klub");
@@ -602,6 +611,47 @@ export default function PengaturanPage() {
                     />
                   </div>
                 </div>
+
+                {/* Sejarah, Visi, Misi */}
+                <div className="pt-4 border-t border-border space-y-4">
+                  <h3 className="text-sm font-semibold text-foreground">Profil Publik Klub</h3>
+                  <p className="text-xs text-muted-foreground">
+                    Informasi ini ditampilkan di halaman publik Profil Klub.
+                  </p>
+                  <div className="space-y-2">
+                    <Label>Sejarah Klub</Label>
+                    <Textarea
+                      value={clubHistory}
+                      onChange={(e) => setClubHistory(e.target.value)}
+                      className="bg-secondary border-border"
+                      rows={4}
+                      placeholder="Tuliskan sejarah singkat klub..."
+                    />
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label>Visi</Label>
+                      <Textarea
+                        value={clubVision}
+                        onChange={(e) => setClubVision(e.target.value)}
+                        className="bg-secondary border-border"
+                        rows={3}
+                        placeholder="Visi klub..."
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Misi</Label>
+                      <Textarea
+                        value={clubMission}
+                        onChange={(e) => setClubMission(e.target.value)}
+                        className="bg-secondary border-border"
+                        rows={3}
+                        placeholder="Misi klub..."
+                      />
+                    </div>
+                  </div>
+                </div>
+
                 <div className="flex justify-end">
                   <Button
                     onClick={handleSaveClub}

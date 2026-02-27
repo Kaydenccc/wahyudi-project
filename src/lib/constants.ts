@@ -9,6 +9,7 @@ import {
   Calendar,
   ListChecks,
   Trophy,
+  UserCircle,
 } from "lucide-react";
 
 export const APP_NAME = "PB. TIGA BERLIAN";
@@ -67,6 +68,12 @@ export const menuItems: MenuItem[] = [
     href: "/laporan",
     icon: FileText,
     roles: ["Admin", "Pelatih", "Ketua Klub"],
+  },
+  {
+    label: "Profil Saya",
+    href: "/profil",
+    icon: UserCircle,
+    roles: ["Atlet"],
   },
 ];
 

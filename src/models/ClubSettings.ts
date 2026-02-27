@@ -8,6 +8,9 @@ export interface IClubSettings extends Document {
   website: string;
   logo: string;
   favicon: string;
+  history: string;
+  vision: string;
+  mission: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -21,6 +24,9 @@ const ClubSettingsSchema = new Schema<IClubSettings>(
     website: { type: String, default: "" },
     logo: { type: String, default: "" },
     favicon: { type: String, default: "" },
+    history: { type: String, default: "" },
+    vision: { type: String, default: "" },
+    mission: { type: String, default: "" },
   },
   { timestamps: true }
 );

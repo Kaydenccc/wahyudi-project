@@ -53,6 +53,9 @@ export async function GET() {
         clubName: settings?.clubName || "PB. TIGA BERLIAN",
         logo: settings?.logo || "",
         website: settings?.website || "",
+        history: settings?.history || "",
+        vision: settings?.vision || "",
+        mission: settings?.mission || "",
       },
       stats: {
         totalAthletes,
