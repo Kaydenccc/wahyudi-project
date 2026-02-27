@@ -11,6 +11,7 @@ import {
   Upload,
   X,
   ImageIcon,
+  Trash2,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -108,6 +109,7 @@ export default function PengaturanPage() {
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [editingUser, setEditingUser] = useState<any>(null);
   const [showBanConfirm, setShowBanConfirm] = useState<any>(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState<any>(null);
   const [dialogSaving, setDialogSaving] = useState(false);
 
   // Add/Edit user form state
@@ -376,6 +378,23 @@ export default function PengaturanPage() {
       mutateUsers();
     } catch {
       toast.error("Gagal mengubah status user");
+    } finally {
+      setDialogSaving(false);
+    }
+  };
+
+  const handleDeleteUser = async (user: any) => {
+    setDialogSaving(true);
+    try {
+      const res = await fetch(`/api/users/${user._id}`, {
+        method: "DELETE",
+      });
+      if (!res.ok) throw new Error("Gagal menghapus user");
+      toast.success(`User "${user.name}" berhasil dihapus!`);
+      setShowDeleteConfirm(null);
+      mutateUsers();
+    } catch {
+      toast.error("Gagal menghapus user");
     } finally {
       setDialogSaving(false);
     }
@@ -884,6 +903,13 @@ export default function PengaturanPage() {
                                   >
                                     {getStatusActionLabel(user.status)}
                                   </DropdownMenuItem>
+                                  <DropdownMenuItem
+                                    className="text-destructive"
+                                    onClick={() => setShowDeleteConfirm(user)}
+                                  >
+                                    <Trash2 className="h-4 w-4 mr-2" />
+                                    Hapus
+                                  </DropdownMenuItem>
                                 </DropdownMenuContent>
                               </DropdownMenu>
                             )}
@@ -1002,6 +1028,36 @@ export default function PengaturanPage() {
               {dialogSaving
                 ? "Memproses..."
                 : getStatusActionLabel(showBanConfirm?.status || "")}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete User Confirm Dialog */}
+      <Dialog open={!!showDeleteConfirm} onOpenChange={() => setShowDeleteConfirm(null)}>
+        <DialogContent className="bg-card border-border">
+          <DialogHeader>
+            <DialogTitle>Hapus User</DialogTitle>
+          </DialogHeader>
+          <p className="text-sm text-muted-foreground">
+            Apakah Anda yakin ingin menghapus user{" "}
+            <span className="font-semibold text-foreground">{showDeleteConfirm?.name}</span>?
+            {showDeleteConfirm?.role === "Atlet" && (
+              <span className="block mt-2 text-destructive">
+                Semua data atlet terkait (absensi, performa, catatan pelatih, prestasi) juga akan dihapus.
+              </span>
+            )}
+          </p>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowDeleteConfirm(null)}>
+              Batal
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={() => handleDeleteUser(showDeleteConfirm)}
+              disabled={dialogSaving}
+            >
+              {dialogSaving ? "Menghapus..." : "Hapus"}
             </Button>
           </DialogFooter>
         </DialogContent>
