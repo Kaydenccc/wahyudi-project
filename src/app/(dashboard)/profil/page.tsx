@@ -1,11 +1,19 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { User, Save, KeyRound } from "lucide-react";
+import { User, Save, KeyRound, Dumbbell } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { PageHeader } from "@/components/shared/page-header";
 import { toast } from "sonner";
@@ -14,27 +22,50 @@ import { useSession } from "@/hooks/use-session";
 export default function ProfilPage() {
   const { user: sessionUser, refresh: refreshSession } = useSession();
   const [saving, setSaving] = useState(false);
+  const [loaded, setLoaded] = useState(false);
 
+  // Common fields
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [currentPassword, setCurrentPassword] = useState("");
   const [password, setPassword] = useState("");
+  const [address, setAddress] = useState("");
 
-  useEffect(() => {
-    if (sessionUser) {
-      setName(sessionUser.name || "");
-      setEmail(sessionUser.email || "");
-    }
-  }, [sessionUser]);
+  // Atlet & Pelatih
+  const [dateOfBirth, setDateOfBirth] = useState("");
+  const [gender, setGender] = useState("");
 
-  // Fetch phone separately since session doesn't include it
+  // Atlet only
+  const [category, setCategory] = useState("");
+  const [position, setPosition] = useState("");
+  const [height, setHeight] = useState("");
+  const [weight, setWeight] = useState("");
+
+  const role = sessionUser?.role;
+
+  // Fetch full profile data
   useEffect(() => {
     async function fetchProfile() {
       try {
         const res = await fetch("/api/auth/profile");
         if (res.ok) {
           const data = await res.json();
+          setName(data.name || "");
+          setEmail(data.email || "");
           setPhone(data.phone || "");
+          setAddress(data.address || "");
+          setDateOfBirth(
+            data.dateOfBirth
+              ? new Date(data.dateOfBirth).toISOString().split("T")[0]
+              : ""
+          );
+          setGender(data.gender || "");
+          setCategory(data.category || "");
+          setPosition(data.position || "");
+          setHeight(data.height?.toString() || "");
+          setWeight(data.weight?.toString() || "");
+          setLoaded(true);
         }
       } catch {
         // ignore
@@ -42,6 +73,14 @@ export default function ProfilPage() {
     }
     fetchProfile();
   }, []);
+
+  // Sync name/email from session if profile hasn't loaded yet
+  useEffect(() => {
+    if (sessionUser && !loaded) {
+      setName(sessionUser.name || "");
+      setEmail(sessionUser.email || "");
+    }
+  }, [sessionUser, loaded]);
 
   const handleSave = async () => {
     if (!name.trim()) {
@@ -57,17 +96,37 @@ export default function ProfilPage() {
       return;
     }
 
+    if (password && !currentPassword) {
+      toast.error("Password lama wajib diisi untuk mengubah password");
+      return;
+    }
+
+    const body: Record<string, unknown> = {
+      name: name.trim(),
+      email: email.trim(),
+      phone: phone.trim(),
+      address: address.trim(),
+      ...(password ? { password, currentPassword } : {}),
+    };
+
+    if (role === "Atlet" || role === "Pelatih") {
+      if (dateOfBirth) body.dateOfBirth = dateOfBirth;
+      if (gender) body.gender = gender;
+    }
+
+    if (role === "Atlet") {
+      if (category) body.category = category;
+      if (position) body.position = position;
+      if (height) body.height = Number(height);
+      if (weight) body.weight = Number(weight);
+    }
+
     setSaving(true);
     try {
       const res = await fetch("/api/auth/profile", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: name.trim(),
-          email: email.trim(),
-          phone: phone.trim(),
-          ...(password ? { password } : {}),
-        }),
+        body: JSON.stringify(body),
       });
       if (!res.ok) {
         const data = await res.json();
@@ -75,6 +134,7 @@ export default function ProfilPage() {
       }
       toast.success("Profil berhasil disimpan!");
       refreshSession();
+      setCurrentPassword("");
       setPassword("");
     } catch (err: any) {
       toast.error(err.message || "Gagal menyimpan profil");
@@ -124,6 +184,7 @@ export default function ProfilPage() {
 
         {/* Edit Form */}
         <div className="lg:col-span-2 space-y-6">
+          {/* Informasi Pribadi */}
           <Card className="border-border bg-card">
             <CardHeader>
               <CardTitle className="text-lg flex items-center gap-2">
@@ -161,6 +222,34 @@ export default function ProfilPage() {
                     className="bg-secondary border-border"
                   />
                 </div>
+
+                {(role === "Atlet" || role === "Pelatih") && (
+                  <div className="space-y-2">
+                    <Label>Tanggal Lahir</Label>
+                    <Input
+                      type="date"
+                      value={dateOfBirth}
+                      onChange={(e) => setDateOfBirth(e.target.value)}
+                      className="bg-secondary border-border"
+                    />
+                  </div>
+                )}
+
+                {(role === "Atlet" || role === "Pelatih") && (
+                  <div className="space-y-2">
+                    <Label>Jenis Kelamin</Label>
+                    <Select value={gender} onValueChange={setGender}>
+                      <SelectTrigger className="bg-secondary border-border">
+                        <SelectValue placeholder="Pilih jenis kelamin" />
+                      </SelectTrigger>
+                      <SelectContent className="bg-card border-border">
+                        <SelectItem value="Laki-laki">Laki-laki</SelectItem>
+                        <SelectItem value="Perempuan">Perempuan</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
+
                 <div className="space-y-2">
                   <Label>Role</Label>
                   <Input
@@ -170,9 +259,91 @@ export default function ProfilPage() {
                   />
                 </div>
               </div>
+
+              <div className="space-y-2">
+                <Label>Alamat</Label>
+                <Textarea
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                  placeholder="Masukkan alamat lengkap"
+                  className="bg-secondary border-border"
+                  rows={2}
+                />
+              </div>
             </CardContent>
           </Card>
 
+          {/* Informasi Atletik - hanya Atlet */}
+          {role === "Atlet" && (
+            <Card className="border-border bg-card">
+              <CardHeader>
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Dumbbell className="h-5 w-5" />
+                  Informasi Atletik
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Kategori</Label>
+                    <Select value={category} onValueChange={setCategory}>
+                      <SelectTrigger className="bg-secondary border-border">
+                        <SelectValue placeholder="Pilih kategori" />
+                      </SelectTrigger>
+                      <SelectContent className="bg-card border-border">
+                        <SelectItem value="Pra Usia Dini">Pra Usia Dini</SelectItem>
+                        <SelectItem value="Usia Dini">Usia Dini</SelectItem>
+                        <SelectItem value="Anak-anak">Anak-anak</SelectItem>
+                        <SelectItem value="Pemula">Pemula</SelectItem>
+                        <SelectItem value="Remaja">Remaja</SelectItem>
+                        <SelectItem value="Taruna">Taruna</SelectItem>
+                        <SelectItem value="Dewasa">Dewasa</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Posisi</Label>
+                    <Select value={position} onValueChange={setPosition}>
+                      <SelectTrigger className="bg-secondary border-border">
+                        <SelectValue placeholder="Pilih posisi" />
+                      </SelectTrigger>
+                      <SelectContent className="bg-card border-border">
+                        <SelectItem value="Tunggal">Tunggal</SelectItem>
+                        <SelectItem value="Ganda">Ganda</SelectItem>
+                        <SelectItem value="Keduanya">Keduanya</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Tinggi Badan (cm)</Label>
+                    <Input
+                      type="number"
+                      value={height}
+                      onChange={(e) => setHeight(e.target.value)}
+                      placeholder="Contoh: 170"
+                      className="bg-secondary border-border"
+                      min={100}
+                      max={250}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Berat Badan (kg)</Label>
+                    <Input
+                      type="number"
+                      value={weight}
+                      onChange={(e) => setWeight(e.target.value)}
+                      placeholder="Contoh: 65"
+                      className="bg-secondary border-border"
+                      min={30}
+                      max={200}
+                    />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Ubah Password */}
           <Card className="border-border bg-card">
             <CardHeader>
               <CardTitle className="text-lg flex items-center gap-2">
@@ -181,6 +352,16 @@ export default function ProfilPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label>Password Lama</Label>
+                <Input
+                  type="password"
+                  placeholder="Masukkan password lama"
+                  value={currentPassword}
+                  onChange={(e) => setCurrentPassword(e.target.value)}
+                  className="bg-secondary border-border"
+                />
+              </div>
               <div className="space-y-2">
                 <Label>Password Baru</Label>
                 <Input

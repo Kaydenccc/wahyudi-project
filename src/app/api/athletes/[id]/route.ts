@@ -3,8 +3,12 @@ import { connectDB } from "@/lib/db";
 import { Athlete } from "@/models/Athlete";
 import { Attendance } from "@/models/Attendance";
 import { PerformanceRecord } from "@/models/PerformanceRecord";
+import { CoachNote } from "@/models/CoachNote";
+import { Achievement } from "@/models/Achievement";
+import { User } from "@/models/User";
 import { updateAthleteSchema } from "@/lib/validations/athlete";
 import { requireAuth, requireRole } from "@/lib/api-auth";
+import { ZodError } from "zod";
 import { unlink } from "fs/promises";
 import path from "path";
 
@@ -105,7 +109,7 @@ export async function PUT(
 
     return NextResponse.json(athlete);
   } catch (error) {
-    if (error instanceof Error && error.name === "ZodError") {
+    if (error instanceof ZodError) {
       return NextResponse.json({ error: "Data tidak valid" }, { status: 400 });
     }
     console.error("PUT /api/athletes/[id] error:", error);
@@ -131,6 +135,15 @@ export async function DELETE(
 
     // Delete photo file from disk
     await deletePhotoFile(athlete.photo);
+
+    // Cascade: clean up dependent records
+    await Attendance.deleteMany({ athlete: id });
+    await PerformanceRecord.deleteMany({ athlete: id });
+    await CoachNote.deleteMany({ athlete: id });
+    await Achievement.deleteMany({ athlete: id });
+
+    // Clear athleteId reference on linked User
+    await User.updateOne({ athleteId: id }, { $unset: { athleteId: "" } });
 
     return NextResponse.json({ message: "Atlet berhasil dihapus" });
   } catch (error) {

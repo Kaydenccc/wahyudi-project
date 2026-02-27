@@ -7,17 +7,17 @@ export function DynamicFavicon() {
   const { branding } = useBranding();
 
   useEffect(() => {
-    if (!branding.favicon) return;
+    // Use favicon if set, otherwise fall back to club logo
+    const iconUrl = branding.favicon || branding.logo || "/logo.jpeg";
 
-    // Update or create favicon link element
     let link = document.querySelector<HTMLLinkElement>("link[rel='icon']");
     if (!link) {
       link = document.createElement("link");
       link.rel = "icon";
       document.head.appendChild(link);
     }
-    link.href = branding.favicon;
-  }, [branding.favicon]);
+    link.href = iconUrl;
+  }, [branding.favicon, branding.logo]);
 
   return null;
 }

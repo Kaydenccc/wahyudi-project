@@ -232,6 +232,11 @@ export default function DataAtletPage() {
                 ))}
               </tbody>
             </table>
+            {athletes.length === 0 && !isLoading && (
+              <div className="flex items-center justify-center py-8 text-sm text-muted-foreground">
+                Tidak ada data atlet ditemukan.
+              </div>
+            )}
           </div>
 
           {/* Pagination */}

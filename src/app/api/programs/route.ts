@@ -3,6 +3,7 @@ import { connectDB } from "@/lib/db";
 import { TrainingProgram } from "@/models/TrainingProgram";
 import { createProgramSchema } from "@/lib/validations/program";
 import { requireAuth, requireRole } from "@/lib/api-auth";
+import { ZodError } from "zod";
 
 export async function GET(request: NextRequest) {
   try {
@@ -16,7 +17,10 @@ export async function GET(request: NextRequest) {
     const type = searchParams.get("type") || "";
 
     const filter: Record<string, unknown> = {};
-    if (search) filter.name = { $regex: search, $options: "i" };
+    if (search) {
+      const escapedSearch = search.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      filter.name = { $regex: escapedSearch, $options: "i" };
+    }
     if (type) filter.type = type;
 
     const programs = await TrainingProgram.find(filter)
@@ -44,7 +48,7 @@ export async function POST(request: NextRequest) {
     const program = await TrainingProgram.create(validated);
     return NextResponse.json(program, { status: 201 });
   } catch (error) {
-    if (error instanceof Error && error.name === "ZodError") {
+    if (error instanceof ZodError) {
       return NextResponse.json({ error: "Data tidak valid" }, { status: 400 });
     }
     console.error("POST /api/programs error:", error);

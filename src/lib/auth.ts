@@ -76,6 +76,7 @@ export const ROLE_ACCESS: Record<string, string[]> = {
     "/program-latihan",
     "/absensi",
     "/monitoring-performa",
+    "/prestasi",
     "/laporan",
     "/pengaturan",
   ],
@@ -85,16 +86,18 @@ export const ROLE_ACCESS: Record<string, string[]> = {
     "/program-latihan",
     "/absensi",
     "/monitoring-performa",
+    "/prestasi",
     "/laporan",
   ],
   "Ketua Klub": [
     "/dashboard",
     "/data-atlet",
     "/monitoring-performa",
+    "/prestasi",
     "/laporan",
     "/pengaturan",
   ],
-  Atlet: ["/dashboard", "/monitoring-performa"],
+  Atlet: ["/dashboard", "/monitoring-performa", "/prestasi"],
 };
 
 export function canAccessRoute(role: string, pathname: string): boolean {

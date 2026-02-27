@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { BarChart3, TrendingUp, TrendingDown, Search, Plus } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -28,12 +28,6 @@ export default function MonitoringPerformaPage() {
   const { athletes: athletePerformance, isLoading } = usePerformance({
     search: debouncedSearch,
     status: activeTab === "Semua" ? "" : activeTab,
-  });
-
-  const filtered = athletePerformance.filter((a: any) => {
-    const matchesSearch = a.name.toLowerCase().includes(debouncedSearch.toLowerCase());
-    if (activeTab === "Semua") return matchesSearch;
-    return matchesSearch && a.status === activeTab;
   });
 
   const progresBaikCount = athletePerformance.filter((a: any) => a.status === "Progres Baik").length;
@@ -127,7 +121,7 @@ export default function MonitoringPerformaPage() {
                 </tr>
               </thead>
               <tbody>
-                {filtered.map((athlete: any) => (
+                {athletePerformance.map((athlete: any) => (
                   <tr key={athlete._id} className="border-b border-border/50 hover:bg-secondary/30 transition-colors">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
@@ -175,7 +169,7 @@ export default function MonitoringPerformaPage() {
                 ))}
               </tbody>
             </table>
-            {filtered.length === 0 && (
+            {athletePerformance.length === 0 && (
               <div className="flex items-center justify-center py-8 text-sm text-muted-foreground">
                 Tidak ada data atlet ditemukan.
               </div>

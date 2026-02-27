@@ -7,6 +7,16 @@ export interface IUser extends Document {
   role: string;
   status: string;
   password: string;
+  // Role-specific fields (optional)
+  dateOfBirth?: Date;
+  gender?: string;
+  address?: string;
+  // Atlet-only fields
+  category?: string;
+  position?: string;
+  height?: number;
+  weight?: number;
+  athleteId?: mongoose.Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -29,6 +39,22 @@ const UserSchema = new Schema<IUser>(
       default: "Aktif",
     },
     password: { type: String, required: true },
+    // Role-specific fields
+    dateOfBirth: { type: Date },
+    gender: { type: String, enum: ["Laki-laki", "Perempuan"] },
+    address: { type: String, default: "" },
+    // Atlet-only fields
+    category: {
+      type: String,
+      enum: ["Pra Usia Dini", "Usia Dini", "Anak-anak", "Pemula", "Remaja", "Taruna", "Dewasa"],
+    },
+    position: {
+      type: String,
+      enum: ["Tunggal", "Ganda", "Keduanya"],
+    },
+    height: { type: Number },
+    weight: { type: Number },
+    athleteId: { type: Schema.Types.ObjectId, ref: "Athlete" },
   },
   { timestamps: true }
 );

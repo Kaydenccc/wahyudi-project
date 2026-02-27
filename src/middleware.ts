@@ -7,7 +7,7 @@ const JWT_SECRET = new TextEncoder().encode(
 
 const COOKIE_NAME = "bclub-session";
 
-const PUBLIC_PATHS = ["/login", "/register", "/api/auth/login", "/api/auth/register"];
+const PUBLIC_PATHS = ["/login", "/register", "/api/auth/login", "/api/auth/register", "/klub", "/atlet"];
 
 const ROLE_ACCESS: Record<string, string[]> = {
   Admin: [
@@ -16,6 +16,7 @@ const ROLE_ACCESS: Record<string, string[]> = {
     "/program-latihan",
     "/absensi",
     "/monitoring-performa",
+    "/prestasi",
     "/laporan",
     "/pengaturan",
     "/profil",
@@ -26,6 +27,7 @@ const ROLE_ACCESS: Record<string, string[]> = {
     "/program-latihan",
     "/absensi",
     "/monitoring-performa",
+    "/prestasi",
     "/laporan",
     "/profil",
   ],
@@ -33,15 +35,21 @@ const ROLE_ACCESS: Record<string, string[]> = {
     "/dashboard",
     "/data-atlet",
     "/monitoring-performa",
+    "/prestasi",
     "/laporan",
     "/pengaturan",
     "/profil",
   ],
-  Atlet: ["/dashboard", "/monitoring-performa", "/profil"],
+  Atlet: ["/dashboard", "/monitoring-performa", "/prestasi", "/profil"],
 };
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
+
+  // Allow root landing page
+  if (pathname === "/") {
+    return NextResponse.next();
+  }
 
   // Allow public paths
   if (PUBLIC_PATHS.some((p) => pathname.startsWith(p))) {

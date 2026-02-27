@@ -8,6 +8,7 @@ import {
   Settings,
   Calendar,
   ListChecks,
+  Trophy,
 } from "lucide-react";
 
 export const APP_NAME = "PB. TIGA BERLIAN";
@@ -56,6 +57,12 @@ export const menuItems: MenuItem[] = [
     roles: ["Admin", "Pelatih", "Atlet", "Ketua Klub"],
   },
   {
+    label: "Prestasi",
+    href: "/prestasi",
+    icon: Trophy,
+    roles: ["Admin", "Pelatih", "Atlet", "Ketua Klub"],
+  },
+  {
     label: "Laporan",
     href: "/laporan",
     icon: FileText,
@@ -85,3 +92,6 @@ export const athleteStatuses = ["Aktif", "Pemulihan", "Non-Aktif", "Pro Roster"]
 export const trainingTypes = ["Teknik", "Fisik", "Taktik"] as const;
 export const attendanceStatuses = ["Hadir", "Izin", "Tidak Hadir"] as const;
 export const injurySeverities = ["Ringan", "Sedang", "Berat"] as const;
+export const achievementCategories = ["Turnamen", "Kejuaraan", "Peringkat", "Lainnya"] as const;
+export const achievementLevels = ["Daerah", "Nasional", "Internasional"] as const;
+export const achievementResults = ["Juara 1", "Juara 2", "Juara 3", "Partisipasi", "Lainnya"] as const;

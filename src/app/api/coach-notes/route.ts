@@ -3,7 +3,9 @@ import { connectDB } from "@/lib/db";
 import { CoachNote } from "@/models/CoachNote";
 import { requireAuth, requireRole } from "@/lib/api-auth";
 import { createCoachNoteSchema } from "@/lib/validations/coach-note";
+import { User } from "@/models/User";
 import { isValidObjectId } from "mongoose";
+import { ZodError } from "zod";
 
 export async function GET(request: NextRequest) {
   try {
@@ -17,6 +19,16 @@ export async function GET(request: NextRequest) {
 
     const filter: Record<string, unknown> = {};
     if (athleteId) filter.athlete = athleteId;
+
+    // Role-based access: Atlet can only see notes about themselves
+    if (auth.user.role === "Atlet") {
+      const currentUser = await User.findById(auth.user.id).select("athleteId").lean() as any;
+      if (currentUser?.athleteId) {
+        filter.athlete = currentUser.athleteId;
+      } else {
+        return NextResponse.json({ notes: [] });
+      }
+    }
 
     const notes = await CoachNote.find(filter)
       .populate("athlete", "name")
@@ -51,7 +63,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(note, { status: 201 });
   } catch (error) {
-    if (error instanceof Error && error.name === "ZodError") {
+    if (error instanceof ZodError) {
       return NextResponse.json({ error: "Data tidak valid" }, { status: 400 });
     }
     console.error("POST /api/coach-notes error:", error);

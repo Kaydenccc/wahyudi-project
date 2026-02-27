@@ -3,6 +3,7 @@ import { connectDB } from "@/lib/db";
 import { Athlete } from "@/models/Athlete";
 import { createAthleteSchema } from "@/lib/validations/athlete";
 import { requireAuth, requireRole } from "@/lib/api-auth";
+import { ZodError } from "zod";
 
 export async function GET(request: NextRequest) {
   try {
@@ -15,8 +16,8 @@ export async function GET(request: NextRequest) {
     const search = searchParams.get("search") || "";
     const category = searchParams.get("category") || "";
     const status = searchParams.get("status") || "";
-    const page = parseInt(searchParams.get("page") || "1");
-    const limit = parseInt(searchParams.get("limit") || "10");
+    const page = Math.max(1, parseInt(searchParams.get("page") || "1"));
+    const limit = Math.min(100, Math.max(1, parseInt(searchParams.get("limit") || "10")));
 
     const filter: Record<string, unknown> = {};
 
@@ -71,7 +72,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(athlete, { status: 201 });
   } catch (error) {
-    if (error instanceof Error && error.name === "ZodError") {
+    if (error instanceof ZodError) {
       return NextResponse.json({ error: "Data tidak valid" }, { status: 400 });
     }
     console.error("POST /api/athletes error:", error);

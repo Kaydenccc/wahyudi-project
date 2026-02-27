@@ -4,6 +4,7 @@ import { Attendance } from "@/models/Attendance";
 import { bulkAttendanceSchema } from "@/lib/validations/attendance";
 import { requireAuth, requireRole } from "@/lib/api-auth";
 import { isValidObjectId } from "mongoose";
+import { ZodError } from "zod";
 
 export async function GET(request: NextRequest) {
   try {
@@ -16,8 +17,8 @@ export async function GET(request: NextRequest) {
     const search = searchParams.get("search") || "";
     const status = searchParams.get("status") || "";
     const scheduleId = searchParams.get("scheduleId") || "";
-    const page = parseInt(searchParams.get("page") || "1");
-    const limit = parseInt(searchParams.get("limit") || "20");
+    const page = Math.max(1, parseInt(searchParams.get("page") || "1"));
+    const limit = Math.min(100, Math.max(1, parseInt(searchParams.get("limit") || "20")));
 
     const filter: Record<string, unknown> = {};
     if (status) filter.status = status;
@@ -113,7 +114,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ message: "Absensi berhasil disimpan" }, { status: 201 });
   } catch (error) {
-    if (error instanceof Error && error.name === "ZodError") {
+    if (error instanceof ZodError) {
       return NextResponse.json({ error: "Data tidak valid" }, { status: 400 });
     }
     console.error("POST /api/attendance error:", error);

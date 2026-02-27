@@ -1,10 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import { TrainingSchedule } from "@/models/TrainingSchedule";
+import { Attendance } from "@/models/Attendance";
 import "@/models/TrainingProgram";
 import "@/models/Athlete";
 import { updateScheduleSchema } from "@/lib/validations/schedule";
 import { requireAuth, requireRole } from "@/lib/api-auth";
+import { ZodError } from "zod";
 
 export async function GET(
   _request: NextRequest,
@@ -57,7 +59,7 @@ export async function PUT(
 
     return NextResponse.json(schedule);
   } catch (error) {
-    if (error instanceof Error && error.name === "ZodError") {
+    if (error instanceof ZodError) {
       return NextResponse.json({ error: "Data tidak valid" }, { status: 400 });
     }
     console.error("PUT /api/schedules/[id] error:", error);
@@ -80,6 +82,9 @@ export async function DELETE(
     if (!schedule) {
       return NextResponse.json({ error: "Jadwal tidak ditemukan" }, { status: 404 });
     }
+
+    // Cascade: delete related attendance records
+    await Attendance.deleteMany({ schedule: id });
 
     return NextResponse.json({ message: "Jadwal berhasil dihapus" });
   } catch (error) {

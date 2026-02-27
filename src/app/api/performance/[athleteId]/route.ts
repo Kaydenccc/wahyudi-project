@@ -4,6 +4,7 @@ import { PerformanceRecord } from "@/models/PerformanceRecord";
 import { Athlete } from "@/models/Athlete";
 import { CoachNote } from "@/models/CoachNote";
 import { requireAuth } from "@/lib/api-auth";
+import { User } from "@/models/User";
 
 export async function GET(
   _request: NextRequest,
@@ -15,6 +16,14 @@ export async function GET(
 
     await connectDB();
     const { athleteId } = await params;
+
+    // Role-based access: Atlet can only view their own performance
+    if (auth.user.role === "Atlet") {
+      const currentUser = await User.findById(auth.user.id).select("athleteId").lean() as any;
+      if (!currentUser?.athleteId || currentUser.athleteId.toString() !== athleteId) {
+        return NextResponse.json({ error: "Akses ditolak" }, { status: 403 });
+      }
+    }
 
     const athlete = await Athlete.findById(athleteId).lean();
     if (!athlete) {

@@ -5,6 +5,8 @@ import { Athlete } from "@/models/Athlete";
 import { Attendance } from "@/models/Attendance";
 import { createPerformanceSchema } from "@/lib/validations/performance";
 import { requireAuth, requireRole } from "@/lib/api-auth";
+import { User } from "@/models/User";
+import { ZodError } from "zod";
 
 export async function GET(request: NextRequest) {
   try {
@@ -17,11 +19,21 @@ export async function GET(request: NextRequest) {
     const search = searchParams.get("search") || "";
     const status = searchParams.get("status") || "";
 
+    // Role-based access: Atlet can only see their own performance
+    const athleteFilter: Record<string, unknown> = {};
+    if (auth.user.role === "Atlet") {
+      const currentUser = await User.findById(auth.user.id).select("athleteId").lean() as any;
+      if (currentUser?.athleteId) {
+        athleteFilter._id = currentUser.athleteId;
+      } else {
+        return NextResponse.json({ athletes: [] });
+      }
+    }
+
     // Get all athletes with their latest performance
     const escapedSearch = search ? search.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") : "";
-    const athletes = await Athlete.find(
-      escapedSearch ? { name: { $regex: escapedSearch, $options: "i" } } : {}
-    ).lean();
+    if (escapedSearch) athleteFilter.name = { $regex: escapedSearch, $options: "i" };
+    const athletes = await Athlete.find(athleteFilter).lean();
 
     const result = await Promise.all(
       athletes.map(async (athlete) => {
@@ -126,7 +138,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(record, { status: 201 });
   } catch (error) {
-    if (error instanceof Error && error.name === "ZodError") {
+    if (error instanceof ZodError) {
       return NextResponse.json({ error: "Data tidak valid" }, { status: 400 });
     }
     console.error("POST /api/performance error:", error);
