@@ -210,7 +210,7 @@ async function seed() {
       name: "Marcus Fernaldi",
       dateOfBirth: new Date("2000-02-14"),
       gender: "Laki-laki",
-      category: "Senior",
+      category: "Dewasa",
       position: "Ganda",
       status: "Aktif",
       height: 178,
@@ -233,7 +233,7 @@ async function seed() {
       name: "Kevin Sanjaya",
       dateOfBirth: new Date("1999-08-02"),
       gender: "Laki-laki",
-      category: "Senior",
+      category: "Dewasa",
       position: "Ganda",
       status: "Pro Roster",
       height: 170,
@@ -254,7 +254,7 @@ async function seed() {
       name: "Anthony Sinisuka",
       dateOfBirth: new Date("2001-07-15"),
       gender: "Laki-laki",
-      category: "Senior",
+      category: "Dewasa",
       position: "Tunggal",
       status: "Pro Roster",
       height: 175,
@@ -276,7 +276,7 @@ async function seed() {
       name: "Gregoria Mariska",
       dateOfBirth: new Date("2002-03-22"),
       gender: "Perempuan",
-      category: "Senior",
+      category: "Dewasa",
       position: "Tunggal",
       status: "Aktif",
       height: 168,
@@ -296,7 +296,7 @@ async function seed() {
       name: "Apriyani Rahayu",
       dateOfBirth: new Date("2001-11-29"),
       gender: "Perempuan",
-      category: "Senior",
+      category: "Dewasa",
       position: "Ganda",
       status: "Aktif",
       height: 165,
@@ -318,7 +318,7 @@ async function seed() {
       name: "Siti Fadia",
       dateOfBirth: new Date("2003-05-10"),
       gender: "Perempuan",
-      category: "Junior",
+      category: "Remaja",
       position: "Ganda",
       status: "Aktif",
       height: 163,
@@ -337,7 +337,7 @@ async function seed() {
       name: "Rizki Amelia",
       dateOfBirth: new Date("2004-09-12"),
       gender: "Perempuan",
-      category: "Junior",
+      category: "Remaja",
       position: "Tunggal",
       status: "Aktif",
       height: 166,
@@ -356,7 +356,7 @@ async function seed() {
       name: "Fajar Alfian",
       dateOfBirth: new Date("1998-01-26"),
       gender: "Laki-laki",
-      category: "Senior",
+      category: "Dewasa",
       position: "Ganda",
       status: "Pemulihan",
       height: 180,
@@ -377,7 +377,7 @@ async function seed() {
       name: "Rian Ardianto",
       dateOfBirth: new Date("1998-08-17"),
       gender: "Laki-laki",
-      category: "Senior",
+      category: "Dewasa",
       position: "Ganda",
       status: "Aktif",
       height: 176,
@@ -435,7 +435,7 @@ async function seed() {
       name: "Rahmat Hidayat",
       dateOfBirth: new Date("2005-06-25"),
       gender: "Laki-laki",
-      category: "Junior",
+      category: "Remaja",
       position: "Tunggal",
       status: "Aktif",
       height: 172,
@@ -455,7 +455,7 @@ async function seed() {
       name: "Putri Kusuma",
       dateOfBirth: new Date("2005-02-28"),
       gender: "Perempuan",
-      category: "Junior",
+      category: "Remaja",
       position: "Ganda",
       status: "Aktif",
       height: 165,
@@ -474,7 +474,7 @@ async function seed() {
       name: "Leo Rolly",
       dateOfBirth: new Date("2002-08-25"),
       gender: "Laki-laki",
-      category: "Senior",
+      category: "Dewasa",
       position: "Ganda",
       status: "Pemulihan",
       height: 180,
@@ -524,7 +524,7 @@ async function seed() {
       type: "Teknik",
       description: "Program peningkatan kekuatan dan ketepatan smash untuk atlet level menengah hingga atas.",
       objective: "Meningkatkan kecepatan smash rata-rata 10% dalam 4 minggu",
-      target: "Senior & Junior",
+      target: "Dewasa & Remaja",
       duration: 90,
       drills: [
         { name: "Shadow Smash Drill", description: "Latihan bayangan gerakan smash dengan fokus pada teknik ayunan" },
@@ -554,7 +554,7 @@ async function seed() {
       type: "Taktik",
       description: "Taktik dan strategi permainan ganda campuran: rotasi, serangan, dan pertahanan.",
       objective: "Memahami dan menguasai formasi serangan-bertahan dalam ganda campuran",
-      target: "Senior Ganda",
+      target: "Dewasa Ganda",
       duration: 120,
       drills: [
         { name: "Rotasi Front-Back", description: "Latihan rotasi posisi depan dan belakang secara bergantian" },
@@ -582,7 +582,7 @@ async function seed() {
       type: "Teknik",
       description: "Latihan teknik pukulan dekat net: drop shot, netting, dan net kill.",
       objective: "Meningkatkan akurasi pukulan net hingga 85%",
-      target: "Junior & Senior",
+      target: "Remaja & Dewasa",
       duration: 90,
       drills: [
         { name: "Net Spin Drill", description: "Latihan putaran shuttlecock di dekat net" },
@@ -777,14 +777,14 @@ async function seed() {
   // ═══════════════════════════════════════════════════════
   console.log("Seeding users...");
   const usersRaw = [
-    { name: "Admin Utama", email: "admin@bclub.id", phone: "021-5551234", role: "Admin", status: "Aktif", password: "admin123" },
-    { name: "Peter Gade", email: "peter@bclub.id", phone: "081111222333", role: "Pelatih", status: "Aktif", password: "coach123" },
-    { name: "Liliyana Natsir", email: "liliyana@bclub.id", phone: "081222333444", role: "Pelatih", status: "Aktif", password: "coach123" },
-    { name: "Marcus Fernaldi", email: "marcus@bclub.id", phone: "081234567801", role: "Atlet", status: "Aktif", password: "atlet123" },
-    { name: "Kevin Sanjaya", email: "kevin@bclub.id", phone: "081234567802", role: "Atlet", status: "Aktif", password: "atlet123" },
-    { name: "Gregoria Mariska", email: "gregoria@bclub.id", phone: "081234567804", role: "Atlet", status: "Aktif", password: "atlet123" },
-    { name: "Budi Santoso", email: "ketua@bclub.id", phone: "081777888999", role: "Ketua Klub", status: "Aktif", password: "ketua123" },
-    { name: "Susi Susanti", email: "susi@bclub.id", phone: "081333444555", role: "Atlet", status: "Non-Aktif", password: "atlet123" },
+    { name: "Admin Utama", email: "admin@tigaberlian.id", phone: "021-5551234", role: "Admin", status: "Aktif", password: "admin123" },
+    { name: "Peter Gade", email: "peter@tigaberlian.id", phone: "081111222333", role: "Pelatih", status: "Aktif", password: "coach123" },
+    { name: "Liliyana Natsir", email: "liliyana@tigaberlian.id", phone: "081222333444", role: "Pelatih", status: "Aktif", password: "coach123" },
+    { name: "Marcus Fernaldi", email: "marcus@tigaberlian.id", phone: "081234567801", role: "Atlet", status: "Aktif", password: "atlet123" },
+    { name: "Kevin Sanjaya", email: "kevin@tigaberlian.id", phone: "081234567802", role: "Atlet", status: "Aktif", password: "atlet123" },
+    { name: "Gregoria Mariska", email: "gregoria@tigaberlian.id", phone: "081234567804", role: "Atlet", status: "Aktif", password: "atlet123" },
+    { name: "Budi Santoso", email: "ketua@tigaberlian.id", phone: "081777888999", role: "Ketua Klub", status: "Aktif", password: "ketua123" },
+    { name: "Susi Susanti", email: "susi@tigaberlian.id", phone: "081333444555", role: "Atlet", status: "Non-Aktif", password: "atlet123" },
   ];
 
   const usersData = await Promise.all(
@@ -828,13 +828,13 @@ async function seed() {
   console.log(`  Club settings:        1`);
   console.log("========================================");
   console.log("\n  Login credentials:");
-  console.log("  admin@bclub.id    / admin123   (Admin)");
-  console.log("  peter@bclub.id    / coach123   (Pelatih)");
-  console.log("  liliyana@bclub.id / coach123   (Pelatih)");
-  console.log("  marcus@bclub.id   / atlet123   (Atlet)");
-  console.log("  kevin@bclub.id    / atlet123   (Atlet)");
-  console.log("  gregoria@bclub.id / atlet123   (Atlet)");
-  console.log("  ketua@bclub.id    / ketua123   (Ketua Klub)");
+  console.log("  admin@tigaberlian.id    / admin123   (Admin)");
+  console.log("  peter@tigaberlian.id    / coach123   (Pelatih)");
+  console.log("  liliyana@tigaberlian.id / coach123   (Pelatih)");
+  console.log("  marcus@tigaberlian.id   / atlet123   (Atlet)");
+  console.log("  kevin@tigaberlian.id    / atlet123   (Atlet)");
+  console.log("  gregoria@tigaberlian.id / atlet123   (Atlet)");
+  console.log("  ketua@tigaberlian.id    / ketua123   (Ketua Klub)");
   console.log("========================================\n");
 
   await mongoose.disconnect();

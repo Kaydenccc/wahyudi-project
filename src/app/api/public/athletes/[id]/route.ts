@@ -18,7 +18,7 @@ export async function GET(
       .select("customId name dateOfBirth gender category position status height weight photo joinDate")
       .lean() as any;
 
-    if (!athlete) {
+    if (!athlete || athlete.status === "Menunggu") {
       return NextResponse.json({ error: "Atlet tidak ditemukan" }, { status: 404 });
     }
 

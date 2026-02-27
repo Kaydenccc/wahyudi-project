@@ -3,6 +3,7 @@ import { connectDB } from "@/lib/db";
 import { Athlete } from "@/models/Athlete";
 import { createAthleteSchema } from "@/lib/validations/athlete";
 import { requireAuth, requireRole } from "@/lib/api-auth";
+import { syncOrphanedAthletes } from "@/lib/sync-athletes";
 import { ZodError } from "zod";
 
 export async function GET(request: NextRequest) {
@@ -11,6 +12,9 @@ export async function GET(request: NextRequest) {
     if (auth instanceof NextResponse) return auth;
 
     await connectDB();
+
+    // Auto-sync: create missing Athlete records for Atlet users without athleteId
+    await syncOrphanedAthletes();
 
     const { searchParams } = new URL(request.url);
     const search = searchParams.get("search") || "";
