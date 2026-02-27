@@ -1,8 +1,8 @@
 "use client";
 
 import {
-  BarChart,
-  Bar,
+  AreaChart,
+  Area,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -33,29 +33,40 @@ export function PerformanceBarChart({ mode, data = [] }: PerformanceBarChartProp
   const isSmash = mode === "smash";
   const label = isSmash ? "Kec. Smash (km/h)" : "Skor Performa";
   const color = isSmash ? "#3b82f6" : "#22c55e";
+  const colorLight = isSmash ? "#60a5fa" : "#4ade80";
+  const gradientId = isSmash ? "gradientSmash" : "gradientSkor";
 
-  // Auto domain for smash speed
   const yDomain: [number, number] = isSmash ? [0, 400] : [0, 100];
 
   return (
     <ResponsiveContainer width="100%" height={220}>
-      <BarChart data={data}>
+      <AreaChart data={data}>
+        <defs>
+          <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={color} stopOpacity={0.35} />
+            <stop offset="100%" stopColor={color} stopOpacity={0} />
+          </linearGradient>
+        </defs>
         <CartesianGrid
           strokeDasharray="3 3"
           stroke="var(--color-border)"
-          opacity={0.5}
+          opacity={0.4}
+          vertical={false}
         />
         <XAxis
           dataKey="week"
           stroke="var(--color-muted-foreground)"
           tick={{ fill: "var(--color-muted-foreground)", fontSize: 11 }}
-          axisLine={{ stroke: "var(--color-border)" }}
+          axisLine={false}
+          tickLine={false}
         />
         <YAxis
           stroke="var(--color-muted-foreground)"
           tick={{ fill: "var(--color-muted-foreground)", fontSize: 11 }}
-          axisLine={{ stroke: "var(--color-border)" }}
+          axisLine={false}
+          tickLine={false}
           domain={yDomain}
+          width={35}
         />
         <Tooltip
           contentStyle={{
@@ -63,19 +74,23 @@ export function PerformanceBarChart({ mode, data = [] }: PerformanceBarChartProp
             border: "1px solid var(--color-border)",
             borderRadius: "12px",
             color: "var(--color-foreground)",
+            boxShadow: "0 8px 30px rgba(0,0,0,0.12)",
           }}
           formatter={(value) => [
             isSmash ? `${value} km/h` : `${value}/100`,
             label,
           ]}
         />
-        <Bar
+        <Area
+          type="monotone"
           dataKey={mode}
-          fill={color}
-          radius={[4, 4, 0, 0]}
-          maxBarSize={32}
+          stroke={color}
+          strokeWidth={2.5}
+          fill={`url(#${gradientId})`}
+          dot={{ fill: color, strokeWidth: 2, r: 4, stroke: "var(--color-card)" }}
+          activeDot={{ r: 6, fill: colorLight, stroke: color, strokeWidth: 2 }}
         />
-      </BarChart>
+      </AreaChart>
     </ResponsiveContainer>
   );
 }

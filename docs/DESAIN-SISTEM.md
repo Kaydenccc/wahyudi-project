@@ -89,6 +89,7 @@
 │  │  ├── attendances      (Catatan kehadiran)                │   │
 │  │  ├── performancerecords(Catatan performa)                │   │
 │  │  ├── coachnotes       (Catatan pelatih)                  │   │
+│  │  ├── achievements     (Prestasi atlet)                   │   │
 │  │  └── clubsettings     (Pengaturan klub)                  │   │
 │  │                                                          │   │
 │  │  ODM: Mongoose 9 (Schema Validation)                     │   │
@@ -145,30 +146,43 @@
 ```
 PB. TIGA BERLIAN
 │
-├── /login                          [Publik] Halaman Login
-├── /register                       [Publik] Halaman Registrasi
+│── HALAMAN PUBLIK (Tanpa Login) ────────────────────────
 │
-└── /dashboard                      [Semua Role] Dashboard
+├── /                              [Publik] Landing Page
+├── /klub                          [Publik] Profil Klub
+├── /atlet                         [Publik] Daftar Atlet
+│   └── /[id]                      [Publik] Detail Atlet (data kontak disensor)
+├── /login                         [Publik] Halaman Login
+├── /register                      [Publik] Halaman Registrasi
+│
+│── HALAMAN DASHBOARD (Login Required) ──────────────────
+│
+└── /dashboard                     [Semua Role] Dashboard
     │
-    ├── /data-atlet                 [Admin, Pelatih, Ketua Klub]
-    │   ├── /tambah                     Tambah Atlet Baru
-    │   └── /[id]                       Detail Atlet
-    │       └── /edit                   Edit Data Atlet
+    ├── /data-atlet                [Admin, Pelatih, Ketua Klub]
+    │   ├── /tambah                    Tambah Atlet Baru
+    │   └── /[id]                      Detail Atlet
+    │       └── /edit                  Edit Data Atlet
     │
-    ├── /program-latihan            [Admin, Pelatih]
-    │   └── /[id]                       Detail Program
+    ├── /program-latihan           [Admin, Pelatih]
+    │   ├── Daftar Program
+    │   └── /jadwal                    Jadwal Latihan
     │
-    ├── /absensi                    [Admin, Pelatih]
+    ├── /absensi                   [Admin, Pelatih]
     │
-    ├── /monitoring-performa        [Semua Role]
-    │   └── /[athleteId]                Detail Performa Atlet
+    ├── /monitoring-performa       [Semua Role]
+    │   └── /[athleteId]               Detail Performa Atlet
     │
-    ├── /laporan                    [Admin, Pelatih, Ketua Klub]
+    ├── /prestasi                  [Semua Role]
+    │   (CRUD prestasi atlet — Atlet hanya data sendiri, Ketua Klub read-only)
     │
-    └── /pengaturan                 [Admin, Ketua Klub]
-        ├── Tab: Profil                 Edit Profil Sendiri
-        ├── Tab: Klub                   Pengaturan Klub
-        └── Tab: Pengguna              Manajemen User [Admin only]
+    ├── /laporan                   [Admin, Pelatih, Ketua Klub]
+    │
+    ├── /profil                    [Semua Role] Edit Profil & Password
+    │
+    └── /pengaturan                [Admin, Ketua Klub]
+        ├── Tab: Klub                  Pengaturan Klub
+        └── Tab: Pengguna             Manajemen User [Admin only]
 ```
 
 ### Akses Menu per Role
@@ -182,9 +196,20 @@ PB. TIGA BERLIAN
 │ Program Latihan     │   ✓   │    ✓    │     ✗      │   ✗   │
 │ Absensi             │   ✓   │    ✓    │     ✗      │   ✗   │
 │ Monitoring Performa │   ✓   │    ✓    │     ✓      │   ✓   │
+│ Prestasi            │   ✓   │    ✓    │  ✓ (read)  │   ✓   │
 │ Laporan             │   ✓   │    ✓    │     ✓      │   ✗   │
 │ Pengaturan          │   ✓   │    ✗    │     ✓      │   ✗   │
+│ Profil              │   ✓   │    ✓    │     ✓      │   ✓   │
 └─────────────────────┴───────┴─────────┴────────────┴───────┘
+
+┌──────────────────┬────────────────────────────────────────┐
+│ Halaman Publik   │ Akses                                  │
+├──────────────────┼────────────────────────────────────────┤
+│ Landing Page / │ Semua pengunjung (tanpa login)          │
+│ Profil Klub      │ Semua pengunjung (tanpa login)          │
+│ Daftar Atlet     │ Semua pengunjung (tanpa login)          │
+│ Detail Atlet     │ Semua pengunjung (data kontak disensor) │
+└──────────────────┴────────────────────────────────────────┘
 ```
 
 ---
@@ -932,7 +957,8 @@ PB. TIGA BERLIAN
 | 5 | Attendance | Catatan kehadiran per sesi | 7 |
 | 6 | PerformanceRecord | Catatan evaluasi performa | 12 |
 | 7 | CoachNote | Catatan pelatih untuk atlet | 7 |
-| 8 | ClubSettings | Pengaturan identitas klub | 9 |
+| 8 | Achievement | Prestasi/pencapaian atlet | 11 |
+| 9 | ClubSettings | Pengaturan identitas klub | 9 |
 
 ### 6.2 Relasi Antar Entitas
 
@@ -941,8 +967,20 @@ PB. TIGA BERLIAN
 │   ClubSettings   │     (standalone, tidak berelasi)
 └──────────────────┘
 
+┌──────────────────┐     1 ── 1      ┌──────────────────┐
+│      User        │─────────────────│    Athlete       │
+│ (autentikasi)    │  via athleteId  │ (untuk role Atlet)│
+└───────┬──────────┘                 └──────────────────┘
+        │
+        │  1 ── * (createdBy)
+        ▼
 ┌──────────────────┐
-│      User        │     (standalone, untuk autentikasi)
+│   Achievement    │
+│ • title          │
+│ • category       │
+│ • level          │
+│ • result         │
+│ • createdBy → User│
 └──────────────────┘
 
 ┌──────────────────┐         1 ────── *         ┌──────────────────┐
@@ -981,6 +1019,15 @@ PB. TIGA BERLIAN
                     │                  │          │ • type           │
                     │                  │          │ • content        │
                     │                  │          │ • coach          │
+                    │                  │          └──────────────────┘
+                    │                  │
+                    │                  │  1 ── *  ┌──────────────────┐
+                    │                  │──────────│   Achievement    │
+                    │                  │          │ • title          │
+                    │                  │          │ • category       │
+                    │                  │          │ • level          │
+                    │                  │          │ • result         │
+                    │                  │          │ • createdBy→User │
                     └──────────────────┘          └──────────────────┘
 ```
 

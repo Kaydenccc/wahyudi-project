@@ -1,9 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Menu, X, LogIn } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { useTheme } from "next-themes";
+import { Menu, X, LogIn, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useBranding } from "@/hooks/use-branding";
 
@@ -16,6 +18,16 @@ const navLinks = [
 export function PublicNavbar() {
   const { branding } = useBranding();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const pathname = usePathname();
+  const { resolvedTheme, setTheme } = useTheme();
+
+  useEffect(() => setMounted(true), []);
+
+  const isActive = (href: string) => {
+    if (href === "/") return pathname === "/";
+    return pathname === href || pathname.startsWith(href + "/");
+  };
 
   return (
     <nav className="sticky top-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-xl">
@@ -41,7 +53,11 @@ export function PublicNavbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-secondary/50"
+                className={`px-4 py-2 text-sm font-medium transition-colors rounded-lg ${
+                  isActive(link.href)
+                    ? "text-foreground bg-secondary/60"
+                    : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
+                }`}
               >
                 {link.label}
               </Link>
@@ -50,6 +66,19 @@ export function PublicNavbar() {
 
           {/* Actions */}
           <div className="flex items-center gap-2">
+            {mounted && (
+              <button
+                onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
+                className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary/50 transition-colors"
+                title="Ganti tema"
+              >
+                {resolvedTheme === "dark" ? (
+                  <Sun className="h-4 w-4" />
+                ) : (
+                  <Moon className="h-4 w-4" />
+                )}
+              </button>
+            )}
             <Link href="/login">
               <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90">
                 <LogIn className="h-4 w-4 mr-2" />
@@ -73,7 +102,11 @@ export function PublicNavbar() {
                 key={link.href}
                 href={link.href}
                 onClick={() => setMobileOpen(false)}
-                className="block px-4 py-2.5 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-secondary/50 rounded-lg"
+                className={`block px-4 py-2.5 text-sm font-medium rounded-lg ${
+                  isActive(link.href)
+                    ? "text-foreground bg-secondary/60"
+                    : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
+                }`}
               >
                 {link.label}
               </Link>

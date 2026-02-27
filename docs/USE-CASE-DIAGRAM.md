@@ -24,21 +24,33 @@ Buka https://www.canva.com dan cari template "Use Case Diagram", lalu isi manual
 | 1 | **Admin** | Mengelola seluruh sistem termasuk pengguna |
 | 2 | **Pelatih** | Mengelola data operasional latihan dan atlet |
 | 3 | **Ketua Klub** | Mengawasi klub, melihat laporan, kelola pengaturan |
-| 4 | **Atlet** | Melihat dashboard dan performa pribadi |
-| 5 | **Pengunjung** | Belum login, hanya bisa login/register |
+| 4 | **Atlet** | Melihat dashboard, performa pribadi, kelola prestasi sendiri |
+| 5 | **Pengunjung** | Melihat landing page, profil klub, daftar atlet, login/register |
 
 ---
 
 ## Daftar Use Case Lengkap
+
+  ### UC-00: Halaman Publik (Tanpa Login)
+
+  | Kode | Use Case | Pengunjung | Admin | Pelatih | Ketua Klub | Atlet |
+  |------|----------|:---:|:---:|:---:|:---:|:---:|
+  | UC-00.1 | Lihat Landing Page | v | v | v | v | v |
+  | UC-00.2 | Lihat Profil Klub (statistik, atlet unggulan, prestasi) | v | v | v | v | v |
+  | UC-00.3 | Lihat Daftar Atlet (search & filter) | v | v | v | v | v |
+  | UC-00.4 | Lihat Detail Atlet (profil, prestasi, performa) | v | v | v | v | v |
+
+  > **Catatan:** Data kontak (telepon, email, alamat) disensor pada halaman publik untuk melindungi privasi atlet.
 
   ### UC-01: Autentikasi
 
   | Kode | Use Case | Pengunjung | Admin | Pelatih | Ketua Klub | Atlet |
   |------|----------|:---:|:---:|:---:|:---:|:---:|
   | UC-01.1 | Login | v | - | - | - | - |
-  | UC-01.2 | Register (sebagai Atlet) | v | - | - | - | - |
+  | UC-01.2 | Register (sebagai Atlet, Pelatih, atau Ketua Klub) | v | - | - | - | - |
   | UC-01.3 | Logout | - | v | v | v | v |
   | UC-01.4 | Edit Profil Sendiri | - | v | v | v | v |
+  | UC-01.5 | Ganti Password (memerlukan password lama) | - | v | v | v | v |
 
 ### UC-02: Dashboard
 
@@ -114,6 +126,22 @@ Buka https://www.canva.com dan cari template "Use Case Diagram", lalu isi manual
 - Perlu Evaluasi = kehadiran <60% ATAU skor rata-rata <60
 - Stabil = kondisi lainnya
 
+### UC-07B: Prestasi Atlet
+
+| Kode | Use Case | Admin | Pelatih | Ketua Klub | Atlet |
+|------|----------|:---:|:---:|:---:|:---:|
+| UC-07B.1 | Lihat Daftar Prestasi (Filter & Search) | v | v | v | v* |
+| UC-07B.2 | Tambah Prestasi Baru | v | v | - | v* |
+| UC-07B.3 | Edit Prestasi | v | v | - | v** |
+| UC-07B.4 | Hapus Prestasi | v | v | - | v** |
+
+*Atlet hanya bisa melihat dan menambah prestasi untuk diri sendiri
+**Atlet hanya bisa mengedit/menghapus prestasi yang dibuat oleh dirinya sendiri
+
+**Kategori Prestasi:** Turnamen, Kejuaraan, Peringkat, Lainnya
+**Level:** Daerah, Nasional, Internasional
+**Hasil:** Juara 1, Juara 2, Juara 3, Partisipasi, Lainnya
+
 ### UC-08: Laporan
 
 | Kode | Use Case | Admin | Pelatih | Ketua Klub | Atlet |
@@ -152,10 +180,15 @@ Buka https://www.canva.com dan cari template "Use Case Diagram", lalu isi manual
 | **Absensi** | Admin, Pelatih | Admin, Pelatih | Admin, Pelatih | - |
 | **Performa** | Admin, Pelatih | Semua Role | - | - |
 | **Catatan Pelatih** | Admin, Pelatih | Semua Role | Admin, Pelatih | Admin, Pelatih |
+| **Prestasi** | Admin, Pelatih, Atlet* | Semua Role | Admin, Pelatih, Atlet** | Admin, Pelatih, Atlet** |
 | **Laporan** | - | Admin, Pelatih, Ketua Klub | - | - |
 | **Pengguna** | Admin | Admin | Admin | Admin |
 | **Pengaturan Klub** | - | Admin, Ketua Klub | Admin, Ketua Klub | - |
 | **Profil Sendiri** | - | Semua Role | Semua Role | - |
+| **Halaman Publik** | - | Semua (tanpa login) | - | - |
+
+*Atlet hanya bisa membuat prestasi untuk diri sendiri
+**Atlet hanya bisa mengedit/menghapus prestasi yang dibuat sendiri
 
 ---
 
@@ -171,6 +204,7 @@ Buka https://www.canva.com dan cari template "Use Case Diagram", lalu isi manual
 - phone: String
 - role: [Admin | Pelatih | Atlet | Ketua Klub]
 - status: [Aktif | Non-Aktif]
+- athleteId: FK → Athlete (hanya untuk role Atlet)
 - createdAt, updatedAt
 
 #### Athlete
@@ -242,6 +276,19 @@ Buka https://www.canva.com dan cari template "Use Case Diagram", lalu isi manual
 - content: String
 - coach: String
 
+#### Achievement
+- _id (PK)
+- athlete: FK → Athlete
+- title: String
+- description: String
+- date: Date
+- category: [Turnamen | Kejuaraan | Peringkat | Lainnya]
+- level: [Daerah | Nasional | Internasional]
+- result: [Juara 1 | Juara 2 | Juara 3 | Partisipasi | Lainnya]
+- photo: String (file path)
+- createdBy: FK → User
+- createdAt, updatedAt
+
 #### ClubSettings
 - _id (PK)
 - clubName: String
@@ -255,13 +302,16 @@ Buka https://www.canva.com dan cari template "Use Case Diagram", lalu isi manual
 ### Relasi Antar Entitas
 
 ```
+User             1 ──── 1 Athlete (via athleteId, untuk role Atlet)
 TrainingProgram  1 ──── * TrainingSchedule
 TrainingSchedule * ──── * Athlete (many-to-many)
 TrainingSchedule 1 ──── * Attendance
 Athlete          1 ──── * Attendance
 Athlete          1 ──── * PerformanceRecord
 Athlete          1 ──── * CoachNote
+Athlete          1 ──── * Achievement
 Athlete          1 ──── * Injury (embedded)
+Achievement      * ──── 1 User (createdBy)
 ```
 
 ---

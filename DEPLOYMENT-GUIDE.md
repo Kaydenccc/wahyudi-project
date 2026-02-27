@@ -613,7 +613,7 @@ Buka browser: `http://IP_ADDRESS_VPS`
 
 Contoh: `http://148.230.103.107`
 
-Jika halaman login PB. TIGA BERLIAN muncul, Nginx sudah bekerja dengan benar.
+Jika landing page PB. TIGA BERLIAN muncul (hero section dengan logo klub), Nginx sudah bekerja dengan benar.
 
 ---
 
@@ -685,6 +685,19 @@ systemctl restart nginx
 Buka browser: `http://NAMA_DOMAIN`
 
 Contoh: `http://sitigaberlian.my.id`
+
+### 10.5 Halaman Publik yang Tersedia
+
+Setelah deployment, halaman berikut bisa diakses **tanpa login**:
+
+| Halaman | URL | Deskripsi |
+|---------|-----|-----------|
+| Landing Page | `/` | Hero, statistik, atlet unggulan |
+| Profil Klub | `/klub` | Profil klub, statistik, prestasi terbaru |
+| Daftar Atlet | `/atlet` | Daftar semua atlet aktif (search & filter) |
+| Detail Atlet | `/atlet/[id]` | Profil atlet + prestasi (data kontak disensor) |
+
+> **Catatan:** Data sensitif (telepon, email, alamat) otomatis disensor di halaman publik.
 
 ---
 
