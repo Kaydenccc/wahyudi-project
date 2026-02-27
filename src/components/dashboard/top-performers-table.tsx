@@ -1,6 +1,6 @@
 "use client";
 
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Progress } from "@/components/ui/progress";
 import { useDashboardStats } from "@/hooks/use-dashboard";
 
@@ -31,6 +31,9 @@ export function TopPerformersTable() {
         >
           <div className="flex items-center gap-3">
             <Avatar className="h-8 w-8">
+              {p.photo && (
+                <AvatarImage src={p.photo} alt={p.name} />
+              )}
               <AvatarFallback className="bg-primary/10 text-primary text-xs">
                 {p.name.split(" ").map((n: string) => n[0]).join("")}
               </AvatarFallback>

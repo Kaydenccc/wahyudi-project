@@ -24,6 +24,15 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { StatusBadge } from "@/components/shared/status-badge";
 import { usePublicAthlete } from "@/hooks/use-public-data";
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
 
 interface Achievement {
   _id: string;
@@ -434,68 +443,95 @@ export default function PublicAtletDetailPage() {
 
           {performance.recent && performance.recent.length > 0 ? (
             <Card className="border-border bg-card">
-              <CardContent className="p-5 space-y-3">
-                {performance.recent.map(
-                  (entry: RecentPerformance, index: number) => (
-                    <div
-                      key={index}
-                      className="flex items-center gap-4 p-3 rounded-lg bg-secondary/30 hover:bg-secondary/50 transition-colors"
+              <CardContent className="p-5 space-y-4">
+                {/* Area Chart */}
+                <div className="w-full h-[260px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart
+                      data={[...performance.recent].reverse().map((entry: RecentPerformance) => ({
+                        date: new Date(entry.date).toLocaleDateString("id-ID", { day: "numeric", month: "short" }),
+                        score: entry.score,
+                        type: entry.type,
+                      }))}
                     >
-                      {/* Date */}
-                      <div className="flex-shrink-0 w-28">
-                        <p className="text-sm font-medium text-foreground">
-                          {formatDate(entry.date)}
-                        </p>
-                      </div>
+                      <defs>
+                        <linearGradient id="publicScoreGradient" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor="var(--color-primary)" stopOpacity={0.35} />
+                          <stop offset="100%" stopColor="var(--color-primary)" stopOpacity={0} />
+                        </linearGradient>
+                      </defs>
+                      <CartesianGrid
+                        strokeDasharray="3 3"
+                        stroke="var(--color-border)"
+                        opacity={0.4}
+                        vertical={false}
+                      />
+                      <XAxis
+                        dataKey="date"
+                        stroke="var(--color-muted-foreground)"
+                        tick={{ fill: "var(--color-muted-foreground)", fontSize: 11 }}
+                        axisLine={false}
+                        tickLine={false}
+                      />
+                      <YAxis
+                        domain={[0, 100]}
+                        stroke="var(--color-muted-foreground)"
+                        tick={{ fill: "var(--color-muted-foreground)", fontSize: 11 }}
+                        axisLine={false}
+                        tickLine={false}
+                        width={35}
+                      />
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: "var(--color-card)",
+                          border: "1px solid var(--color-border)",
+                          borderRadius: "12px",
+                          color: "var(--color-foreground)",
+                          boxShadow: "0 8px 30px rgba(0,0,0,0.12)",
+                        }}
+                        formatter={(value: any, _name: any, props: any) => [
+                          `${value}/100`,
+                          props?.payload?.type || "Skor",
+                        ]}
+                      />
+                      <Area
+                        type="monotone"
+                        dataKey="score"
+                        stroke="var(--color-primary)"
+                        strokeWidth={2.5}
+                        fill="url(#publicScoreGradient)"
+                        dot={{ fill: "var(--color-primary)", strokeWidth: 2, r: 4, stroke: "var(--color-card)" }}
+                        activeDot={{ r: 6, fill: "var(--color-primary)", stroke: "var(--color-card)", strokeWidth: 2 }}
+                      />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </div>
 
-                      {/* Score with Progress Bar */}
-                      <div className="flex-1 flex items-center gap-3">
-                        <Progress
-                          value={entry.score}
-                          className="flex-1 h-2 bg-secondary [&>div]:bg-primary"
-                        />
-                        <span className="text-sm font-bold text-primary min-w-[45px] text-right">
-                          {entry.score}/100
-                        </span>
+                {/* Summary row below chart */}
+                <div className="flex items-center justify-between pt-2 border-t border-border/50">
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <span>{performance.recent.length} evaluasi terakhir</span>
+                  </div>
+                  {(() => {
+                    const latest = performance.recent[0];
+                    if (!latest) return null;
+                    return (
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm text-muted-foreground">Terkini:</span>
+                        <span className="text-sm font-bold text-primary">{latest.score}/100</span>
+                        {latest.trend === "up" ? (
+                          <span className="flex items-center gap-0.5 text-xs text-green-400">
+                            <TrendingUp className="h-3.5 w-3.5" />+{latest.change}
+                          </span>
+                        ) : latest.trend === "down" ? (
+                          <span className="flex items-center gap-0.5 text-xs text-red-400">
+                            <TrendingDown className="h-3.5 w-3.5" />{latest.change}
+                          </span>
+                        ) : null}
                       </div>
-
-                      {/* Type Badge */}
-                      {entry.type && (
-                        <Badge
-                          variant="outline"
-                          className="border-border text-muted-foreground text-[10px] flex-shrink-0"
-                        >
-                          {entry.type}
-                        </Badge>
-                      )}
-
-                      {/* Trend Arrow + Change */}
-                      <div className="flex items-center gap-1 flex-shrink-0 min-w-[60px] justify-end">
-                        {entry.trend === "up" ? (
-                          <TrendingUp className="h-4 w-4 text-green-400" />
-                        ) : entry.trend === "down" ? (
-                          <TrendingDown className="h-4 w-4 text-red-400" />
-                        ) : (
-                          <div className="h-4 w-4 flex items-center justify-center">
-                            <div className="h-0.5 w-3 bg-muted-foreground rounded" />
-                          </div>
-                        )}
-                        <span
-                          className={`text-xs font-medium ${
-                            entry.trend === "up"
-                              ? "text-green-400"
-                              : entry.trend === "down"
-                                ? "text-red-400"
-                                : "text-muted-foreground"
-                          }`}
-                        >
-                          {entry.change > 0 ? "+" : ""}
-                          {entry.change}
-                        </span>
-                      </div>
-                    </div>
-                  )
-                )}
+                    );
+                  })()}
+                </div>
               </CardContent>
             </Card>
           ) : (

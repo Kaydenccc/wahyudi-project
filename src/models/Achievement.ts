@@ -41,6 +41,10 @@ const AchievementSchema = new Schema<IAchievement>(
   { timestamps: true }
 );
 
+AchievementSchema.index({ athlete: 1, date: -1 });
+AchievementSchema.index({ category: 1 });
+AchievementSchema.index({ level: 1 });
+
 export const Achievement =
   mongoose.models.Achievement ||
   mongoose.model<IAchievement>("Achievement", AchievementSchema);

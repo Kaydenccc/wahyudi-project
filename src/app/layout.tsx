@@ -18,6 +18,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "PB. TIGA BERLIAN | Sistem Pembinaan Atlet Bulutangkis",
   description: "Sistem informasi pembinaan dan monitoring performa atlet bulutangkis",
+  icons: { icon: "/logo.jpeg" },
   metadataBase: new URL("https://sitigaberlian.my.id"),
   openGraph: {
     title: "PB. TIGA BERLIAN | Sistem Pembinaan Atlet Bulutangkis",

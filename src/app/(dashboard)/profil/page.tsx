@@ -14,7 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { PageHeader } from "@/components/shared/page-header";
 import { toast } from "sonner";
 import { useSession } from "@/hooks/use-session";
@@ -164,6 +164,9 @@ export default function ProfilPage() {
         <Card className="border-border bg-card lg:col-span-1">
           <CardContent className="flex flex-col items-center py-8 space-y-4">
             <Avatar className="h-24 w-24 border-4 border-primary/30">
+              {sessionUser?.photo && (
+                <AvatarImage src={sessionUser.photo} alt={sessionUser.name} />
+              )}
               <AvatarFallback className="bg-primary/10 text-primary text-2xl font-bold">
                 {initials}
               </AvatarFallback>

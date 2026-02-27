@@ -161,19 +161,13 @@ export default function KlubPage() {
             <div className="relative group">
               <div className="absolute -inset-1 rounded-2xl bg-gradient-to-br from-primary/60 to-primary/20 blur-sm group-hover:blur-md transition-all duration-500" />
               <div className="relative size-24 rounded-2xl overflow-hidden ring-2 ring-primary/30 bg-card">
-                {club?.logo ? (
-                  <Image
-                    src={club.logo}
-                    alt={club.clubName || "Logo Klub"}
-                    fill
-                    className="object-cover"
-                    priority
-                  />
-                ) : (
-                  <div className="size-full flex items-center justify-center bg-primary/10">
-                    <Star className="size-10 text-primary" />
-                  </div>
-                )}
+                <Image
+                  src={club?.logo || "/logo.jpeg"}
+                  alt={club?.clubName || "Logo Klub"}
+                  fill
+                  className="object-cover"
+                  priority
+                />
               </div>
             </div>
 

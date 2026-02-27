@@ -49,6 +49,8 @@ const PerformanceRecordSchema = new Schema<IPerformanceRecord>(
   { timestamps: true }
 );
 
+PerformanceRecordSchema.index({ athlete: 1, date: -1 });
+
 export const PerformanceRecord =
   mongoose.models.PerformanceRecord ||
   mongoose.model<IPerformanceRecord>("PerformanceRecord", PerformanceRecordSchema);

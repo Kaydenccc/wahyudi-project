@@ -6,7 +6,7 @@ import Link from "next/link";
 import { Bell, Search, Menu, LogOut, Sun, Moon, X, Calendar, Clock } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 import {
   Popover,
@@ -145,6 +145,9 @@ export function Topbar() {
                     className="flex items-center gap-3 w-full px-4 py-2.5 hover:bg-secondary/50 transition-colors text-left cursor-pointer"
                   >
                     <Avatar className="h-8 w-8">
+                      {athlete.photo && (
+                        <AvatarImage src={athlete.photo} alt={athlete.name} />
+                      )}
                       <AvatarFallback className="bg-primary/10 text-primary text-xs">
                         {athlete.name?.split(" ").map((n: string) => n[0]).join("").slice(0, 2)}
                       </AvatarFallback>
@@ -275,6 +278,9 @@ export function Topbar() {
           </div>
 
           <Avatar className="h-9 w-9 border-2 border-primary">
+            {user?.photo && (
+              <AvatarImage src={user.photo} alt={user.name} />
+            )}
             <AvatarFallback className="bg-primary/20 text-primary text-sm font-semibold">
               {initials}
             </AvatarFallback>

@@ -65,7 +65,7 @@ export async function POST(req: NextRequest) {
           phone: validated.phone,
           address: validated.address,
           joinDate: new Date(),
-          status: "Aktif",
+          status: "Menunggu",
         });
 
         await User.findByIdAndUpdate(user._id, { athleteId: athlete._id });

@@ -5,6 +5,7 @@ import { Athlete } from "@/models/Athlete";
 import { Attendance } from "@/models/Attendance";
 import { PerformanceRecord } from "@/models/PerformanceRecord";
 import { CoachNote } from "@/models/CoachNote";
+import { Achievement } from "@/models/Achievement";
 import { updateUserSchema } from "@/lib/validations/user";
 import { requireRole } from "@/lib/api-auth";
 import { hashPassword } from "@/lib/auth";
@@ -103,6 +104,7 @@ export async function DELETE(
       await Attendance.deleteMany({ athlete: user.athleteId });
       await PerformanceRecord.deleteMany({ athlete: user.athleteId });
       await CoachNote.deleteMany({ athlete: user.athleteId });
+      await Achievement.deleteMany({ athlete: user.athleteId });
       await Athlete.findByIdAndDelete(user.athleteId);
     }
 

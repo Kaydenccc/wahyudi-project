@@ -6,7 +6,7 @@ import { BarChart3, TrendingUp, TrendingDown, Search, Plus } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Progress } from "@/components/ui/progress";
 import { PageHeader } from "@/components/shared/page-header";
 import { StatusBadge } from "@/components/shared/status-badge";
@@ -126,6 +126,9 @@ export default function MonitoringPerformaPage() {
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         <Avatar className="h-9 w-9">
+                          {athlete.photo && (
+                            <AvatarImage src={athlete.photo} alt={athlete.name} />
+                          )}
                           <AvatarFallback className="bg-primary/10 text-primary text-xs">
                             {athlete.name.split(" ").map((n: string) => n[0]).join("")}
                           </AvatarFallback>

@@ -20,7 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Progress } from "@/components/ui/progress";
 import { StatCard } from "@/components/shared/stat-card";
 import { PageHeader } from "@/components/shared/page-header";
@@ -359,6 +359,9 @@ export default function LaporanPage() {
                         <td className="px-6 py-3">
                           <div className="flex items-center gap-3">
                             <Avatar className="h-8 w-8">
+                              {athlete.photo && (
+                                <AvatarImage src={athlete.photo} alt={athlete.name} />
+                              )}
                               <AvatarFallback className="bg-primary/10 text-primary text-xs">
                                 {athlete.name
                                   .split(" ")

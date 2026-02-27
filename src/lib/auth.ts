@@ -2,8 +2,12 @@ import { SignJWT, jwtVerify } from "jose";
 import bcrypt from "bcryptjs";
 import { cookies } from "next/headers";
 
+if (process.env.NODE_ENV === "production" && !process.env.JWT_SECRET) {
+  throw new Error("JWT_SECRET environment variable is required in production");
+}
+
 const JWT_SECRET = new TextEncoder().encode(
-  process.env.JWT_SECRET || "bclub-secret-key-change-in-production"
+  process.env.JWT_SECRET || "bclub-dev-secret-key"
 );
 
 const COOKIE_NAME = "bclub-session";
@@ -79,6 +83,7 @@ export const ROLE_ACCESS: Record<string, string[]> = {
     "/prestasi",
     "/laporan",
     "/pengaturan",
+    "/profil",
   ],
   Pelatih: [
     "/dashboard",
@@ -88,6 +93,7 @@ export const ROLE_ACCESS: Record<string, string[]> = {
     "/monitoring-performa",
     "/prestasi",
     "/laporan",
+    "/profil",
   ],
   "Ketua Klub": [
     "/dashboard",
@@ -96,8 +102,9 @@ export const ROLE_ACCESS: Record<string, string[]> = {
     "/prestasi",
     "/laporan",
     "/pengaturan",
+    "/profil",
   ],
-  Atlet: ["/dashboard", "/monitoring-performa", "/prestasi"],
+  Atlet: ["/dashboard", "/monitoring-performa", "/prestasi", "/profil"],
 };
 
 export function canAccessRoute(role: string, pathname: string): boolean {

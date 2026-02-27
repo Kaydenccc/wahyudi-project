@@ -21,6 +21,8 @@ const CoachNoteSchema = new Schema<ICoachNote>(
   { timestamps: true }
 );
 
+CoachNoteSchema.index({ athlete: 1, date: -1 });
+
 export const CoachNote =
   mongoose.models.CoachNote ||
   mongoose.model<ICoachNote>("CoachNote", CoachNoteSchema);

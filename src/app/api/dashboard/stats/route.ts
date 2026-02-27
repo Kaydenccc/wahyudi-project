@@ -60,6 +60,7 @@ export async function GET(request: NextRequest) {
       {
         $project: {
           name: "$athlete.name",
+          photo: "$athlete.photo",
           category: "$athlete.category",
           position: "$athlete.position",
           avgScore: { $round: ["$avgScore", 0] },

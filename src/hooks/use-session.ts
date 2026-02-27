@@ -15,6 +15,7 @@ type SessionUser = {
   name: string;
   email: string;
   role: string;
+  photo?: string;
 };
 
 type SessionContextType = {

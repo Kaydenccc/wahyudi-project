@@ -78,6 +78,7 @@ export async function GET(request: NextRequest) {
 
           return {
             name: athlete.name,
+            photo: athlete.photo || "",
             category: athlete.category,
             attendance: attendancePercent,
             avgScore,

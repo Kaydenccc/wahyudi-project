@@ -7,7 +7,7 @@ import { Users, UserCheck, HeartPulse, Star, Search, SlidersHorizontal, Download
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -183,6 +183,9 @@ export default function DataAtletPage() {
                     <td className="px-6 py-4">
                       <Link href={`/data-atlet/${athlete._id}`} className="flex items-center gap-3">
                         <Avatar className="h-10 w-10">
+                          {(athlete as any).photo && (
+                            <AvatarImage src={(athlete as any).photo} alt={athlete.name} />
+                          )}
                           <AvatarFallback className="bg-primary/10 text-primary text-sm">
                             {athlete.name.split(" ").map((n: string) => n[0]).join("")}
                           </AvatarFallback>

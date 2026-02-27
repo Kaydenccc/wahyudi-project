@@ -65,6 +65,13 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const validated = createAchievementSchema.parse(body);
 
+    // Validate athlete exists
+    const { Athlete } = await import("@/models/Athlete");
+    const athleteExists = await Athlete.findById(validated.athlete).lean();
+    if (!athleteExists) {
+      return NextResponse.json({ error: "Atlet tidak ditemukan" }, { status: 404 });
+    }
+
     // Atlet can only create for themselves
     if (auth.user.role === "Atlet") {
       const currentUser = await User.findById(auth.user.id).select("athleteId").lean() as any;
