@@ -1,5 +1,12 @@
 import mongoose, { Schema, Document } from "mongoose";
 
+export interface ISponsor {
+  _id?: mongoose.Types.ObjectId;
+  name: string;
+  logo: string;
+  website?: string;
+}
+
 export interface IClubSettings extends Document {
   clubName: string;
   phone: string;
@@ -11,6 +18,7 @@ export interface IClubSettings extends Document {
   history: string;
   vision: string;
   mission: string;
+  sponsors: ISponsor[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -27,6 +35,13 @@ const ClubSettingsSchema = new Schema<IClubSettings>(
     history: { type: String, default: "" },
     vision: { type: String, default: "" },
     mission: { type: String, default: "" },
+    sponsors: [
+      {
+        name: { type: String, required: true },
+        logo: { type: String, required: true },
+        website: { type: String, default: "" },
+      },
+    ],
   },
   { timestamps: true }
 );

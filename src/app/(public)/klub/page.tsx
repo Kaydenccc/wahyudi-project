@@ -11,6 +11,8 @@ import {
   ArrowRight,
   Star,
   Award,
+  Handshake,
+  ExternalLink,
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -181,98 +183,21 @@ export default function KlubPage() {
               </p>
             </div>
 
-            {/* Website link */}
-            {club?.website && (
-              <a
-                href={club.website}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-card/80 backdrop-blur-sm border border-border/50 text-sm text-muted-foreground hover:text-foreground hover:border-primary/30 transition-all duration-300"
-              >
-                <Globe className="size-4 text-primary" />
-                <span>{club.website.replace(/^https?:\/\//, "")}</span>
-                <ArrowRight className="size-3" />
-              </a>
-            )}
+            {/* Login link */}
+            <Link
+              href="/login"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-card/80 backdrop-blur-sm border border-border/50 text-sm text-muted-foreground hover:text-foreground hover:border-primary/30 transition-all duration-300"
+            >
+              <Globe className="size-4 text-primary" />
+              <span>Masuk Dashboard</span>
+              <ArrowRight className="size-3" />
+            </Link>
           </div>
         </div>
 
         {/* Bottom fade */}
         <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-background to-transparent" />
       </section>
-
-      {/* ===== SEJARAH SECTION ===== */}
-      {club?.history && (
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 sm:pt-16">
-          <div className="space-y-6">
-            <div className="flex items-center gap-3">
-              <div className="flex items-center justify-center size-10 rounded-xl bg-primary/10">
-                <BookOpen className="size-5 text-primary" />
-              </div>
-              <div>
-                <h2 className="text-2xl sm:text-3xl font-bold text-foreground">
-                  Sejarah Klub
-                </h2>
-                <p className="text-sm text-muted-foreground">
-                  Perjalanan {club?.clubName || "Klub"}
-                </p>
-              </div>
-            </div>
-            <Card className="border-border/50 bg-card/80 backdrop-blur-sm">
-              <CardContent className="py-6">
-                <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
-                  {club.history}
-                </p>
-              </CardContent>
-            </Card>
-          </div>
-        </section>
-      )}
-
-      {/* ===== VISI & MISI SECTION ===== */}
-      {(club?.vision || club?.mission) && (
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 sm:pt-16">
-          <div className="space-y-6">
-            <div className="flex items-center gap-3">
-              <div className="flex items-center justify-center size-10 rounded-xl bg-blue-500/10">
-                <Star className="size-5 text-blue-500" />
-              </div>
-              <div>
-                <h2 className="text-2xl sm:text-3xl font-bold text-foreground">
-                  Visi & Misi
-                </h2>
-                <p className="text-sm text-muted-foreground">
-                  Arah dan tujuan pembinaan
-                </p>
-              </div>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-              {club?.vision && (
-                <Card className="relative overflow-hidden border-border/50 bg-card/80 backdrop-blur-sm">
-                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary/60 via-primary/30 to-transparent" />
-                  <CardContent className="py-6">
-                    <h3 className="text-lg font-semibold text-foreground mb-3">Visi</h3>
-                    <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
-                      {club.vision}
-                    </p>
-                  </CardContent>
-                </Card>
-              )}
-              {club?.mission && (
-                <Card className="relative overflow-hidden border-border/50 bg-card/80 backdrop-blur-sm">
-                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500/60 via-blue-500/30 to-transparent" />
-                  <CardContent className="py-6">
-                    <h3 className="text-lg font-semibold text-foreground mb-3">Misi</h3>
-                    <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
-                      {club.mission}
-                    </p>
-                  </CardContent>
-                </Card>
-              )}
-            </div>
-          </div>
-        </section>
-      )}
 
       {/* ===== STATISTICS SECTION ===== */}
       <section className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 z-10">
@@ -328,6 +253,79 @@ export default function KlubPage() {
           </Card>
         </div>
       </section>
+
+      {/* ===== SEJARAH SECTION ===== */}
+      {club?.history && (
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-20">
+          <div className="space-y-6">
+            <div className="flex items-center gap-3">
+              <div className="flex items-center justify-center size-10 rounded-xl bg-primary/10">
+                <BookOpen className="size-5 text-primary" />
+              </div>
+              <div>
+                <h2 className="text-2xl sm:text-3xl font-bold text-foreground">
+                  Sejarah Klub
+                </h2>
+                <p className="text-sm text-muted-foreground">
+                  Perjalanan {club?.clubName || "Klub"}
+                </p>
+              </div>
+            </div>
+            <Card className="border-border/50 bg-card/80 backdrop-blur-sm">
+              <CardContent className="py-6">
+                <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
+                  {club.history}
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+      )}
+
+      {/* ===== VISI & MISI SECTION ===== */}
+      {(club?.vision || club?.mission) && (
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-20">
+          <div className="space-y-6">
+            <div className="flex items-center gap-3">
+              <div className="flex items-center justify-center size-10 rounded-xl bg-blue-500/10">
+                <Star className="size-5 text-blue-500" />
+              </div>
+              <div>
+                <h2 className="text-2xl sm:text-3xl font-bold text-foreground">
+                  Visi & Misi
+                </h2>
+                <p className="text-sm text-muted-foreground">
+                  Arah dan tujuan pembinaan
+                </p>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+              {club?.vision && (
+                <Card className="relative overflow-hidden border-border/50 bg-card/80 backdrop-blur-sm">
+                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary/60 via-primary/30 to-transparent" />
+                  <CardContent className="py-6">
+                    <h3 className="text-lg font-semibold text-foreground mb-3">Visi</h3>
+                    <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
+                      {club.vision}
+                    </p>
+                  </CardContent>
+                </Card>
+              )}
+              {club?.mission && (
+                <Card className="relative overflow-hidden border-border/50 bg-card/80 backdrop-blur-sm">
+                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500/60 via-blue-500/30 to-transparent" />
+                  <CardContent className="py-6">
+                    <h3 className="text-lg font-semibold text-foreground mb-3">Misi</h3>
+                    <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
+                      {club.mission}
+                    </p>
+                  </CardContent>
+                </Card>
+              )}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ===== FEATURED ATHLETES SECTION ===== */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
@@ -561,6 +559,77 @@ export default function KlubPage() {
           )}
         </div>
       </section>
+
+      {/* ===== SPONSOR & MITRA SECTION ===== */}
+      {club?.sponsors && club.sponsors.length > 0 && (
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
+          <div className="space-y-8">
+            {/* Section header */}
+            <div className="flex flex-col items-center text-center gap-3">
+              <div className="flex items-center justify-center size-12 rounded-2xl bg-primary/10">
+                <Handshake className="size-6 text-primary" />
+              </div>
+              <div>
+                <h2 className="text-2xl sm:text-3xl font-bold text-foreground">
+                  Sponsor & Mitra
+                </h2>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Didukung oleh mitra terbaik kami
+                </p>
+              </div>
+            </div>
+
+            {/* Sponsors grid */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6">
+              {club.sponsors.map((sponsor: { _id: string; name: string; logo: string; website?: string }) => {
+                const content = (
+                  <div
+                    key={sponsor._id}
+                    className="group relative flex flex-col items-center gap-3 p-6 rounded-2xl bg-card/80 backdrop-blur-sm border border-border/50 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-1 transition-all duration-300"
+                  >
+                    {/* Glow effect on hover */}
+                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+                    {/* Logo container */}
+                    <div className="relative size-20 sm:size-24 rounded-xl overflow-hidden bg-background/50 border border-border/30 flex items-center justify-center p-2 group-hover:border-primary/20 transition-colors duration-300">
+                      <Image
+                        src={sponsor.logo}
+                        alt={sponsor.name}
+                        fill
+                        className="object-contain p-2 group-hover:scale-110 transition-transform duration-300"
+                      />
+                    </div>
+
+                    {/* Sponsor name */}
+                    <div className="relative text-center">
+                      <p className="text-sm font-medium text-foreground group-hover:text-primary transition-colors duration-300">
+                        {sponsor.name}
+                      </p>
+                      {sponsor.website && (
+                        <ExternalLink className="inline-block size-3 text-muted-foreground/50 ml-1 group-hover:text-primary/60 transition-colors" />
+                      )}
+                    </div>
+                  </div>
+                );
+
+                if (sponsor.website) {
+                  return (
+                    <a
+                      key={sponsor._id}
+                      href={sponsor.website}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {content}
+                    </a>
+                  );
+                }
+                return content;
+              })}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ===== CTA SECTION ===== */}
       <section className="relative overflow-hidden">

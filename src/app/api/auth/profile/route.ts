@@ -19,15 +19,34 @@ export async function GET(request: NextRequest) {
 
     await connectDB();
 
-    const user = await User.findById(auth.user.id)
+    let user = await User.findById(auth.user.id)
       .select("-password")
-      .lean();
+      .lean() as any;
 
     if (!user) {
       return NextResponse.json(
         { error: "User tidak ditemukan" },
         { status: 404 }
       );
+    }
+
+    // Auto-create Athlete record for active Atlet users without one
+    if (user.role === "Atlet" && user.status === "Aktif" && !user.athleteId) {
+      const athlete = await Athlete.create({
+        name: user.name,
+        dateOfBirth: user.dateOfBirth || new Date("2000-01-01"),
+        gender: user.gender || "Laki-laki",
+        category: user.category || "Pemula",
+        position: user.position || "Tunggal",
+        height: user.height || 170,
+        weight: user.weight || 60,
+        phone: user.phone || "",
+        address: user.address || "",
+        joinDate: new Date(),
+        status: "Aktif",
+      });
+      await User.findByIdAndUpdate(auth.user.id, { athleteId: athlete._id });
+      user = await User.findById(auth.user.id).select("-password").lean();
     }
 
     return NextResponse.json(user);

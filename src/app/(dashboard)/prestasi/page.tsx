@@ -197,24 +197,10 @@ export default function PrestasiPage() {
             );
           }
         })
-        .catch(() => {
-          // silently fail — will fallback to name matching
-        })
+        .catch(() => {})
         .finally(() => setProfileLoading(false));
     }
   }, [isAtlet]);
-
-  // Fallback: if no athleteId from profile, match by user name in athletes list
-  useEffect(() => {
-    if (isAtlet && !profileLoading && !ownAthleteId && user?.name && allAthletes.length > 0) {
-      const match = allAthletes.find(
-        (a: any) => a.name?.toLowerCase() === user.name?.toLowerCase()
-      );
-      if (match) {
-        setOwnAthleteId(match._id);
-      }
-    }
-  }, [isAtlet, profileLoading, ownAthleteId, user?.name, allAthletes]);
 
   // ---------------------------------------------------------------------------
   // Client-side search filter (API doesn't support text search)
@@ -289,7 +275,11 @@ export default function PrestasiPage() {
   const handleSubmit = async () => {
     // Basic validation
     if (!form.athlete) {
-      toast.error("Pilih atlet terlebih dahulu");
+      if (isAtlet) {
+        toast.error("Profil atlet belum tersedia. Silakan muat ulang halaman.");
+      } else {
+        toast.error("Pilih atlet terlebih dahulu");
+      }
       return;
     }
     if (!form.title.trim()) {
@@ -711,9 +701,7 @@ export default function PrestasiPage() {
                   value={
                     profileLoading
                       ? "Memuat..."
-                      : ownAthleteId
-                        ? user?.name || "Atlet"
-                        : "Profil atlet belum ditautkan. Hubungi admin."
+                      : user?.name || "Atlet"
                   }
                   disabled
                   className="bg-secondary border-border"

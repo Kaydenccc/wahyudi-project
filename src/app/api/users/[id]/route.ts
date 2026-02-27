@@ -65,12 +65,43 @@ export async function PUT(
       updateData.password = await hashPassword(validated.password);
     }
 
+    // Check if this is an Atlet approval (Menunggu → Aktif)
+    const currentUser = await User.findById(id).lean() as any;
+    if (!currentUser) {
+      return NextResponse.json({ error: "Pengguna tidak ditemukan" }, { status: 404 });
+    }
+
+    const isApproval = currentUser.status === "Menunggu" && updateData.status === "Aktif";
+
     const user = await User.findByIdAndUpdate(id, updateData, { new: true })
       .select("-password")
-      .lean();
+      .lean() as any;
 
     if (!user) {
       return NextResponse.json({ error: "Pengguna tidak ditemukan" }, { status: 404 });
+    }
+
+    // On Atlet approval: create Athlete record if missing, update status if exists
+    if (isApproval && user.role === "Atlet") {
+      if (user.athleteId) {
+        await Athlete.findByIdAndUpdate(user.athleteId, { status: "Aktif" });
+      } else {
+        // Auto-create Athlete record for legacy users without one
+        const athlete = await Athlete.create({
+          name: user.name,
+          dateOfBirth: user.dateOfBirth || new Date("2000-01-01"),
+          gender: user.gender || "Laki-laki",
+          category: user.category || "Pemula",
+          position: user.position || "Tunggal",
+          height: user.height || 170,
+          weight: user.weight || 60,
+          phone: user.phone || "",
+          address: user.address || "",
+          joinDate: new Date(),
+          status: "Aktif",
+        });
+        await User.findByIdAndUpdate(id, { athleteId: athlete._id });
+      }
     }
 
     return NextResponse.json(user);

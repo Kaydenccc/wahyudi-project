@@ -56,6 +56,7 @@ export async function GET() {
         history: settings?.history || "",
         vision: settings?.vision || "",
         mission: settings?.mission || "",
+        sponsors: settings?.sponsors || [],
       },
       stats: {
         totalAthletes,

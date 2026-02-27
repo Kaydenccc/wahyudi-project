@@ -59,7 +59,7 @@ const AthleteSchema = new Schema<IAthlete>(
     status: {
       type: String,
       required: true,
-      enum: ["Aktif", "Pemulihan", "Non-Aktif", "Pro Roster"],
+      enum: ["Aktif", "Pemulihan", "Non-Aktif", "Pro Roster", "Menunggu"],
       default: "Aktif",
     },
     height: { type: Number, required: true },

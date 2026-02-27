@@ -94,6 +94,16 @@ export default function PengaturanPage() {
   const [clubVision, setClubVision] = useState("");
   const [clubMission, setClubMission] = useState("");
 
+  // Sponsors state
+  const [sponsors, setSponsors] = useState<{ _id?: string; name: string; logo: string; website?: string }[]>([]);
+  const [showSponsorDialog, setShowSponsorDialog] = useState(false);
+  const [sponsorName, setSponsorName] = useState("");
+  const [sponsorLogo, setSponsorLogo] = useState("");
+  const [sponsorLogoPreview, setSponsorLogoPreview] = useState("");
+  const [sponsorWebsite, setSponsorWebsite] = useState("");
+  const [uploadingSponsorLogo, setUploadingSponsorLogo] = useState(false);
+  const sponsorLogoInputRef = useRef<HTMLInputElement>(null);
+
   // User management dialog state
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [editingUser, setEditingUser] = useState<any>(null);
@@ -129,6 +139,7 @@ export default function PengaturanPage() {
       setClubHistory(settings.history || "");
       setClubVision(settings.vision || "");
       setClubMission(settings.mission || "");
+      setSponsors(settings.sponsors || []);
     }
   }, [settings]);
 
@@ -206,6 +217,39 @@ export default function PengaturanPage() {
     handleUploadFile(file, setUploadingFavicon, setClubFavicon, setFaviconPreview);
   };
 
+  const handleSponsorLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      toast.error("File harus berupa gambar");
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("Ukuran file maksimal 5MB");
+      return;
+    }
+    handleUploadFile(file, setUploadingSponsorLogo, setSponsorLogo, setSponsorLogoPreview);
+  };
+
+  const handleAddSponsor = () => {
+    if (!sponsorName.trim() || !sponsorLogo) {
+      toast.error("Nama dan logo sponsor wajib diisi");
+      return;
+    }
+    setSponsors((prev) => [...prev, { name: sponsorName.trim(), logo: sponsorLogo, website: sponsorWebsite.trim() || "" }]);
+    setSponsorName("");
+    setSponsorLogo("");
+    setSponsorLogoPreview("");
+    setSponsorWebsite("");
+    setShowSponsorDialog(false);
+    toast.success("Sponsor ditambahkan! Klik Simpan untuk menyimpan perubahan.");
+  };
+
+  const handleRemoveSponsor = (index: number) => {
+    setSponsors((prev) => prev.filter((_, i) => i !== index));
+    toast.success("Sponsor dihapus! Klik Simpan untuk menyimpan perubahan.");
+  };
+
   const handleSaveClub = async () => {
     setSaving(true);
     try {
@@ -223,6 +267,7 @@ export default function PengaturanPage() {
           history: clubHistory,
           vision: clubVision,
           mission: clubMission,
+          sponsors: sponsors.map((s) => ({ name: s.name, logo: s.logo, website: s.website || "" })),
         }),
       });
       if (!res.ok) throw new Error("Gagal menyimpan pengaturan klub");
@@ -652,6 +697,68 @@ export default function PengaturanPage() {
                   </div>
                 </div>
 
+                {/* Sponsors */}
+                <div className="pt-4 border-t border-border space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h3 className="text-sm font-semibold text-foreground">Sponsor & Mitra</h3>
+                      <p className="text-xs text-muted-foreground">
+                        Kelola logo sponsor yang ditampilkan di halaman publik.
+                      </p>
+                    </div>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        setSponsorName("");
+                        setSponsorLogo("");
+                        setSponsorLogoPreview("");
+                        setSponsorWebsite("");
+                        setShowSponsorDialog(true);
+                      }}
+                    >
+                      <UserPlus className="h-3.5 w-3.5 mr-1.5" />
+                      Tambah Sponsor
+                    </Button>
+                  </div>
+
+                  {sponsors.length > 0 ? (
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                      {sponsors.map((sponsor, index) => (
+                        <div
+                          key={sponsor._id || index}
+                          className="relative group rounded-xl border border-border bg-secondary/50 p-3 flex flex-col items-center gap-2"
+                        >
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveSponsor(index)}
+                            className="absolute top-1.5 right-1.5 opacity-0 group-hover:opacity-100 transition-opacity h-6 w-6 rounded-full bg-destructive/10 text-destructive flex items-center justify-center hover:bg-destructive/20"
+                            title="Hapus sponsor"
+                          >
+                            <X className="h-3.5 w-3.5" />
+                          </button>
+                          <div className="h-16 w-16 rounded-lg bg-background border border-border flex items-center justify-center overflow-hidden">
+                            {sponsor.logo ? (
+                              <img src={sponsor.logo} alt={sponsor.name} className="h-full w-full object-contain p-1" />
+                            ) : (
+                              <ImageIcon className="h-6 w-6 text-muted-foreground" />
+                            )}
+                          </div>
+                          <p className="text-xs font-medium text-foreground text-center truncate w-full">
+                            {sponsor.name}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="rounded-xl border border-dashed border-border py-8 flex flex-col items-center gap-2 text-muted-foreground">
+                      <ImageIcon className="h-8 w-8" />
+                      <p className="text-sm">Belum ada sponsor</p>
+                    </div>
+                  )}
+                </div>
+
                 <div className="flex justify-end">
                   <Button
                     onClick={handleSaveClub}
@@ -895,6 +1002,78 @@ export default function PengaturanPage() {
               {dialogSaving
                 ? "Memproses..."
                 : getStatusActionLabel(showBanConfirm?.status || "")}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Add Sponsor Dialog */}
+      <Dialog open={showSponsorDialog} onOpenChange={setShowSponsorDialog}>
+        <DialogContent className="bg-card border-border">
+          <DialogHeader>
+            <DialogTitle>Tambah Sponsor</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label>Nama Sponsor</Label>
+              <Input
+                value={sponsorName}
+                onChange={(e) => setSponsorName(e.target.value)}
+                className="bg-secondary border-border"
+                placeholder="Nama sponsor atau mitra"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>Logo Sponsor</Label>
+              <div className="flex items-center gap-4">
+                <div className="h-20 w-20 rounded-xl border-2 border-dashed border-border flex items-center justify-center overflow-hidden bg-secondary/50 shrink-0">
+                  {sponsorLogoPreview ? (
+                    <img src={sponsorLogoPreview} alt="Preview" className="h-full w-full object-contain p-1" />
+                  ) : (
+                    <ImageIcon className="h-8 w-8 text-muted-foreground" />
+                  )}
+                </div>
+                <div className="flex flex-col gap-2">
+                  <input
+                    ref={sponsorLogoInputRef}
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handleSponsorLogoChange}
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => sponsorLogoInputRef.current?.click()}
+                    disabled={uploadingSponsorLogo}
+                  >
+                    <Upload className="h-3.5 w-3.5 mr-1.5" />
+                    {uploadingSponsorLogo ? "Mengunggah..." : "Unggah Logo"}
+                  </Button>
+                </div>
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label>Website (opsional)</Label>
+              <Input
+                value={sponsorWebsite}
+                onChange={(e) => setSponsorWebsite(e.target.value)}
+                className="bg-secondary border-border"
+                placeholder="https://..."
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowSponsorDialog(false)}>
+              Batal
+            </Button>
+            <Button
+              onClick={handleAddSponsor}
+              disabled={!sponsorName.trim() || !sponsorLogo}
+              className="bg-primary text-primary-foreground hover:bg-primary/90"
+            >
+              Tambah
             </Button>
           </DialogFooter>
         </DialogContent>

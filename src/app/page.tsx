@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Users, BookOpen, Trophy, BarChart3, Calendar, FileText, ArrowRight, Star, Award, LogIn } from "lucide-react";
+import { Users, BookOpen, Trophy, BarChart3, Calendar, FileText, ArrowRight, Star, Award, LogIn, Handshake, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { usePublicClub } from "@/hooks/use-public-data";
@@ -43,7 +43,7 @@ const features = [
 
 export default function LandingPage() {
   const { branding } = useBranding();
-  const { stats, featuredAthletes, isLoading } = usePublicClub();
+  const { club, stats, featuredAthletes, isLoading } = usePublicClub();
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -206,6 +206,59 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
+
+      {/* Sponsor Section */}
+      {club?.sponsors && club.sponsors.length > 0 && (
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-1.5 rounded-full text-sm font-medium mb-4">
+              <Handshake className="h-4 w-4" />
+              Sponsor & Mitra
+            </div>
+            <h2 className="text-3xl font-bold text-foreground">
+              Didukung Oleh
+            </h2>
+            <p className="mt-2 text-muted-foreground max-w-xl mx-auto">
+              Mitra dan sponsor yang mendukung pembinaan atlet kami.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6 max-w-5xl mx-auto">
+            {club.sponsors.map((sponsor: { _id: string; name: string; logo: string; website?: string }) => {
+              const card = (
+                <div
+                  key={sponsor._id}
+                  className="group flex flex-col items-center gap-3 p-6 bg-card border border-border/50 rounded-xl hover:border-primary/30 hover:-translate-y-1 hover:shadow-lg transition-all"
+                >
+                  <div className="relative size-20 sm:size-24 rounded-xl overflow-hidden bg-background/50 border border-border/30 flex items-center justify-center p-2 group-hover:border-primary/20 transition-colors">
+                    <Image
+                      src={sponsor.logo}
+                      alt={sponsor.name}
+                      fill
+                      className="object-contain p-2 group-hover:scale-110 transition-transform duration-300"
+                    />
+                  </div>
+                  <p className="text-sm font-medium text-foreground group-hover:text-primary transition-colors text-center">
+                    {sponsor.name}
+                    {sponsor.website && (
+                      <ExternalLink className="inline-block size-3 text-muted-foreground/50 ml-1 group-hover:text-primary/60 transition-colors" />
+                    )}
+                  </p>
+                </div>
+              );
+
+              if (sponsor.website) {
+                return (
+                  <a key={sponsor._id} href={sponsor.website} target="_blank" rel="noopener noreferrer">
+                    {card}
+                  </a>
+                );
+              }
+              return card;
+            })}
+          </div>
+        </section>
+      )}
 
       {/* CTA Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">

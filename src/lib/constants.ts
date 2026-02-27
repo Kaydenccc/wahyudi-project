@@ -95,7 +95,7 @@ export function canSeeSettings(role: string): boolean {
 export const categories = ["Pra Usia Dini", "Usia Dini", "Anak-anak", "Pemula", "Remaja", "Taruna", "Dewasa"] as const;
 export const positions = ["Tunggal", "Ganda", "Keduanya"] as const;
 export const genders = ["Laki-laki", "Perempuan"] as const;
-export const athleteStatuses = ["Aktif", "Pemulihan", "Non-Aktif", "Pro Roster"] as const;
+export const athleteStatuses = ["Aktif", "Pemulihan", "Non-Aktif", "Pro Roster", "Menunggu"] as const;
 export const trainingTypes = ["Teknik", "Fisik", "Taktik"] as const;
 export const attendanceStatuses = ["Hadir", "Izin", "Tidak Hadir"] as const;
 export const injurySeverities = ["Ringan", "Sedang", "Berat"] as const;
