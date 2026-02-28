@@ -7,7 +7,7 @@ const JWT_SECRET = new TextEncoder().encode(
 
 const COOKIE_NAME = "bclub-session";
 
-const PUBLIC_PATHS = ["/login", "/register", "/api/auth/login", "/api/auth/register", "/klub", "/atlet"];
+const PUBLIC_PATHS = ["/login", "/register", "/api/auth/login", "/api/auth/register", "/klub", "/atlet", "/dokumentasi"];
 
 const ROLE_ACCESS: Record<string, string[]> = {
   Admin: [
