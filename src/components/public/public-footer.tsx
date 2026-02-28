@@ -44,6 +44,9 @@ export function PublicFooter() {
               <Link href="/atlet" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                 Daftar Atlet
               </Link>
+              <Link href="/dokumentasi" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                Dokumentasi
+              </Link>
             </div>
           </div>
 

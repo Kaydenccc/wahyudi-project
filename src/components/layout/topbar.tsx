@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Bell, Search, Menu, LogOut, Sun, Moon, X, Calendar, Clock } from "lucide-react";
+import { Bell, Search, Menu, LogOut, Sun, Moon, X, Calendar, Clock, HelpCircle } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -184,6 +184,13 @@ export function Topbar() {
             )}
           </Button>
         )}
+
+        {/* Help / Documentation */}
+        <Link href="/dokumentasi" target="_blank">
+          <Button variant="ghost" size="icon" title="Panduan Penggunaan">
+            <HelpCircle className="h-5 w-5" />
+          </Button>
+        </Link>
 
         {/* Notification Bell */}
         <Popover open={notifOpen} onOpenChange={setNotifOpen}>

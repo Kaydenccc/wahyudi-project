@@ -13,6 +13,7 @@ const navLinks = [
   { label: "Beranda", href: "/" },
   { label: "Profil Klub", href: "/klub" },
   { label: "Daftar Atlet", href: "/atlet" },
+  { label: "Dokumentasi", href: "/dokumentasi" },
 ];
 
 export function PublicNavbar() {

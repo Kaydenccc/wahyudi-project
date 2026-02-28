@@ -93,6 +93,12 @@ export default function LandingPage() {
                 Masuk Dashboard
               </Button>
             </Link>
+            <Link href="/dokumentasi">
+              <Button size="lg" variant="outline" className="px-8">
+                <BookOpen className="h-4 w-4 mr-2" />
+                Panduan Penggunaan
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
