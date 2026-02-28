@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import { CoachNote } from "@/models/CoachNote";
 import { requireRole } from "@/lib/api-auth";
+import { isValidObjectId } from "mongoose";
 
 export async function DELETE(
   _request: NextRequest,
@@ -13,6 +14,10 @@ export async function DELETE(
 
     await connectDB();
     const { id } = await params;
+
+    if (!isValidObjectId(id)) {
+      return NextResponse.json({ error: "ID catatan tidak valid" }, { status: 400 });
+    }
 
     const note = await CoachNote.findByIdAndDelete(id);
     if (!note) {

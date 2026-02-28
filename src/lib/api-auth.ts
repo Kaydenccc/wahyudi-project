@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { jwtVerify } from "jose";
 
 const JWT_SECRET = new TextEncoder().encode(
-  process.env.JWT_SECRET || "bclub-secret-key-change-in-production"
+  process.env.JWT_SECRET || "bclub-dev-secret-key"
 );
 
 const COOKIE_NAME = "bclub-session";

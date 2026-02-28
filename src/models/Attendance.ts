@@ -27,6 +27,8 @@ const AttendanceSchema = new Schema<IAttendance>(
 
 // Compound index: one attendance record per athlete per schedule
 AttendanceSchema.index({ schedule: 1, athlete: 1 }, { unique: true });
+AttendanceSchema.index({ date: -1 });
+AttendanceSchema.index({ athlete: 1, date: -1 });
 
 export const Attendance =
   mongoose.models.Attendance ||

@@ -19,11 +19,10 @@ export async function GET(request: NextRequest) {
     const month = searchParams.get("month") || "";
     const year = searchParams.get("year") || new Date().getFullYear().toString();
     const category = searchParams.get("category") || "";
-    const trainingType = searchParams.get("trainingType") || "";
 
     // Date range for the selected month
-    const monthNum = month ? parseInt(month) - 1 : new Date().getMonth();
-    const yearNum = parseInt(year);
+    const monthNum = month ? parseInt(month, 10) - 1 : new Date().getMonth();
+    const yearNum = parseInt(year, 10);
     const startDate = new Date(yearNum, monthNum, 1);
     const endDate = new Date(yearNum, monthNum + 1, 0, 23, 59, 59);
     const prevStartDate = new Date(yearNum, monthNum - 1, 1);

@@ -6,7 +6,8 @@
       "Bash(node -e \"const fs=require\\(''fs''\\); fs.writeFileSync\\(''d:/SEKOLAH/wahyu-project/_gen.js'', ''const fs=require\\(\"\"fs\"\"\\);\\\\nconst b64=\"\"PLACEHOLDER\"\";\\\\nfs.writeFileSync\\(\"\"d:/SEKOLAH/wahyu-project/src/app/\\(dashboard\\)/absensi/page.tsx\"\", Buffer.from\\(b64,\"\"base64\"\"\\).toString\\(\"\"utf8\"\"\\)\\);\\\\nconsole.log\\(\"\"done\"\"\\);''\\); console.log\\(''script created''\\)\")",
       "Bash(node -e \"console.log\\(Buffer.from\\(''This Week&'' + ''apos;s Schedule''\\).toString\\(''base64''\\)\\)\")",
       "Bash(node -e \":*)",
-      "Bash(npm run build)"
+      "Bash(npm run build)",
+      "Bash(npx eslint src/app/api --quiet)"
     ]
   }
 }

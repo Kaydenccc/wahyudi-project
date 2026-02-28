@@ -19,5 +19,8 @@ export type { ICoachNote } from "./CoachNote";
 export { User } from "./User";
 export type { IUser } from "./User";
 
+export { Achievement } from "./Achievement";
+export type { IAchievement } from "./Achievement";
+
 export { ClubSettings } from "./ClubSettings";
 export type { IClubSettings } from "./ClubSettings";

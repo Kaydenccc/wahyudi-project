@@ -30,6 +30,29 @@ export async function POST(
       );
     }
 
+    const validSeverities = ["Ringan", "Sedang", "Berat"];
+    if (severity && !validSeverities.includes(severity)) {
+      return NextResponse.json(
+        { error: "Severity harus salah satu dari: Ringan, Sedang, Berat" },
+        { status: 400 }
+      );
+    }
+
+    if (recoveryWeeks !== undefined && (typeof recoveryWeeks !== "number" || recoveryWeeks < 0)) {
+      return NextResponse.json(
+        { error: "Recovery weeks harus berupa angka positif" },
+        { status: 400 }
+      );
+    }
+
+    const parsedDate = new Date(date);
+    if (isNaN(parsedDate.getTime())) {
+      return NextResponse.json(
+        { error: "Format tanggal tidak valid" },
+        { status: 400 }
+      );
+    }
+
     const athlete = await Athlete.findById(id);
     if (!athlete) {
       return NextResponse.json({ error: "Atlet tidak ditemukan" }, { status: 404 });
@@ -37,7 +60,7 @@ export async function POST(
 
     athlete.injuries.push({
       type,
-      date: new Date(date),
+      date: parsedDate,
       status: "Dalam Pemulihan",
       severity: severity || "Ringan",
       recoveryWeeks: recoveryWeeks || 4,

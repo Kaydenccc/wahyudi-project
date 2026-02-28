@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const user = await User.findOne({ email: email.toLowerCase() });
+    const user = await User.findOne({ email: email.trim().toLowerCase() });
     if (!user) {
       return NextResponse.json(
         { error: "Email atau password salah" },

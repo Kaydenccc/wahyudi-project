@@ -97,5 +97,9 @@ AthleteSchema.virtual("age").get(function () {
 AthleteSchema.set("toJSON", { virtuals: true });
 AthleteSchema.set("toObject", { virtuals: true });
 
+AthleteSchema.index({ status: 1 });
+AthleteSchema.index({ category: 1 });
+AthleteSchema.index({ createdAt: -1 });
+
 export const Athlete =
   mongoose.models.Athlete || mongoose.model<IAthlete>("Athlete", AthleteSchema);

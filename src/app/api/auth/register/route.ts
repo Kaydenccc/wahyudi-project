@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
     const validated = registerSchema.parse(body);
 
     // Check for existing email
-    const existing = await User.findOne({ email: validated.email.toLowerCase() });
+    const existing = await User.findOne({ email: validated.email.trim().toLowerCase() });
     if (existing) {
       return NextResponse.json(
         { error: "Email sudah terdaftar" },
@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
     // Build user data
     const userData: Record<string, unknown> = {
       name: validated.name,
-      email: validated.email.toLowerCase(),
+      email: validated.email.trim().toLowerCase(),
       password: hashedPassword,
       role: validated.role,
       status: "Menunggu",

@@ -16,6 +16,8 @@ export async function GET(request: NextRequest) {
 
     const { searchParams } = new URL(request.url);
     const athleteId = searchParams.get("athleteId") || "";
+    const page = Math.max(1, parseInt(searchParams.get("page") || "1", 10));
+    const limit = Math.min(100, Math.max(1, parseInt(searchParams.get("limit") || "50", 10)));
 
     const filter: Record<string, unknown> = {};
     if (athleteId) filter.athlete = athleteId;
@@ -30,12 +32,15 @@ export async function GET(request: NextRequest) {
       }
     }
 
+    const total = await CoachNote.countDocuments(filter);
     const notes = await CoachNote.find(filter)
       .populate("athlete", "name")
       .sort({ date: -1 })
+      .skip((page - 1) * limit)
+      .limit(limit)
       .lean();
 
-    return NextResponse.json({ notes });
+    return NextResponse.json({ notes, pagination: { total, page, limit, totalPages: Math.ceil(total / limit) } });
   } catch (error) {
     console.error("GET /api/coach-notes error:", error);
     return NextResponse.json({ error: "Gagal mengambil catatan" }, { status: 500 });

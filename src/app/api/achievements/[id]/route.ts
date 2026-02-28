@@ -5,6 +5,7 @@ import { User } from "@/models/User";
 import { updateAchievementSchema } from "@/lib/validations/achievement";
 import { requireAuth } from "@/lib/api-auth";
 import { ZodError } from "zod";
+import { isValidObjectId } from "mongoose";
 
 export async function GET(
   _request: NextRequest,
@@ -16,6 +17,10 @@ export async function GET(
 
     await connectDB();
     const { id } = await params;
+
+    if (!isValidObjectId(id)) {
+      return NextResponse.json({ error: "ID prestasi tidak valid" }, { status: 400 });
+    }
 
     const achievement = await Achievement.findById(id)
       .populate("athlete", "name photo category")
@@ -51,6 +56,10 @@ export async function PUT(
 
     await connectDB();
     const { id } = await params;
+
+    if (!isValidObjectId(id)) {
+      return NextResponse.json({ error: "ID prestasi tidak valid" }, { status: 400 });
+    }
 
     const existing = await Achievement.findById(id).lean() as any;
     if (!existing) {
@@ -94,6 +103,10 @@ export async function DELETE(
 
     await connectDB();
     const { id } = await params;
+
+    if (!isValidObjectId(id)) {
+      return NextResponse.json({ error: "ID prestasi tidak valid" }, { status: 400 });
+    }
 
     const existing = await Achievement.findById(id).lean() as any;
     if (!existing) {

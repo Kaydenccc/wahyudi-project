@@ -6,6 +6,7 @@ import "@/models/Athlete";
 import { createScheduleSchema } from "@/lib/validations/schedule";
 import { requireAuth, requireRole } from "@/lib/api-auth";
 import { ZodError } from "zod";
+import { isValidObjectId } from "mongoose";
 
 export async function GET(request: NextRequest) {
   try {
@@ -22,9 +23,11 @@ export async function GET(request: NextRequest) {
     if (status) filter.status = status;
     if (date) {
       const dateObj = new Date(date);
-      const nextDay = new Date(dateObj);
-      nextDay.setDate(nextDay.getDate() + 1);
-      filter.date = { $gte: dateObj, $lt: nextDay };
+      if (!isNaN(dateObj.getTime())) {
+        const nextDay = new Date(dateObj);
+        nextDay.setDate(nextDay.getDate() + 1);
+        filter.date = { $gte: dateObj, $lt: nextDay };
+      }
     }
 
     // Auto-update statuses based on current time using batch operations
@@ -103,7 +106,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(schedule, { status: 201 });
   } catch (error) {
-    if (error instanceof Error && error.name === "ZodError") {
+    if (error instanceof ZodError) {
       return NextResponse.json({ error: "Data tidak valid" }, { status: 400 });
     }
     console.error("POST /api/schedules error:", error);

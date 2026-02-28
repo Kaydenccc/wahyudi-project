@@ -9,13 +9,17 @@ import { User } from "@/models/User";
 import { updateAthleteSchema } from "@/lib/validations/athlete";
 import { requireAuth, requireRole } from "@/lib/api-auth";
 import { ZodError } from "zod";
+import { isValidObjectId } from "mongoose";
 import { unlink } from "fs/promises";
 import path from "path";
 
 async function deletePhotoFile(photoUrl: string | undefined) {
   if (!photoUrl || !photoUrl.startsWith("/uploads/")) return;
   try {
-    const filePath = path.join(process.cwd(), "public", photoUrl);
+    const uploadsDir = path.resolve(process.cwd(), "public", "uploads");
+    const filePath = path.resolve(process.cwd(), "public", photoUrl);
+    // Prevent path traversal — resolved path must stay within uploads dir
+    if (!filePath.startsWith(uploadsDir)) return;
     await unlink(filePath);
   } catch {
     // File may not exist, ignore
@@ -32,6 +36,10 @@ export async function GET(
 
     await connectDB();
     const { id } = await params;
+
+    if (!isValidObjectId(id)) {
+      return NextResponse.json({ error: "ID atlet tidak valid" }, { status: 400 });
+    }
 
     const athlete = await Athlete.findById(id).lean();
     if (!athlete) {
@@ -87,6 +95,10 @@ export async function PUT(
     await connectDB();
     const { id } = await params;
 
+    if (!isValidObjectId(id)) {
+      return NextResponse.json({ error: "ID atlet tidak valid" }, { status: 400 });
+    }
+
     const body = await request.json();
     const validated = updateAthleteSchema.parse(body);
 
@@ -127,6 +139,10 @@ export async function DELETE(
 
     await connectDB();
     const { id } = await params;
+
+    if (!isValidObjectId(id)) {
+      return NextResponse.json({ error: "ID atlet tidak valid" }, { status: 400 });
+    }
 
     const athlete = await Athlete.findByIdAndDelete(id);
     if (!athlete) {

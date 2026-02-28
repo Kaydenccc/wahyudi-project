@@ -10,6 +10,7 @@ import { updateUserSchema } from "@/lib/validations/user";
 import { requireRole } from "@/lib/api-auth";
 import { hashPassword } from "@/lib/auth";
 import { ZodError } from "zod";
+import { isValidObjectId } from "mongoose";
 
 export async function GET(
   _request: NextRequest,
@@ -21,6 +22,10 @@ export async function GET(
 
     await connectDB();
     const { id } = await params;
+
+    if (!isValidObjectId(id)) {
+      return NextResponse.json({ error: "ID pengguna tidak valid" }, { status: 400 });
+    }
 
     const user = await User.findById(id).select("-password").lean();
     if (!user) {
@@ -44,6 +49,10 @@ export async function PUT(
 
     await connectDB();
     const { id } = await params;
+
+    if (!isValidObjectId(id)) {
+      return NextResponse.json({ error: "ID pengguna tidak valid" }, { status: 400 });
+    }
 
     const body = await request.json();
     const validated = updateUserSchema.parse(body);
@@ -124,6 +133,10 @@ export async function DELETE(
 
     await connectDB();
     const { id } = await params;
+
+    if (!isValidObjectId(id)) {
+      return NextResponse.json({ error: "ID pengguna tidak valid" }, { status: 400 });
+    }
 
     const user = await User.findById(id) as any;
     if (!user) {

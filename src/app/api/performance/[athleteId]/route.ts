@@ -5,6 +5,7 @@ import { Athlete } from "@/models/Athlete";
 import { CoachNote } from "@/models/CoachNote";
 import { requireAuth } from "@/lib/api-auth";
 import { User } from "@/models/User";
+import { isValidObjectId } from "mongoose";
 
 export async function GET(
   _request: NextRequest,
@@ -16,6 +17,10 @@ export async function GET(
 
     await connectDB();
     const { athleteId } = await params;
+
+    if (!isValidObjectId(athleteId)) {
+      return NextResponse.json({ error: "ID atlet tidak valid" }, { status: 400 });
+    }
 
     // Role-based access: Atlet can only view their own performance
     if (auth.user.role === "Atlet") {

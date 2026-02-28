@@ -18,8 +18,8 @@ export async function GET(request: NextRequest) {
     const athleteId = searchParams.get("athleteId") || "";
     const category = searchParams.get("category") || "";
     const level = searchParams.get("level") || "";
-    const page = Math.max(1, parseInt(searchParams.get("page") || "1"));
-    const limit = Math.min(100, Math.max(1, parseInt(searchParams.get("limit") || "20")));
+    const page = Math.max(1, parseInt(searchParams.get("page") || "1", 10));
+    const limit = Math.min(100, Math.max(1, parseInt(searchParams.get("limit") || "20", 10)));
 
     const filter: Record<string, unknown> = {};
     if (athleteId) filter.athlete = athleteId;
