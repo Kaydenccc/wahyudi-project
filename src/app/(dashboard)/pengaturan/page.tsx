@@ -317,7 +317,10 @@ export default function PengaturanPage() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(body),
         });
-        if (!res.ok) throw new Error("Gagal mengupdate user");
+        if (!res.ok) {
+          const data = await res.json().catch(() => ({}));
+          throw new Error(data.error || "Gagal mengupdate user");
+        }
         toast.success("User berhasil diupdate!");
       } else {
         if (!formPassword || formPassword.length < 8) {
@@ -1121,7 +1124,7 @@ export default function PengaturanPage() {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowSponsorDialog(false)}>
+            <Button variant="outline" onClick={() => { setSponsorName(""); setSponsorLogo(""); setSponsorLogoPreview(""); setSponsorWebsite(""); setShowSponsorDialog(false); }}>
               Batal
             </Button>
             <Button

@@ -36,6 +36,10 @@ const TrainingScheduleSchema = new Schema<ITrainingSchedule>(
   { timestamps: true }
 );
 
+TrainingScheduleSchema.index({ date: -1 });
+TrainingScheduleSchema.index({ status: 1 });
+TrainingScheduleSchema.index({ program: 1 });
+
 export const TrainingSchedule =
   mongoose.models.TrainingSchedule ||
   mongoose.model<ITrainingSchedule>("TrainingSchedule", TrainingScheduleSchema);

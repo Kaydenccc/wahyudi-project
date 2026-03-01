@@ -183,23 +183,24 @@ export default function PrestasiPage() {
   const [profileLoading, setProfileLoading] = useState(false);
 
   useEffect(() => {
-    if (isAtlet) {
-      setProfileLoading(true);
-      fetch("/api/auth/profile")
-        .then((res) => {
-          if (res.ok) return res.json();
-          throw new Error("Failed to fetch profile");
-        })
-        .then((data) => {
-          if (data?.athleteId) {
-            setOwnAthleteId(
-              typeof data.athleteId === "object" ? data.athleteId._id || data.athleteId : data.athleteId
-            );
-          }
-        })
-        .catch(() => {})
-        .finally(() => setProfileLoading(false));
-    }
+    if (!isAtlet) return;
+    let cancelled = false;
+    setProfileLoading(true);
+    fetch("/api/auth/profile")
+      .then((res) => {
+        if (res.ok) return res.json();
+        throw new Error("Failed to fetch profile");
+      })
+      .then((data) => {
+        if (!cancelled && data?.athleteId) {
+          setOwnAthleteId(
+            typeof data.athleteId === "object" ? data.athleteId._id || data.athleteId : data.athleteId
+          );
+        }
+      })
+      .catch(() => {})
+      .finally(() => { if (!cancelled) setProfileLoading(false); });
+    return () => { cancelled = true; };
   }, [isAtlet]);
 
   // ---------------------------------------------------------------------------

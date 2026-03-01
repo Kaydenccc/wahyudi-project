@@ -84,6 +84,7 @@ export default function AtletDetailPage() {
   };
 
   const handleDeleteInjury = async (injuryId: string) => {
+    if (!confirm("Apakah Anda yakin ingin menghapus data cedera ini?")) return;
     try {
       const res = await fetch(`/api/athletes/${id}/injuries?injuryId=${injuryId}`, {
         method: "DELETE",

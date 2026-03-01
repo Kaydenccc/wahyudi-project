@@ -53,23 +53,29 @@ export function Topbar() {
       return;
     }
 
+    const controller = new AbortController();
     const timer = setTimeout(async () => {
       setSearching(true);
       try {
-        const res = await fetch(`/api/athletes?search=${encodeURIComponent(searchQuery)}&limit=5`);
+        const res = await fetch(`/api/athletes?search=${encodeURIComponent(searchQuery)}&limit=5`, {
+          signal: controller.signal,
+        });
         if (res.ok) {
           const data = await res.json();
           setSearchResults(data.athletes || []);
           setShowResults(true);
         }
-      } catch {
-        // ignore
+      } catch (err) {
+        if (err instanceof DOMException && err.name === "AbortError") return;
       } finally {
-        setSearching(false);
+        if (!controller.signal.aborted) setSearching(false);
       }
     }, 300);
 
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+      controller.abort();
+    };
   }, [searchQuery]);
 
   // Upcoming schedules for notifications

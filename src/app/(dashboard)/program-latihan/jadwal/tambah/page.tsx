@@ -55,6 +55,11 @@ export default function TambahJadwalPage() {
       return;
     }
 
+    if (startTime && endTime && startTime >= endTime) {
+      toast.error("Jam selesai harus lebih besar dari jam mulai");
+      return;
+    }
+
     setIsSubmitting(true);
     try {
       const dateObj = new Date(date);

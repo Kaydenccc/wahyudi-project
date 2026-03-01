@@ -77,6 +77,8 @@ export async function PUT(
     const validated = updateAchievementSchema.parse(body);
 
     const updateData: Record<string, unknown> = { ...validated };
+    // Prevent changing the athlete reference — it's immutable after creation
+    delete updateData.athlete;
     if (validated.date) updateData.date = new Date(validated.date);
 
     const achievement = await Achievement.findByIdAndUpdate(id, updateData, { new: true })

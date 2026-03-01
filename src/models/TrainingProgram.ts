@@ -37,6 +37,9 @@ const TrainingProgramSchema = new Schema<ITrainingProgram>(
   { timestamps: true }
 );
 
+TrainingProgramSchema.index({ name: 1 });
+TrainingProgramSchema.index({ type: 1 });
+
 export const TrainingProgram =
   mongoose.models.TrainingProgram ||
   mongoose.model<ITrainingProgram>("TrainingProgram", TrainingProgramSchema);

@@ -82,9 +82,14 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Ketua Klub tidak dapat menambah prestasi" }, { status: 403 });
     }
 
+    const parsedDate = new Date(validated.date);
+    if (isNaN(parsedDate.getTime())) {
+      return NextResponse.json({ error: "Format tanggal tidak valid" }, { status: 400 });
+    }
+
     const achievement = await Achievement.create({
       ...validated,
-      date: new Date(validated.date),
+      date: parsedDate,
       createdBy: auth.user.id,
     });
 

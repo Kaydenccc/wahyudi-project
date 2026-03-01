@@ -84,8 +84,8 @@ export async function GET(request: NextRequest) {
       { $sort: { _id: 1 } },
     ]);
 
-    const weeklyAttendance = weeklyAttendanceRaw.map((w, i) => ({
-      week: `W${i + 1}`,
+    const weeklyAttendance = weeklyAttendanceRaw.map((w) => ({
+      week: `W${w._id}`,
       percentage: w.total > 0 ? Math.round((w.hadir / w.total) * 100) : 0,
     }));
 

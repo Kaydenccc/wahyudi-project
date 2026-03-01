@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { writeFile, mkdir } from "fs/promises";
+import { randomBytes } from "crypto";
 import path from "path";
 import { requireAuth } from "@/lib/api-auth";
 
@@ -42,7 +43,7 @@ export async function POST(request: NextRequest) {
       "image/webp": "webp",
     };
     const ext = mimeToExt[file.type] || "jpg";
-    const filename = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+    const filename = `${Date.now()}-${randomBytes(4).toString("hex")}.${ext}`;
     const uploadDir = path.join(process.cwd(), "public", "uploads");
     await mkdir(uploadDir, { recursive: true });
     const filepath = path.join(uploadDir, filename);
@@ -51,9 +52,10 @@ export async function POST(request: NextRequest) {
 
     const url = `/uploads/${filename}`;
     return NextResponse.json({ url });
-  } catch (error: any) {
+  } catch (error) {
+    console.error("POST /api/upload error:", error);
     return NextResponse.json(
-      { error: error.message || "Upload gagal" },
+      { error: "Upload gagal" },
       { status: 500 }
     );
   }

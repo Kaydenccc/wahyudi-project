@@ -2,8 +2,8 @@ import { z } from "zod";
 
 export const createAchievementSchema = z.object({
   athlete: z.string().min(1, "Atlet wajib dipilih"),
-  title: z.string().min(1, "Judul prestasi wajib diisi"),
-  description: z.string().default(""),
+  title: z.string().min(1, "Judul prestasi wajib diisi").max(200),
+  description: z.string().max(2000).default(""),
   date: z.string().min(1, "Tanggal wajib diisi"),
   category: z.enum(["Turnamen", "Kejuaraan", "Peringkat", "Lainnya"]),
   level: z.enum(["Daerah", "Nasional", "Internasional"]),
@@ -12,8 +12,8 @@ export const createAchievementSchema = z.object({
 });
 
 export const updateAchievementSchema = z.object({
-  title: z.string().min(1).optional(),
-  description: z.string().optional(),
+  title: z.string().min(1).max(200).optional(),
+  description: z.string().max(2000).optional(),
   date: z.string().min(1).optional(),
   category: z.enum(["Turnamen", "Kejuaraan", "Peringkat", "Lainnya"]).optional(),
   level: z.enum(["Daerah", "Nasional", "Internasional"]).optional(),

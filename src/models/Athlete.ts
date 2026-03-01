@@ -50,7 +50,7 @@ const PerformanceEntrySchema = new Schema<IPerformanceEntry>({
 
 const AthleteSchema = new Schema<IAthlete>(
   {
-    customId: { type: String, unique: true },
+    customId: { type: String, unique: true, sparse: true },
     name: { type: String, required: true },
     dateOfBirth: { type: Date, required: true },
     gender: { type: String, required: true, enum: ["Laki-laki", "Perempuan"] },

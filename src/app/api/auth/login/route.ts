@@ -15,6 +15,14 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Prevent bcrypt DoS with extremely long passwords
+    if (typeof password !== "string" || password.length > 128) {
+      return NextResponse.json(
+        { error: "Email atau password salah" },
+        { status: 401 }
+      );
+    }
+
     const user = await User.findOne({ email: email.trim().toLowerCase() });
     if (!user) {
       return NextResponse.json(

@@ -20,7 +20,12 @@ export async function GET(request: NextRequest) {
     const limit = Math.min(100, Math.max(1, parseInt(searchParams.get("limit") || "50", 10)));
 
     const filter: Record<string, unknown> = {};
-    if (athleteId) filter.athlete = athleteId;
+    if (athleteId) {
+      if (!isValidObjectId(athleteId)) {
+        return NextResponse.json({ error: "ID atlet tidak valid" }, { status: 400 });
+      }
+      filter.athlete = athleteId;
+    }
 
     // Role-based access: Atlet can only see notes about themselves
     if (auth.user.role === "Atlet") {
@@ -61,9 +66,14 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "ID atlet tidak valid" }, { status: 400 });
     }
 
+    const parsedDate = new Date(validated.date);
+    if (isNaN(parsedDate.getTime())) {
+      return NextResponse.json({ error: "Format tanggal tidak valid" }, { status: 400 });
+    }
+
     const note = await CoachNote.create({
       ...validated,
-      date: new Date(validated.date),
+      date: parsedDate,
     });
 
     return NextResponse.json(note, { status: 201 });

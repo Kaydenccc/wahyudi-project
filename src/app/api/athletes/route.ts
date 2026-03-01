@@ -68,10 +68,16 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const validated = createAthleteSchema.parse(body);
 
+    const parsedDOB = new Date(validated.dateOfBirth);
+    const parsedJoin = new Date(validated.joinDate);
+    if (isNaN(parsedDOB.getTime()) || isNaN(parsedJoin.getTime())) {
+      return NextResponse.json({ error: "Format tanggal tidak valid" }, { status: 400 });
+    }
+
     const athlete = await Athlete.create({
       ...validated,
-      dateOfBirth: new Date(validated.dateOfBirth),
-      joinDate: new Date(validated.joinDate),
+      dateOfBirth: parsedDOB,
+      joinDate: parsedJoin,
     });
 
     return NextResponse.json(athlete, { status: 201 });

@@ -99,9 +99,19 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const validated = createScheduleSchema.parse(body);
 
+    const parsedDate = new Date(validated.date);
+    if (isNaN(parsedDate.getTime())) {
+      return NextResponse.json({ error: "Format tanggal tidak valid" }, { status: 400 });
+    }
+
+    // Validate endTime > startTime
+    if (validated.startTime && validated.endTime && validated.startTime >= validated.endTime) {
+      return NextResponse.json({ error: "Jam selesai harus lebih besar dari jam mulai" }, { status: 400 });
+    }
+
     const schedule = await TrainingSchedule.create({
       ...validated,
-      date: new Date(validated.date),
+      date: parsedDate,
     });
 
     return NextResponse.json(schedule, { status: 201 });

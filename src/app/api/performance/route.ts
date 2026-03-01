@@ -7,6 +7,7 @@ import { createPerformanceSchema } from "@/lib/validations/performance";
 import { requireAuth, requireRole } from "@/lib/api-auth";
 import { User } from "@/models/User";
 import { ZodError } from "zod";
+import { isValidObjectId } from "mongoose";
 
 export async function GET(request: NextRequest) {
   try {
@@ -133,6 +134,20 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const validated = createPerformanceSchema.parse(body);
 
+    // Validate athlete exists
+    if (!isValidObjectId(validated.athlete)) {
+      return NextResponse.json({ error: "ID atlet tidak valid" }, { status: 400 });
+    }
+    const athleteExists = await Athlete.findById(validated.athlete).select("_id").lean();
+    if (!athleteExists) {
+      return NextResponse.json({ error: "Atlet tidak ditemukan" }, { status: 404 });
+    }
+
+    const parsedDate = new Date(validated.date);
+    if (isNaN(parsedDate.getTime())) {
+      return NextResponse.json({ error: "Format tanggal tidak valid" }, { status: 400 });
+    }
+
     // Auto-compute trend and change based on previous record
     const prevRecord = await PerformanceRecord.findOne({ athlete: validated.athlete })
       .sort({ date: -1 })
@@ -150,7 +165,7 @@ export async function POST(request: NextRequest) {
 
     const record = await PerformanceRecord.create({
       ...validated,
-      date: new Date(validated.date),
+      date: parsedDate,
       trend,
       change,
     });

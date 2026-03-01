@@ -94,15 +94,18 @@ export default function LaporanPage() {
       if (selectedTrainingType !== "all") query.set("trainingType", selectedTrainingType);
 
       const res = await fetch(`/api/reports?${query.toString()}`);
-      if (!res.ok) throw new Error("Gagal mengambil data laporan");
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.error || "Gagal mengambil data laporan");
+      }
       const data = await res.json();
       setReportData(data.report || data.data || data.reports || []);
       setTotalSessions(data.totalSessions || 0);
       setReportPeriod(data.period || null);
       setShowPreview(true);
       toast.success("Laporan berhasil di-generate!");
-    } catch {
-      toast.error("Gagal mengambil data laporan");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Gagal mengambil data laporan");
     } finally {
       setGenerating(false);
     }

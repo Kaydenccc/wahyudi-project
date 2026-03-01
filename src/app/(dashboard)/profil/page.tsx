@@ -46,10 +46,11 @@ export default function ProfilPage() {
 
   // Fetch full profile data
   useEffect(() => {
+    let cancelled = false;
     async function fetchProfile() {
       try {
         const res = await fetch("/api/auth/profile");
-        if (res.ok) {
+        if (res.ok && !cancelled) {
           const data = await res.json();
           setName(data.name || "");
           setEmail(data.email || "");
@@ -68,10 +69,11 @@ export default function ProfilPage() {
           setLoaded(true);
         }
       } catch {
-        // ignore
+        if (!cancelled) toast.error("Gagal memuat data profil");
       }
     }
     fetchProfile();
+    return () => { cancelled = true; };
   }, []);
 
   // Sync name/email from session if profile hasn't loaded yet

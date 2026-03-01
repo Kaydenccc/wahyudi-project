@@ -33,10 +33,10 @@ const PerformanceRecordSchema = new Schema<IPerformanceRecord>(
     score: { type: Number, required: true, min: 0, max: 100 },
     type: { type: String, required: true, enum: ["Training", "Post-Match"] },
     stats: {
-      smashSpeed: { type: Number },
-      footworkRating: { type: Number },
-      winProbability: { type: Number },
-      netAccuracy: { type: Number },
+      smashSpeed: { type: Number, min: 0 },
+      footworkRating: { type: Number, min: 0, max: 10 },
+      winProbability: { type: Number, min: 0, max: 100 },
+      netAccuracy: { type: Number, min: 0, max: 100 },
     },
     recovery: {
       overall: { type: Number },

@@ -7,6 +7,7 @@ import "@/models/Athlete";
 import { updateScheduleSchema } from "@/lib/validations/schedule";
 import { requireAuth, requireRole } from "@/lib/api-auth";
 import { ZodError } from "zod";
+import { isValidObjectId } from "mongoose";
 
 export async function GET(
   _request: NextRequest,
@@ -18,6 +19,10 @@ export async function GET(
 
     await connectDB();
     const { id } = await params;
+
+    if (!isValidObjectId(id)) {
+      return NextResponse.json({ error: "ID jadwal tidak valid" }, { status: 400 });
+    }
 
     const schedule = await TrainingSchedule.findById(id)
       .populate("program", "name type duration")
@@ -45,6 +50,10 @@ export async function PUT(
 
     await connectDB();
     const { id } = await params;
+
+    if (!isValidObjectId(id)) {
+      return NextResponse.json({ error: "ID jadwal tidak valid" }, { status: 400 });
+    }
 
     const body = await request.json();
     const validated = updateScheduleSchema.parse(body);
@@ -77,6 +86,10 @@ export async function DELETE(
 
     await connectDB();
     const { id } = await params;
+
+    if (!isValidObjectId(id)) {
+      return NextResponse.json({ error: "ID jadwal tidak valid" }, { status: 400 });
+    }
 
     const schedule = await TrainingSchedule.findByIdAndDelete(id);
     if (!schedule) {

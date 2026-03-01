@@ -60,7 +60,7 @@ export async function PUT(
     // Check email uniqueness if email is being changed
     if (validated.email) {
       const existing = await User.findOne({
-        email: validated.email.toLowerCase(),
+        email: validated.email.trim().toLowerCase(),
         _id: { $ne: id },
       });
       if (existing) {

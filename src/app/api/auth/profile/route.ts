@@ -50,9 +50,10 @@ export async function GET(request: NextRequest) {
     }
 
     return NextResponse.json(user);
-  } catch (error: any) {
+  } catch (error) {
+    console.error("GET /api/auth/profile error:", error);
     return NextResponse.json(
-      { error: error.message || "Gagal mengambil profil" },
+      { error: "Gagal mengambil profil" },
       { status: 500 }
     );
   }
@@ -93,7 +94,7 @@ export async function PUT(request: NextRequest) {
     // Check email uniqueness if changing email
     if (validated.email) {
       const emailExists = await User.findOne({
-        email: validated.email.toLowerCase(),
+        email: validated.email.trim().toLowerCase(),
         _id: { $ne: auth.user.id },
       });
       if (emailExists) {
@@ -102,7 +103,7 @@ export async function PUT(request: NextRequest) {
           { status: 409 }
         );
       }
-      updateData.email = validated.email.toLowerCase();
+      updateData.email = validated.email.trim().toLowerCase();
     }
 
     // Hash password if provided — require current password verification
@@ -163,15 +164,16 @@ export async function PUT(request: NextRequest) {
     }
 
     return NextResponse.json(user);
-  } catch (error: any) {
+  } catch (error) {
     if (error instanceof ZodError) {
       return NextResponse.json(
         { error: "Data tidak valid" },
         { status: 400 }
       );
     }
+    console.error("PUT /api/auth/profile error:", error);
     return NextResponse.json(
-      { error: error.message || "Gagal update profil" },
+      { error: "Gagal update profil" },
       { status: 500 }
     );
   }

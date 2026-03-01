@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import { Attendance } from "@/models/Attendance";
+import { Athlete } from "@/models/Athlete";
 import { bulkAttendanceSchema } from "@/lib/validations/attendance";
 import { requireAuth, requireRole } from "@/lib/api-auth";
 import { isValidObjectId } from "mongoose";
@@ -22,9 +23,14 @@ export async function GET(request: NextRequest) {
 
     const filter: Record<string, unknown> = {};
     if (status) filter.status = status;
-    if (scheduleId) filter.schedule = scheduleId;
+    if (scheduleId) {
+      if (!isValidObjectId(scheduleId)) {
+        return NextResponse.json({ error: "Schedule ID tidak valid" }, { status: 400 });
+      }
+      filter.schedule = scheduleId;
+    }
 
-    let query = Attendance.find(filter)
+    const query = Attendance.find(filter)
       .populate("athlete", "name category")
       .populate({
         path: "schedule",
@@ -36,9 +42,17 @@ export async function GET(request: NextRequest) {
       .limit(limit);
 
     if (search) {
-      // We need to filter by athlete name after populate
-      // For now, fetch all and filter
-      const allRecords = await Attendance.find(filter)
+      // Find matching athlete IDs first, then query attendance with those IDs
+      const escapedSearch = search.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      const matchingAthletes = await Athlete.find(
+        { name: { $regex: escapedSearch, $options: "i" } },
+        { _id: 1 }
+      ).lean();
+      const athleteIds = matchingAthletes.map((a) => a._id);
+
+      const searchFilter = { ...filter, athlete: { $in: athleteIds } };
+      const total = await Attendance.countDocuments(searchFilter);
+      const records = await Attendance.find(searchFilter)
         .populate("athlete", "name category")
         .populate({
           path: "schedule",
@@ -46,18 +60,12 @@ export async function GET(request: NextRequest) {
           populate: { path: "program", select: "name" },
         })
         .sort({ date: -1 })
+        .skip((page - 1) * limit)
+        .limit(limit)
         .lean();
 
-      const filtered = allRecords.filter((r) => {
-        const athlete = r.athlete as { name?: string } | null;
-        return athlete?.name?.toLowerCase().includes(search.toLowerCase());
-      });
-
-      const total = filtered.length;
-      const paged = filtered.slice((page - 1) * limit, page * limit);
-
       return NextResponse.json({
-        records: paged,
+        records,
         pagination: { total, page, limit, totalPages: Math.ceil(total / limit) },
       });
     }

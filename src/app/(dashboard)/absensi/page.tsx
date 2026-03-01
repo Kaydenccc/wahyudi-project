@@ -44,9 +44,9 @@ export default function AbsensiPage() {
   const debouncedHistorySearch = useDebouncedValue(historySearch, 500);
   const [historyFilter, setHistoryFilter] = useState("");
 
-  const { schedules: todaySchedules, isLoading: schedulesLoading } = useSchedules({ date: todayDate });
-  const { athletes, isLoading: athletesLoading } = useAthletes({ limit: 50 });
-  const { records: attendanceHistory, isLoading: historyLoading, mutate: mutateAttendance } = useAttendance({ search: debouncedHistorySearch, status: historyFilter });
+  const { schedules: todaySchedules, isLoading: schedulesLoading, isError: schedulesError } = useSchedules({ date: todayDate });
+  const { athletes, isLoading: athletesLoading, isError: athletesError } = useAthletes({ limit: 50 });
+  const { records: attendanceHistory, isLoading: historyLoading, isError: historyError, mutate: mutateAttendance } = useAttendance({ search: debouncedHistorySearch, status: historyFilter });
   const { stats: dashStats } = useDashboardStats();
 
   // Set default selected schedule when schedules load
@@ -74,12 +74,15 @@ export default function AbsensiPage() {
           records,
         }),
       });
-      if (!res.ok) throw new Error("Gagal menyimpan absensi");
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.error || "Gagal menyimpan absensi");
+      }
       toast.success("Absensi berhasil disimpan!");
       setAttendanceData({});
       mutateAttendance();
-    } catch {
-      toast.error("Gagal menyimpan absensi");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Gagal menyimpan absensi");
     } finally {
       setSubmitting(false);
     }
@@ -100,6 +103,23 @@ export default function AbsensiPage() {
         />
         <div className="flex items-center justify-center py-12">
           <div className="text-muted-foreground">Memuat...</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (schedulesError || athletesError || historyError) {
+    return (
+      <div className="space-y-6">
+        <PageHeader
+          title="Absensi Latihan"
+          description="Tandai kehadiran untuk sesi latihan hari ini dan lihat riwayat kehadiran."
+        />
+        <div className="flex items-center justify-center py-12">
+          <div className="text-center space-y-2">
+            <div className="text-red-400">Gagal memuat data absensi</div>
+            <Button variant="outline" onClick={() => window.location.reload()}>Coba Lagi</Button>
+          </div>
         </div>
       </div>
     );

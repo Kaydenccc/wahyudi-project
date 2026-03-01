@@ -4,6 +4,7 @@ import { Athlete } from "@/models/Athlete";
 import { Achievement } from "@/models/Achievement";
 import { PerformanceRecord } from "@/models/PerformanceRecord";
 import { Attendance } from "@/models/Attendance";
+import { isValidObjectId } from "mongoose";
 
 export async function GET(
   _request: NextRequest,
@@ -13,12 +14,16 @@ export async function GET(
     await connectDB();
     const { id } = await params;
 
+    if (!isValidObjectId(id)) {
+      return NextResponse.json({ error: "ID atlet tidak valid" }, { status: 400 });
+    }
+
     // Exclude sensitive fields: phone, address
     const athlete = await Athlete.findById(id)
       .select("customId name dateOfBirth gender category position status height weight photo joinDate")
       .lean() as any;
 
-    if (!athlete || athlete.status === "Menunggu") {
+    if (!athlete || athlete.status !== "Aktif") {
       return NextResponse.json({ error: "Atlet tidak ditemukan" }, { status: 404 });
     }
 

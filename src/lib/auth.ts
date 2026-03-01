@@ -72,43 +72,5 @@ export async function clearSessionCookie() {
   cookieStore.delete(COOKIE_NAME);
 }
 
-// Role hierarchy for access control
-export const ROLE_ACCESS: Record<string, string[]> = {
-  Admin: [
-    "/dashboard",
-    "/data-atlet",
-    "/program-latihan",
-    "/absensi",
-    "/monitoring-performa",
-    "/prestasi",
-    "/laporan",
-    "/pengaturan",
-    "/profil",
-  ],
-  Pelatih: [
-    "/dashboard",
-    "/data-atlet",
-    "/program-latihan",
-    "/absensi",
-    "/monitoring-performa",
-    "/prestasi",
-    "/laporan",
-    "/profil",
-  ],
-  "Ketua Klub": [
-    "/dashboard",
-    "/data-atlet",
-    "/monitoring-performa",
-    "/prestasi",
-    "/laporan",
-    "/pengaturan",
-    "/profil",
-  ],
-  Atlet: ["/dashboard", "/monitoring-performa", "/prestasi", "/profil"],
-};
-
-export function canAccessRoute(role: string, pathname: string): boolean {
-  const allowedRoutes = ROLE_ACCESS[role];
-  if (!allowedRoutes) return false;
-  return allowedRoutes.some((route) => pathname.startsWith(route));
-}
+// Re-export from single source of truth
+export { ROLE_ACCESS, canAccessRoute } from "./role-access";

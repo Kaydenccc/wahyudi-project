@@ -260,30 +260,36 @@ export default function DataAtletPage() {
               >
                 &lt;
               </Button>
-              {Array.from({ length: Math.min(pagination.totalPages, 5) }, (_, i) => i + 1).map((page) => (
-                <Button
-                  key={page}
-                  variant={page === currentPage ? "default" : "outline"}
-                  size="icon"
-                  className={cn("h-8 w-8", page === currentPage && "bg-primary text-primary-foreground")}
-                  onClick={() => setCurrentPage(page)}
-                >
-                  {page}
-                </Button>
-              ))}
-              {pagination.totalPages > 5 && (
-                <>
-                  <span className="px-1 text-muted-foreground">...</span>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="h-8 w-8"
-                    onClick={() => setCurrentPage(pagination.totalPages)}
-                  >
-                    {pagination.totalPages}
-                  </Button>
-                </>
-              )}
+              {(() => {
+                const totalPages = pagination.totalPages;
+                const pages: (number | string)[] = [];
+                if (totalPages <= 7) {
+                  for (let i = 1; i <= totalPages; i++) pages.push(i);
+                } else {
+                  pages.push(1);
+                  if (currentPage > 3) pages.push("...");
+                  const start = Math.max(2, currentPage - 1);
+                  const end = Math.min(totalPages - 1, currentPage + 1);
+                  for (let i = start; i <= end; i++) pages.push(i);
+                  if (currentPage < totalPages - 2) pages.push("...");
+                  pages.push(totalPages);
+                }
+                return pages.map((page, idx) =>
+                  typeof page === "string" ? (
+                    <span key={`ellipsis-${idx}`} className="px-1 text-muted-foreground">...</span>
+                  ) : (
+                    <Button
+                      key={page}
+                      variant={page === currentPage ? "default" : "outline"}
+                      size="icon"
+                      className={cn("h-8 w-8", page === currentPage && "bg-primary text-primary-foreground")}
+                      onClick={() => setCurrentPage(page)}
+                    >
+                      {page}
+                    </Button>
+                  )
+                );
+              })()}
               <Button
                 variant="outline"
                 size="icon"

@@ -101,6 +101,14 @@ export async function PUT(
       );
     }
 
+    const validStatuses = ["Dalam Pemulihan", "Pulih"];
+    if (!validStatuses.includes(status)) {
+      return NextResponse.json(
+        { error: "Status harus salah satu dari: Dalam Pemulihan, Pulih" },
+        { status: 400 }
+      );
+    }
+
     const athlete = await Athlete.findById(id);
     if (!athlete) {
       return NextResponse.json({ error: "Atlet tidak ditemukan" }, { status: 404 });

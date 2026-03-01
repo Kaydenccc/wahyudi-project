@@ -20,9 +20,24 @@ export async function GET(request: NextRequest) {
     const year = searchParams.get("year") || new Date().getFullYear().toString();
     const category = searchParams.get("category") || "";
 
+    // Validate report type
+    const allowedTypes = ["monthly", "attendance", "athlete"];
+    if (!allowedTypes.includes(type)) {
+      return NextResponse.json({ error: "Tipe laporan tidak valid" }, { status: 400 });
+    }
+
     // Date range for the selected month
     const monthNum = month ? parseInt(month, 10) - 1 : new Date().getMonth();
     const yearNum = parseInt(year, 10);
+
+    // Validate month (0-11 after conversion) and year
+    if (month && (isNaN(monthNum) || monthNum < 0 || monthNum > 11)) {
+      return NextResponse.json({ error: "Bulan tidak valid (1-12)" }, { status: 400 });
+    }
+    if (isNaN(yearNum) || yearNum < 2000 || yearNum > 2100) {
+      return NextResponse.json({ error: "Tahun tidak valid" }, { status: 400 });
+    }
+
     const startDate = new Date(yearNum, monthNum, 1);
     const endDate = new Date(yearNum, monthNum + 1, 0, 23, 59, 59);
     const prevStartDate = new Date(yearNum, monthNum - 1, 1);

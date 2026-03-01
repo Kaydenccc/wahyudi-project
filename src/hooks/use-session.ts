@@ -42,20 +42,26 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       if (res.ok) {
         const data = await res.json();
         setUser(data.user);
-      } else {
+      } else if (res.status === 401) {
         setUser(null);
       }
+      // For other errors (5xx, network), keep current user to avoid unexpected logout
     } catch {
-      setUser(null);
+      // Network error — keep current user state
     } finally {
       setIsLoading(false);
     }
   }, []);
 
   const logout = useCallback(async () => {
-    await fetch("/api/auth/logout", { method: "POST" });
-    setUser(null);
-    window.location.href = "/login";
+    try {
+      await fetch("/api/auth/logout", { method: "POST" });
+    } catch {
+      // Even if logout request fails, still clear client state
+    } finally {
+      setUser(null);
+      window.location.href = "/login";
+    }
   }, []);
 
   useEffect(() => {

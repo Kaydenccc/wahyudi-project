@@ -6,18 +6,18 @@ export const createPerformanceSchema = z.object({
   score: z.number().min(0).max(100),
   type: z.enum(["Training", "Post-Match"]),
   stats: z.object({
-    smashSpeed: z.number().optional(),
-    footworkRating: z.number().optional(),
-    winProbability: z.number().optional(),
-    netAccuracy: z.number().optional(),
+    smashSpeed: z.number().min(0).max(500).optional(),
+    footworkRating: z.number().min(0).max(10).optional(),
+    winProbability: z.number().min(0).max(100).optional(),
+    netAccuracy: z.number().min(0).max(100).optional(),
   }).default({}),
   recovery: z.object({
-    overall: z.number().optional(),
-    sleepScore: z.number().optional(),
-    hrvStatus: z.string().optional(),
+    overall: z.number().min(0).max(100).optional(),
+    sleepScore: z.number().min(0).max(100).optional(),
+    hrvStatus: z.enum(["Baik", "Normal", "Rendah"]).optional(),
   }).default({}),
   trend: z.enum(["up", "down", "neutral"]).default("neutral"),
-  change: z.string().default("0%"),
+  change: z.string().max(20).default("0%"),
 });
 
 export type CreatePerformanceInput = z.infer<typeof createPerformanceSchema>;

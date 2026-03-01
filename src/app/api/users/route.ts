@@ -6,6 +6,7 @@ import { createUserSchema } from "@/lib/validations/user";
 import { requireRole } from "@/lib/api-auth";
 import { hashPassword } from "@/lib/auth";
 import { syncOrphanedAthletes } from "@/lib/sync-athletes";
+import { ZodError } from "zod";
 
 export async function GET(request: NextRequest) {
   try {
@@ -40,7 +41,7 @@ export async function POST(request: NextRequest) {
     const validated = createUserSchema.parse(body);
 
     // Check for existing email
-    const emailLower = validated.email.toLowerCase();
+    const emailLower = validated.email.trim().toLowerCase();
     const existing = await User.findOne({ email: emailLower });
     if (existing) {
       return NextResponse.json({ error: "Email sudah terdaftar" }, { status: 409 });
@@ -76,7 +77,7 @@ export async function POST(request: NextRequest) {
     const updatedUser = await User.findById(user._id).select("-password").lean();
     return NextResponse.json(updatedUser, { status: 201 });
   } catch (error) {
-    if (error instanceof Error && error.name === "ZodError") {
+    if (error instanceof ZodError) {
       return NextResponse.json({ error: "Data tidak valid" }, { status: 400 });
     }
     console.error("POST /api/users error:", error);

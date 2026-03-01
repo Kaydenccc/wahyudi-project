@@ -47,10 +47,11 @@ export default function InputPerformaPage() {
   });
 
   useEffect(() => {
+    let cancelled = false;
     async function fetchAthletes() {
       try {
         const res = await fetch("/api/athletes?limit=100");
-        if (res.ok) {
+        if (res.ok && !cancelled) {
           const data = await res.json();
           setAthletes(
             (data.athletes || []).map((a: any) => ({
@@ -61,12 +62,13 @@ export default function InputPerformaPage() {
           );
         }
       } catch {
-        // ignore
+        if (!cancelled) toast.error("Gagal memuat data atlet");
       } finally {
-        setLoadingAthletes(false);
+        if (!cancelled) setLoadingAthletes(false);
       }
     }
     fetchAthletes();
+    return () => { cancelled = true; };
   }, []);
 
   if (user && user.role !== "Admin" && user.role !== "Pelatih") {
