@@ -17,8 +17,20 @@ export async function POST(request: NextRequest) {
     }
 
     // Validate file type (include HEIC/HEIF for iOS camera photos)
+    // On iOS Safari, file.type can sometimes be empty string — fall back to extension check
     const allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/heic", "image/heif"];
-    if (!allowedTypes.includes(file.type) && !file.type.startsWith("image/")) {
+    const fileExt = file.name?.split(".").pop()?.toLowerCase() || "";
+    const allowedExts = ["jpg", "jpeg", "png", "webp", "heic", "heif"];
+    const isAllowedType = allowedTypes.includes(file.type) || file.type.startsWith("image/");
+    const isAllowedExt = allowedExts.includes(fileExt);
+
+    if (!file.type && !isAllowedExt) {
+      return NextResponse.json(
+        { error: "Format file tidak didukung. Gunakan file gambar (JPG, PNG, WebP)." },
+        { status: 400 }
+      );
+    }
+    if (file.type && !isAllowedType) {
       return NextResponse.json(
         { error: "Format file tidak didukung. Gunakan file gambar (JPG, PNG, WebP)." },
         { status: 400 }
@@ -44,7 +56,7 @@ export async function POST(request: NextRequest) {
       "image/heic": "heic",
       "image/heif": "heif",
     };
-    const ext = mimeToExt[file.type] || "jpg";
+    const ext = mimeToExt[file.type] || (allowedExts.includes(fileExt) ? fileExt : "jpg");
     const filename = `${Date.now()}-${randomBytes(4).toString("hex")}.${ext}`;
     const uploadDir = path.join(process.cwd(), "public", "uploads");
     await mkdir(uploadDir, { recursive: true });

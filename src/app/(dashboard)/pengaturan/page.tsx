@@ -929,7 +929,7 @@ export default function PengaturanPage() {
       )}
 
       {/* Add/Edit User Dialog */}
-      <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
+      <Dialog open={showAddDialog} onOpenChange={(open) => { if (!open) { setFormName(""); setFormEmail(""); setFormRole("Atlet"); setFormPassword(""); setEditingUser(null); } setShowAddDialog(open); }}>
         <DialogContent className="bg-card border-border">
           <DialogHeader>
             <DialogTitle>
@@ -1067,7 +1067,7 @@ export default function PengaturanPage() {
       </Dialog>
 
       {/* Add Sponsor Dialog */}
-      <Dialog open={showSponsorDialog} onOpenChange={setShowSponsorDialog}>
+      <Dialog open={showSponsorDialog} onOpenChange={(open) => { if (!open) { setSponsorName(""); setSponsorLogo(""); setSponsorLogoPreview(""); setSponsorWebsite(""); } setShowSponsorDialog(open); }}>
         <DialogContent className="bg-card border-border">
           <DialogHeader>
             <DialogTitle>Tambah Sponsor</DialogTitle>
