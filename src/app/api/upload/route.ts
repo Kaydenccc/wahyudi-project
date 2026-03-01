@@ -16,11 +16,11 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "No file provided" }, { status: 400 });
     }
 
-    // Validate file type
-    const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
-    if (!allowedTypes.includes(file.type)) {
+    // Validate file type (include HEIC/HEIF for iOS camera photos)
+    const allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/heic", "image/heif"];
+    if (!allowedTypes.includes(file.type) && !file.type.startsWith("image/")) {
       return NextResponse.json(
-        { error: "Format file tidak didukung. Gunakan JPG, PNG, atau WebP." },
+        { error: "Format file tidak didukung. Gunakan file gambar (JPG, PNG, WebP)." },
         { status: 400 }
       );
     }
@@ -41,6 +41,8 @@ export async function POST(request: NextRequest) {
       "image/jpeg": "jpg",
       "image/png": "png",
       "image/webp": "webp",
+      "image/heic": "heic",
+      "image/heif": "heif",
     };
     const ext = mimeToExt[file.type] || "jpg";
     const filename = `${Date.now()}-${randomBytes(4).toString("hex")}.${ext}`;

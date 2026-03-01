@@ -78,8 +78,9 @@ export default function EditAtletPage() {
       return;
     }
 
-    if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
-      toast.error("Format file tidak didukung. Gunakan JPG, PNG, atau WebP.");
+    const allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/heic", "image/heif"];
+    if (!allowedTypes.includes(file.type) && !file.type.startsWith("image/")) {
+      toast.error("Format file tidak didukung. Gunakan file gambar (JPG, PNG, WebP).");
       return;
     }
 
@@ -393,7 +394,7 @@ export default function EditAtletPage() {
                       ref={fileInputRef}
                       type="file"
                       className="hidden"
-                      accept="image/jpeg,image/png,image/webp"
+                      accept="image/*"
                       onChange={handleFileChange}
                     />
                   </label>
