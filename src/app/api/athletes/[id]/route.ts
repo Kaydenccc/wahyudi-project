@@ -14,12 +14,16 @@ import { unlink } from "fs/promises";
 import path from "path";
 
 async function deletePhotoFile(photoUrl: string | undefined) {
-  if (!photoUrl || !photoUrl.startsWith("/uploads/")) return;
+  if (!photoUrl) return;
+  // Extract filename from either "/uploads/file.jpg" or "/api/uploads/file.jpg"
+  const match = photoUrl.match(/\/(?:api\/)?uploads\/([^/]+)$/);
+  if (!match) return;
+  const filename = match[1];
   try {
     const uploadsDir = path.resolve(process.cwd(), "public", "uploads");
-    const filePath = path.resolve(process.cwd(), "public", photoUrl);
+    const filePath = path.join(uploadsDir, filename);
     // Prevent path traversal — resolved path must stay within uploads dir
-    if (!filePath.startsWith(uploadsDir)) return;
+    if (!path.resolve(filePath).startsWith(uploadsDir)) return;
     await unlink(filePath);
   } catch {
     // File may not exist, ignore
