@@ -13,6 +13,16 @@ const nextConfig: NextConfig = {
     ],
   },
 
+  // Rewrite /uploads/* to API route so old photo URLs in DB still work
+  async rewrites() {
+    return [
+      {
+        source: "/uploads/:filename",
+        destination: "/api/uploads/:filename",
+      },
+    ];
+  },
+
   // Security headers
   async headers() {
     return [
