@@ -23,6 +23,13 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
+  // Serve uploaded files via API route
+  if (pathname.startsWith("/uploads/")) {
+    const url = req.nextUrl.clone();
+    url.pathname = `/api${pathname}`;
+    return NextResponse.rewrite(url);
+  }
+
   // Allow API routes (they handle their own auth)
   if (pathname.startsWith("/api/")) {
     return NextResponse.next();
