@@ -42,6 +42,7 @@ export function PublicNavbar() {
               width={36}
               height={36}
               className="rounded-lg"
+              unoptimized
             />
             <span className="font-bold text-foreground hidden sm:block">
               {branding.clubName}

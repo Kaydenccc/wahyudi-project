@@ -20,6 +20,7 @@ export function PublicFooter() {
                 width={40}
                 height={40}
                 className="rounded-lg"
+                unoptimized
               />
               <div>
                 <p className="font-bold text-foreground">{branding.clubName}</p>

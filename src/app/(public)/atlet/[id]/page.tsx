@@ -189,6 +189,7 @@ export default function PublicAtletDetailPage() {
                       width={120}
                       height={120}
                       className="h-full w-full object-cover"
+                      unoptimized
                     />
                   </div>
                 ) : (

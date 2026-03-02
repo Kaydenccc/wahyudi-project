@@ -211,6 +211,7 @@ export default function PublicAtletPage() {
                               width={80}
                               height={80}
                               className="h-full w-full object-cover"
+                              unoptimized
                             />
                           </div>
                         ) : (

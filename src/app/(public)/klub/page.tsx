@@ -169,6 +169,7 @@ export default function KlubPage() {
                   fill
                   className="object-cover"
                   priority
+                  unoptimized
                 />
               </div>
             </div>
@@ -597,6 +598,7 @@ export default function KlubPage() {
                         alt={sponsor.name}
                         fill
                         className="object-contain p-2 group-hover:scale-110 transition-transform duration-300"
+                        unoptimized
                       />
                     </div>
 

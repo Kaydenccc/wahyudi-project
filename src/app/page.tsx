@@ -66,6 +66,7 @@ export default function LandingPage() {
                 height={96}
                 className="relative rounded-2xl shadow-2xl"
                 priority
+                unoptimized
               />
             </div>
           </div>
@@ -152,7 +153,7 @@ export default function LandingPage() {
               >
                 <Avatar className="h-16 w-16 mx-auto ring-2 ring-border group-hover:ring-primary/40 transition-all">
                   {athlete.photo ? (
-                    <Image src={athlete.photo} alt={athlete.name} width={64} height={64} className="rounded-full object-cover" />
+                    <Image src={athlete.photo} alt={athlete.name} width={64} height={64} className="rounded-full object-cover" unoptimized />
                   ) : (
                     <AvatarFallback className="bg-primary/10 text-primary font-bold">
                       {athlete.name?.split(" ").map((n: string) => n[0]).join("").slice(0, 2).toUpperCase()}
@@ -242,6 +243,7 @@ export default function LandingPage() {
                       alt={sponsor.name}
                       fill
                       className="object-contain p-2 group-hover:scale-110 transition-transform duration-300"
+                      unoptimized
                     />
                   </div>
                   <p className="text-sm font-medium text-foreground group-hover:text-primary transition-colors text-center">
