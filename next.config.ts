@@ -4,6 +4,15 @@ const nextConfig: NextConfig = {
   // Standalone output untuk deployment VPS (Docker, PM2, dll)
   output: "standalone",
 
+  // Allow Next.js Image Optimization for uploaded files in public/uploads/
+  images: {
+    localPatterns: [
+      {
+        pathname: "/uploads/**",
+      },
+    ],
+  },
+
   // Security headers
   async headers() {
     return [
