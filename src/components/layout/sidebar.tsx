@@ -56,17 +56,17 @@ export function Sidebar({ mobile = false }: { mobile?: boolean }) {
       mobile ? "h-full" : "fixed left-0 top-0 z-40 h-screen"
     )}>
       {/* Logo */}
-      <div className="flex items-center gap-3 px-6 py-5 border-b border-border">
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/20 overflow-hidden shrink-0">
+      <div className="flex items-center gap-3 px-4 py-4 border-b border-border">
+        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 overflow-hidden shrink-0 ring-1 ring-primary/20">
           <img
             src={branding.logo || "/logo.jpeg"}
             alt="Logo"
-            className="h-8 w-8 object-contain"
+            className="h-full w-full object-contain"
           />
         </div>
-        <div>
-          <h1 className="font-bold text-foreground text-sm leading-tight">{APP_NAME}</h1>
-          <p className="text-[10px] font-semibold tracking-[0.2em] text-primary uppercase">{APP_SUBTITLE}</p>
+        <div className="min-w-0">
+          <h1 className="font-bold text-foreground text-sm leading-tight truncate">{APP_NAME}</h1>
+          <p className="text-[10px] font-semibold tracking-widest text-primary uppercase mt-0.5">{APP_SUBTITLE}</p>
         </div>
       </div>
 
