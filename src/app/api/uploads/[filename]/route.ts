@@ -33,7 +33,7 @@ export async function GET(
     return new NextResponse(buffer, {
       headers: {
         "Content-Type": contentType,
-        "Cache-Control": "public, max-age=31536000, immutable",
+        "Cache-Control": "no-cache, no-store, must-revalidate",
       },
     });
   } catch {
