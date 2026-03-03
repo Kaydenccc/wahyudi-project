@@ -110,8 +110,9 @@ export async function PUT(
     if (validated.dateOfBirth) updateData.dateOfBirth = new Date(validated.dateOfBirth);
     if (validated.joinDate) updateData.joinDate = new Date(validated.joinDate);
 
-    // Delete old photo if a new one is being uploaded
-    if (validated.photo) {
+    // Delete old photo if photo field was explicitly sent and differs from stored value
+    // This covers both: replacing with new photo, and clearing the photo (photo = "")
+    if ("photo" in validated) {
       const existing = await Athlete.findById(id).select("photo").lean();
       if (existing?.photo && existing.photo !== validated.photo) {
         await deletePhotoFile(existing.photo);

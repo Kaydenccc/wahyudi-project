@@ -119,45 +119,54 @@ export default function DataAtletPage() {
         <StatCard title="ROSTER PRO" value={athletes.filter((a: any) => a.status === "Pro Roster").length} icon={Star} iconColor="text-yellow-400" />
       </div>
 
-      {/* Filter Tabs & Actions */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div className="flex items-center gap-2">
-          {tabs.map((tab) => (
-            <button
-              key={tab.value}
-              onClick={() => handleTabChange(tab.value)}
-              className={cn(
-                "px-4 py-2 text-sm font-medium rounded-lg transition-colors",
-                activeTab === tab.value
-                  ? "bg-primary text-primary-foreground"
-                  : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
-              )}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Cari atlet..."
-              value={searchQuery}
-              onChange={(e) => {
-                setSearchQuery(e.target.value);
-                setCurrentPage(1);
-              }}
-              className="pl-10 w-64 bg-secondary border-border"
-            />
+      {/* Filter & Actions Bar */}
+      <Card className="border-border bg-card">
+        <CardContent className="p-3 sm:p-4">
+          <div className="flex flex-col gap-3">
+            {/* Tab Pills — scrollable */}
+            <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-hide pb-0.5">
+              {tabs.map((tab) => (
+                <button
+                  key={tab.value}
+                  onClick={() => handleTabChange(tab.value)}
+                  className={cn(
+                    "shrink-0 px-3.5 py-1.5 text-xs font-semibold rounded-full border transition-all duration-150 whitespace-nowrap",
+                    activeTab === tab.value
+                      ? "bg-primary text-primary-foreground border-primary shadow-sm"
+                      : "bg-transparent text-muted-foreground border-border hover:border-primary/40 hover:text-foreground"
+                  )}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Divider + Search Row */}
+            <div className="flex items-center gap-2 pt-1 border-t border-border/60">
+              <div className="relative flex-1 max-w-xs">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+                <Input
+                  placeholder="Cari atlet..."
+                  value={searchQuery}
+                  onChange={(e) => {
+                    setSearchQuery(e.target.value);
+                    setCurrentPage(1);
+                  }}
+                  className="pl-9 h-8 text-sm bg-secondary border-border"
+                />
+              </div>
+              <div className="ml-auto flex items-center gap-1.5">
+                <Button variant="outline" size="icon" className="h-8 w-8">
+                  <SlidersHorizontal className="h-3.5 w-3.5" />
+                </Button>
+                <Button variant="outline" size="icon" className="h-8 w-8">
+                  <Download className="h-3.5 w-3.5" />
+                </Button>
+              </div>
+            </div>
           </div>
-          <Button variant="outline" size="icon">
-            <SlidersHorizontal className="h-4 w-4" />
-          </Button>
-          <Button variant="outline" size="icon">
-            <Download className="h-4 w-4" />
-          </Button>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
 
       {/* Athletes Table */}
       <Card className="border-border bg-card overflow-hidden">
